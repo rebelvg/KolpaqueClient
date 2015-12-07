@@ -139,8 +139,6 @@ namespace KolpaqueClient
         public void RefreshInterface()
         {
             listView1.Items.Clear();
-            listView1.Update();
-            listView1.Refresh();
 
             listView1.Items.Add("LIVESTREAMERPATH=" + livestreamerPath);
 
