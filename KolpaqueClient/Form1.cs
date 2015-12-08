@@ -22,11 +22,7 @@ namespace KolpaqueClient
 
             livestreamerPath = "C:\\Program Files (x86)\\Livestreamer\\livestreamer.exe";
 
-            if (File.Exists(livestreamerPath))
-            {
-                textBox1.Text = livestreamerPath;
-            }
-            else
+            if (!File.Exists(livestreamerPath))
             {
                 textBox1.Enabled = true;
                 textBox1.Text = "https://github.com/chrippa/livestreamer/releases";
@@ -62,7 +58,7 @@ namespace KolpaqueClient
         List<string> poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/admin/", "http://podkolpakom.net/tv/admin/", "http://podkolpakom.net/murshun/admin/", "http://vps.podkolpakom.net/" });
         int twitchCooldown = 0;
         
-        double clientVersion = 0.251;
+        double clientVersion = 0.252;
         double newClientVersion;
 
         bool newVersionBalloonShown = false;
@@ -81,6 +77,11 @@ namespace KolpaqueClient
 
             foreach (string X in infoFromIniFile)
             {
+                if (X.Contains("LIVESTREAMERPATH="))
+                {
+                    livestreamerPath = X.Replace("LIVESTREAMERPATH=", "");
+                    textBox1.Text = livestreamerPath;
+                }
                 if (X.Contains("LQ=True"))
                 {
                     checkBox1.Checked = true;
@@ -138,6 +139,8 @@ namespace KolpaqueClient
 
         public void RefreshInterface()
         {
+            textBox1.Text = livestreamerPath;
+
             listView1.Items.Clear();
 
             listView1.Items.Add("LIVESTREAMERPATH=" + livestreamerPath);
@@ -338,7 +341,7 @@ namespace KolpaqueClient
                     if (!newVersionBalloonShown)
                     {
                         notifyIcon1.BalloonTipTitle = "New Version Available";
-                        notifyIcon1.BalloonTipText = "ftp://podkolpakom.net:359/KolpaqueClient.exe";
+                        notifyIcon1.BalloonTipText = "https://github.com/rebelvg/KolpaqueClient/releases";
                         notifyIcon1.Visible = true;
                         notifyIcon1.ShowBalloonTip(5000);
 
@@ -494,11 +497,6 @@ namespace KolpaqueClient
             System.Diagnostics.Process.Start("http://podkolpakom.net/");
         }
 
-        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://podkolpakom.net/stream/admin/");
-        }
-
         private void timer1_Tick(object sender, EventArgs e)
         {
             GetStats(true);
@@ -512,7 +510,7 @@ namespace KolpaqueClient
             }
             if (notifyIcon1.BalloonTipTitle == "New Version Available")
             {
-                System.Diagnostics.Process.Start("ftp://podkolpakom.net:359/KolpaqueClient.exe");
+                System.Diagnostics.Process.Start("https://github.com/rebelvg/KolpaqueClient/releases");
             }
         }
 
@@ -563,7 +561,7 @@ namespace KolpaqueClient
 
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("ftp://podkolpakom.net:359/KolpaqueClient.exe");
+            System.Diagnostics.Process.Start("https://github.com/rebelvg/KolpaqueClient/releases");
         }
 
         private void closeClientToolStripMenuItem_Click(object sender, EventArgs e)
@@ -693,6 +691,22 @@ namespace KolpaqueClient
         private void contextMenuStrip2_Closed(object sender, ToolStripDropDownClosedEventArgs e)
         {
             listView2LastSelectedItem.Selected = false;
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            OpenFileDialog selectExePath = new OpenFileDialog();
+
+            selectExePath.Title = "Select livestreamer.exe";
+            selectExePath.Filter = "Executable File (.exe) | *.exe";
+
+            if (selectExePath.ShowDialog() == DialogResult.OK)
+            {
+                livestreamerPath = selectExePath.FileName;
+            }
+
+            SaveIniFile();
+            RefreshInterface();
         }
     }
 }
