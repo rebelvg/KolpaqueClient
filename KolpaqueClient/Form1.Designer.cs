@@ -120,7 +120,7 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "Ini Info";
-            this.columnHeader1.Width = 364;
+            this.columnHeader1.Width = 380;
             // 
             // checkBox1
             // 
@@ -221,7 +221,7 @@
             // 
             this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader2});
-            this.listView2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.listView2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.listView2.FullRowSelect = true;
             this.listView2.GridLines = true;
             this.listView2.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
@@ -238,7 +238,7 @@
             // columnHeader2
             // 
             this.columnHeader2.Text = "Channels";
-            this.columnHeader2.Width = 274;
+            this.columnHeader2.Width = 290;
             // 
             // timer1
             // 

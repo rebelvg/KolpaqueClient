@@ -62,7 +62,7 @@ namespace KolpaqueClient
         List<string> poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/admin/", "http://podkolpakom.net/tv/admin/", "http://podkolpakom.net/murshun/admin/", "http://vps.podkolpakom.net/" });
         int twitchCooldown = 0;
         
-        double clientVersion = 0.254;
+        double clientVersion = 0.255;
         double newClientVersion;
         string newClientVersionLink = "https://github.com/rebelvg/KolpaqueClient/releases";
 
@@ -175,16 +175,18 @@ namespace KolpaqueClient
             {
                 string amsStatsString = client.DownloadString("http://dedick.podkolpakom.net/stats/ams/gib_stats.php?stream=" + S.Replace("podkolpakom.net/live/", ""));
 
-                if (amsStatsString.Contains("\"live\":\"Online\""))
+                dynamic amsStatsJSON = JsonConvert.DeserializeObject(amsStatsString);
+                
+                if (amsStatsJSON.live.ToString() == "Online")
                 {
                     if (item.BackColor != Color.Green)
                     {
                         ChannelWentOnline(item, showBalloon);
                     }
                 }
-                if (amsStatsString.Contains("\"live\":\"Offline\""))
+                if (amsStatsJSON.live.ToString() == "Offline")
                 {
-                    if (item.BackColor != Color.White)
+                    if (item.BackColor != default(Color))
                     {
                         ChannelWentOffline(item);
                     }
@@ -219,7 +221,7 @@ namespace KolpaqueClient
                         }
                         if (!X.Contains("publishing/"))
                         {
-                            if (item.BackColor != Color.White)
+                            if (item.BackColor != default(Color))
                             {
                                 ChannelWentOffline(item);
                             }
@@ -241,24 +243,26 @@ namespace KolpaqueClient
             {
                 string twitchStatsString = client.DownloadString("https://api.twitch.tv/kraken/streams?channel=" + S.Replace("twitch.tv/", ""));
 
-                if (twitchStatsString.Contains("created_at"))
+                dynamic twitchAPIStats = JsonConvert.DeserializeObject(twitchStatsString);
+
+                if (twitchAPIStats.streams.Count > 0)
                 {
                     if (item.BackColor != Color.Green)
                     {
                         ChannelWentOnline(item, showBalloon);
                     }
                 }
-                if (twitchStatsString.Contains("\"streams\":[]"))
+                if (twitchAPIStats.streams.Count == 0)
                 {
-                    if (item.BackColor != Color.White)
+                    if (item.BackColor != default(Color))
                     {
                         ChannelWentOffline(item);
                     }
                 }
             }
-            catch (Exception)
+            catch
             {
-                
+
             }
         }
 
@@ -290,7 +294,7 @@ namespace KolpaqueClient
 
         public void ChannelWentOffline(ListViewItem item)
         {
-            this.Invoke(new Action(() => item.BackColor = Color.White));
+            this.Invoke(new Action(() => item.BackColor = default(Color)));
 
             foreach (ToolStripMenuItem toolStripMenuitem1 in contextMenuStrip1.Items)
             {
@@ -298,7 +302,7 @@ namespace KolpaqueClient
                 {
                     if (toolStripMenuitem2.Text == item.Text)
                     {
-                        toolStripMenuitem2.BackColor = Color.White;
+                        toolStripMenuitem2.BackColor = default(Color);
                     }
                 }
             }
@@ -315,31 +319,16 @@ namespace KolpaqueClient
             }
         }
 
-        public class GitHubArray
-        {
-            public string url { get; set; }
-            public string tag_name { get; set; }
-        }
-
-        public class GitHubAssetsArray
-        {
-            public string browser_download_url { get; set; }
-        }
-
         public void GetNewVersionNewThread()
         {
             try
             {
-                string gitHubApiUrl = "https://api.github.com/repos/rebelvg/KolpaqueClient/releases";
-                string gitHubApiString;
-                string gitHubApiAssetsString;
-
-                HttpWebRequest request = WebRequest.Create(gitHubApiUrl) as HttpWebRequest;
+                HttpWebRequest request = WebRequest.Create("https://api.github.com/repos/rebelvg/KolpaqueClient/releases") as HttpWebRequest;
 
                 request.UserAgent = "KolpaqueClient";
-                request.KeepAlive = false;
-                request.Accept = "application/vnd.github.v3+json";
 
+                string gitHubApiString;
+                        
                 using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
                 {
                     using (StreamReader reader = new StreamReader(response.GetResponseStream()))
@@ -348,27 +337,11 @@ namespace KolpaqueClient
                     }
                 }
 
-                GitHubArray[] GitHubArray = JsonConvert.DeserializeObject<GitHubArray[]>(gitHubApiString);
+                dynamic gitHubAPIStats = JsonConvert.DeserializeObject(gitHubApiString);
+            
+                newClientVersion = Double.Parse(gitHubAPIStats[0].tag_name.ToString());
 
-                request = WebRequest.Create(GitHubArray[0].url + "/assets") as HttpWebRequest;
-
-                request.UserAgent = "KolpaqueClient";
-                request.KeepAlive = false;
-                request.Accept = "application/vnd.github.v3+json";
-
-                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
-                {
-                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-                    {
-                        gitHubApiAssetsString = reader.ReadToEnd();
-                    }
-                }
-
-                GitHubAssetsArray[] GitHubAssetsArray = JsonConvert.DeserializeObject<GitHubAssetsArray[]>(gitHubApiAssetsString);
-
-                newClientVersion = Double.Parse(GitHubArray[0].tag_name);
-
-                newClientVersionLink = GitHubAssetsArray[0].browser_download_url;
+                newClientVersionLink = gitHubAPIStats[0].assets[0].browser_download_url;
 
                 if (newClientVersion > clientVersion)
                 {
