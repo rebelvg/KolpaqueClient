@@ -61,6 +61,7 @@
             this.removeChannelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBox5 = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             this.SuspendLayout();
@@ -114,7 +115,7 @@
             this.listView1.Size = new System.Drawing.Size(384, 321);
             this.listView1.TabIndex = 9;
             this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.View = System.Windows.Forms.View.SmallIcon;
             // 
             // columnHeader1
             // 
@@ -199,10 +200,10 @@
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Location = new System.Drawing.Point(9, 420);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(52, 13);
+            this.linkLabel1.Size = new System.Drawing.Size(83, 13);
             this.linkLabel1.TabIndex = 16;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Kolpaque";
+            this.linkLabel1.Text = "Kolpaque Home";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // checkBox2
@@ -230,7 +231,7 @@
             this.listView2.Size = new System.Drawing.Size(294, 379);
             this.listView2.TabIndex = 19;
             this.listView2.UseCompatibleStateImageBehavior = false;
-            this.listView2.View = System.Windows.Forms.View.Details;
+            this.listView2.View = System.Windows.Forms.View.SmallIcon;
             this.listView2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView2_MouseClick);
             this.listView2.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listView2_MouseDoubleClick);
             // 
@@ -351,6 +352,12 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
+            // timer2
+            // 
+            this.timer2.Enabled = true;
+            this.timer2.Interval = 60000;
+            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -420,5 +427,6 @@
         private System.Windows.Forms.ToolStripMenuItem removeChannelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openChatToolStripMenuItem;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Timer timer2;
     }
 }

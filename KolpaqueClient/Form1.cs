@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Net;
 using System.IO;
 using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace KolpaqueClient
 {
@@ -50,6 +51,9 @@ namespace KolpaqueClient
             label2.Text = "Version " + clientVersion.ToString();
 
             GetStats(false);
+
+            Thread NewVersionThread = new Thread(() => GetNewVersionNewThread());
+            NewVersionThread.Start();
         }
 
         string livestreamerPath;
@@ -58,8 +62,9 @@ namespace KolpaqueClient
         List<string> poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/admin/", "http://podkolpakom.net/tv/admin/", "http://podkolpakom.net/murshun/admin/", "http://vps.podkolpakom.net/" });
         int twitchCooldown = 0;
         
-        double clientVersion = 0.252;
+        double clientVersion = 0.253;
         double newClientVersion;
+        string newClientVersionLink = "https://github.com/rebelvg/KolpaqueClient/releases";
 
         bool newVersionBalloonShown = false;
 
@@ -142,8 +147,6 @@ namespace KolpaqueClient
             textBox1.Text = livestreamerPath;
 
             listView1.Items.Clear();
-
-            listView1.Items.Add("LIVESTREAMERPATH=" + livestreamerPath);
 
             listView1.Items.Add("LQ=" + checkBox1.Checked);
 
@@ -312,27 +315,60 @@ namespace KolpaqueClient
             }
         }
 
+        public class GitHubArray
+        {
+            public string url { get; set; }
+            public string tag_name { get; set; }
+        }
+
+        public class GitHubAssetsArray
+        {
+            public string browser_download_url { get; set; }
+        }
+
         public void GetNewVersionNewThread()
         {
-            WebClient client = new WebClient();
-
             try
             {
-                string amsStatsString = client.DownloadString("http://dedick.podkolpakom.net/stats/ams/gib_stats.php");
+                string gitHubApiUrl = "https://api.github.com/repos/rebelvg/KolpaqueClient/releases";
+                string gitHubApiString;
+                string gitHubApiAssetsString;
 
-                amsStatsString = amsStatsString.Replace("\"", "");
-                amsStatsString = amsStatsString.Replace("{", "");
-                amsStatsString = amsStatsString.Replace("}", "");
+                HttpWebRequest request = WebRequest.Create(gitHubApiUrl) as HttpWebRequest;
 
-                List<string> amsStatsList = amsStatsString.Split(',').ToList();
+                request.UserAgent = "KolpaqueClient";
+                request.KeepAlive = false;
+                request.Accept = "application/vnd.github.v3+json";
 
-                foreach (string X in amsStatsList)
+                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
                 {
-                    if (X.Contains("KolpaqueClientVersion"))
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                     {
-                        newClientVersion = Double.Parse(X.Replace("KolpaqueClientVersion:", ""));
+                        gitHubApiString = reader.ReadToEnd();
                     }
                 }
+
+                GitHubArray[] GitHubArray = JsonConvert.DeserializeObject<GitHubArray[]>(gitHubApiString);
+
+                request = WebRequest.Create(GitHubArray[0].url + "/assets") as HttpWebRequest;
+
+                request.UserAgent = "KolpaqueClient";
+                request.KeepAlive = false;
+                request.Accept = "application/vnd.github.v3+json";
+
+                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+                {
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                    {
+                        gitHubApiAssetsString = reader.ReadToEnd();
+                    }
+                }
+
+                GitHubAssetsArray[] GitHubAssetsArray = JsonConvert.DeserializeObject<GitHubAssetsArray[]>(gitHubApiAssetsString);
+
+                newClientVersion = Double.Parse(GitHubArray[0].tag_name);
+
+                newClientVersionLink = GitHubAssetsArray[0].browser_download_url;
 
                 if (newClientVersion > clientVersion)
                 {
@@ -341,7 +377,7 @@ namespace KolpaqueClient
                     if (!newVersionBalloonShown)
                     {
                         notifyIcon1.BalloonTipTitle = "New Version Available";
-                        notifyIcon1.BalloonTipText = "https://github.com/rebelvg/KolpaqueClient/releases";
+                        notifyIcon1.BalloonTipText = newClientVersionLink;
                         notifyIcon1.Visible = true;
                         notifyIcon1.ShowBalloonTip(5000);
 
@@ -356,7 +392,7 @@ namespace KolpaqueClient
                     }
                 }
             }
-            catch (Exception)
+            catch
             {
 
             }
@@ -414,9 +450,6 @@ namespace KolpaqueClient
             }
 
             twitchCooldown++;
-
-            Thread NewVersionThread = new Thread(() => GetNewVersionNewThread());
-            NewVersionThread.Start();
         }
 
         public void PlayStream(ListViewItem X)
@@ -510,7 +543,7 @@ namespace KolpaqueClient
             }
             if (notifyIcon1.BalloonTipTitle == "New Version Available")
             {
-                System.Diagnostics.Process.Start("https://github.com/rebelvg/KolpaqueClient/releases");
+                System.Diagnostics.Process.Start(notifyIcon1.Text);
             }
         }
 
@@ -561,7 +594,7 @@ namespace KolpaqueClient
 
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/rebelvg/KolpaqueClient/releases");
+            System.Diagnostics.Process.Start(newClientVersionLink);
         }
 
         private void closeClientToolStripMenuItem_Click(object sender, EventArgs e)
@@ -707,6 +740,12 @@ namespace KolpaqueClient
 
             SaveIniFile();
             RefreshInterface();
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            Thread NewVersionThread = new Thread(() => GetNewVersionNewThread());
+            NewVersionThread.Start();
         }
     }
 }
