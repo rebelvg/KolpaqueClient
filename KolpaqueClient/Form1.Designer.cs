@@ -115,7 +115,7 @@
             this.listView1.Size = new System.Drawing.Size(384, 321);
             this.listView1.TabIndex = 9;
             this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.SmallIcon;
+            this.listView1.View = System.Windows.Forms.View.List;
             // 
             // columnHeader1
             // 
