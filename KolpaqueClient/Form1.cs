@@ -543,7 +543,7 @@ namespace KolpaqueClient
             }
             if (notifyIcon1.BalloonTipTitle == "New Version Available")
             {
-                System.Diagnostics.Process.Start(notifyIcon1.Text);
+                System.Diagnostics.Process.Start(notifyIcon1.BalloonTipText);
             }
         }
 
