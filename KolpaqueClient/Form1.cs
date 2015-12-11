@@ -179,17 +179,11 @@ namespace KolpaqueClient
                 
                 if (amsStatsJSON.live.ToString() == "Online")
                 {
-                    if (item.BackColor != Color.Green)
-                    {
                         ChannelWentOnline(item, showBalloon);
-                    }
                 }
                 if (amsStatsJSON.live.ToString() == "Offline")
                 {
-                    if (item.BackColor != default(Color))
-                    {
                         ChannelWentOffline(item);
-                    }
                 }
             }
             catch (Exception)
@@ -214,17 +208,11 @@ namespace KolpaqueClient
                     {
                         if (X.Contains("publishing/"))
                         {
-                            if (item.BackColor != Color.Green)
-                            {
-                                ChannelWentOnline(item, showBalloon);
-                            }
+                            ChannelWentOnline(item, showBalloon);
                         }
                         if (!X.Contains("publishing/"))
                         {
-                            if (item.BackColor != default(Color))
-                            {
-                                ChannelWentOffline(item);
-                            }
+                            ChannelWentOffline(item);
                         }
                     }
                 }
@@ -247,17 +235,11 @@ namespace KolpaqueClient
 
                 if (twitchAPIStats.streams.Count > 0)
                 {
-                    if (item.BackColor != Color.Green)
-                    {
-                        ChannelWentOnline(item, showBalloon);
-                    }
+                    ChannelWentOnline(item, showBalloon);
                 }
                 if (twitchAPIStats.streams.Count == 0)
                 {
-                    if (item.BackColor != default(Color))
-                    {
-                        ChannelWentOffline(item);
-                    }
+                    ChannelWentOffline(item);
                 }
             }
             catch
@@ -268,41 +250,47 @@ namespace KolpaqueClient
 
         public void ChannelWentOnline(ListViewItem item, bool showBalloon)
         {
-            this.Invoke(new Action(() => item.BackColor = Color.Green));
-
-            foreach (ToolStripMenuItem toolStripMenuitem1 in contextMenuStrip1.Items)
+            if (item.BackColor != Color.Green)
             {
-                foreach (ToolStripMenuItem toolStripMenuitem2 in toolStripMenuitem1.DropDownItems)
+                this.Invoke(new Action(() => item.BackColor = Color.Green));
+
+                foreach (ToolStripMenuItem toolStripMenuitem1 in contextMenuStrip1.Items)
                 {
-                    if (toolStripMenuitem2.Text == item.Text)
+                    foreach (ToolStripMenuItem toolStripMenuitem2 in toolStripMenuitem1.DropDownItems)
                     {
-                        toolStripMenuitem2.BackColor = Color.Green;
+                        if (toolStripMenuitem2.Text == item.Text)
+                        {
+                            toolStripMenuitem2.BackColor = Color.Green;
+                        }
                     }
                 }
-            }
 
-            if (showBalloon)
-            {
-                PrintBalloon(item);
-            }
+                if (showBalloon)
+                {
+                    PrintBalloon(item);
+                }
 
-            if (checkBox4.Checked)
-            {
-                PlayStream(item);
+                if (checkBox4.Checked)
+                {
+                    PlayStream(item);
+                }
             }
         }
 
         public void ChannelWentOffline(ListViewItem item)
         {
-            this.Invoke(new Action(() => item.BackColor = default(Color)));
-
-            foreach (ToolStripMenuItem toolStripMenuitem1 in contextMenuStrip1.Items)
+            if (item.BackColor != default(Color))
             {
-                foreach (ToolStripMenuItem toolStripMenuitem2 in toolStripMenuitem1.DropDownItems)
+                this.Invoke(new Action(() => item.BackColor = default(Color)));
+
+                foreach (ToolStripMenuItem toolStripMenuitem1 in contextMenuStrip1.Items)
                 {
-                    if (toolStripMenuitem2.Text == item.Text)
+                    foreach (ToolStripMenuItem toolStripMenuitem2 in toolStripMenuitem1.DropDownItems)
                     {
-                        toolStripMenuitem2.BackColor = default(Color);
+                        if (toolStripMenuitem2.Text == item.Text)
+                        {
+                            toolStripMenuitem2.BackColor = default(Color);
+                        }
                     }
                 }
             }
