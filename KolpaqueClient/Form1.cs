@@ -305,20 +305,20 @@ namespace KolpaqueClient
                 notifyIcon1.BalloonTipText = item.Text;
                 notifyIcon1.Visible = true;
                 notifyIcon1.ShowBalloonTip(5000);
-            }
 
-            Thread.Sleep(5000);
+                Thread.Sleep(5000);
 
-            try
-            {
-                notifyIcon1.BalloonTipTitle = "";
-                notifyIcon1.BalloonTipText = "";
-                notifyIcon1.Visible = false;
-                notifyIcon1.Visible = true;
-            }
-            catch
-            {
+                try
+                {
+                    notifyIcon1.BalloonTipTitle = "";
+                    notifyIcon1.BalloonTipText = "";
+                    notifyIcon1.Visible = false;
+                    notifyIcon1.Visible = true;
+                }
+                catch
+                {
 
+                }
             }
         }
 
