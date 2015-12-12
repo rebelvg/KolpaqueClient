@@ -62,7 +62,7 @@ namespace KolpaqueClient
         List<string> poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/admin/", "http://podkolpakom.net/tv/admin/", "http://podkolpakom.net/murshun/admin/", "http://vps.podkolpakom.net/" });
         int twitchCooldown = 0;
         
-        double clientVersion = 0.256;
+        double clientVersion = 0.257;
         double newClientVersion;
         string newClientVersionLink = "https://github.com/rebelvg/KolpaqueClient/releases";
 
@@ -314,6 +314,7 @@ namespace KolpaqueClient
                 notifyIcon1.BalloonTipTitle = "";
                 notifyIcon1.BalloonTipText = "";
                 notifyIcon1.Visible = false;
+                notifyIcon1.Visible = true;
             }
             catch
             {
@@ -365,6 +366,7 @@ namespace KolpaqueClient
                             notifyIcon1.BalloonTipTitle = "";
                             notifyIcon1.BalloonTipText = "";
                             notifyIcon1.Visible = false;
+                            notifyIcon1.Visible = true;
                         }
                         catch
                         {
@@ -533,15 +535,15 @@ namespace KolpaqueClient
         {
             if (e.Button == MouseButtons.Left)
             {
-            if (this.WindowState == FormWindowState.Minimized)
-            {
-                this.Show();
-                this.WindowState = FormWindowState.Normal;
-            }
-            else
-            {
-                this.WindowState = FormWindowState.Minimized;
-            }
+                if (this.WindowState == FormWindowState.Minimized)
+                {
+                    this.Show();
+                    this.WindowState = FormWindowState.Normal;
+                }
+                else
+                {
+                    this.WindowState = FormWindowState.Minimized;
+                }
             }
         }
 
