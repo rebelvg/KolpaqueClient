@@ -299,7 +299,7 @@
             this.copyToClipboardToolStripMenuItem,
             this.removeChannelToolStripMenuItem});
             this.contextMenuStrip2.Name = "contextMenuStrip2";
-            this.contextMenuStrip2.Size = new System.Drawing.Size(161, 92);
+            this.contextMenuStrip2.Size = new System.Drawing.Size(161, 114);
             this.contextMenuStrip2.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuStrip2_Closed);
             // 
             // playStreamToolStripMenuItem
@@ -350,7 +350,7 @@
             this.button1.TabIndex = 25;
             this.button1.Text = "...";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // timer2
             // 

@@ -62,7 +62,7 @@ namespace KolpaqueClient
         List<string> poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/admin/", "http://podkolpakom.net/tv/admin/", "http://podkolpakom.net/murshun/admin/", "http://vps.podkolpakom.net/" });
         int twitchCooldown = 0;
         
-        double clientVersion = 0.255;
+        double clientVersion = 0.256;
         double newClientVersion;
         string newClientVersionLink = "https://github.com/rebelvg/KolpaqueClient/releases";
 
@@ -267,7 +267,8 @@ namespace KolpaqueClient
 
                 if (showBalloon)
                 {
-                    PrintBalloon(item);
+                    Thread NewThread = new Thread(() => PrintBalloon(item));
+                    NewThread.Start();
                 }
 
                 if (checkBox4.Checked)
@@ -304,6 +305,19 @@ namespace KolpaqueClient
                 notifyIcon1.BalloonTipText = item.Text;
                 notifyIcon1.Visible = true;
                 notifyIcon1.ShowBalloonTip(5000);
+            }
+
+            Thread.Sleep(5000);
+
+            try
+            {
+                notifyIcon1.BalloonTipTitle = "";
+                notifyIcon1.BalloonTipText = "";
+                notifyIcon1.Visible = false;
+            }
+            catch
+            {
+
             }
         }
 
@@ -343,6 +357,19 @@ namespace KolpaqueClient
                         notifyIcon1.ShowBalloonTip(5000);
 
                         newVersionBalloonShown = true;
+
+                        Thread.Sleep(5000);
+
+                        try
+                        {
+                            notifyIcon1.BalloonTipTitle = "";
+                            notifyIcon1.BalloonTipText = "";
+                            notifyIcon1.Visible = false;
+                        }
+                        catch
+                        {
+
+                        }
                     }
                 }
                 else
@@ -459,17 +486,6 @@ namespace KolpaqueClient
                     myProcess.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                     myProcess.Start();
                 }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            SaveIniFile();
-            RefreshInterface();
-
-            foreach (ListViewItem X in listView2.CheckedItems)
-            {
-                PlayStream(X);
-            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -687,7 +703,7 @@ namespace KolpaqueClient
             listView2LastSelectedItem.Selected = false;
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
             OpenFileDialog selectExePath = new OpenFileDialog();
 
