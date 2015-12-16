@@ -21,29 +21,32 @@ namespace KolpaqueClient
         {
             InitializeComponent();
 
-            livestreamerPath = "C:\\Program Files (x86)\\Livestreamer\\livestreamer.exe";
+            livestreamerPath_textBox.Text = "C:\\Program Files (x86)\\Livestreamer\\livestreamer.exe";
 
-            if (!File.Exists(livestreamerPath))
+            if (!File.Exists(livestreamerPath_textBox.Text))
             {
-                textBox1.Enabled = true;
-                textBox1.Text = "https://github.com/chrippa/livestreamer/releases";
+                livestreamerPath_textBox.Enabled = true;
+                livestreamerPath_textBox.Text = "https://github.com/chrippa/livestreamer/releases";
             }
 
             iniFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.ini";
-            textBox2.Text = iniFilePath;
+            xmlFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.xml";
+            xmlPath_textBox.Text = xmlFilePath;
 
             if (File.Exists(iniFilePath))
             {
                 ReadIniFile();
-                RefreshInterface();
+                SaveXmlFile();
+                File.Delete(iniFilePath);
+            }
+            
+            if (File.Exists(xmlFilePath))
+            {      
+                ReadXmlFile();
             }
             else
             {
-                MessageBox.Show("KolpaqueClient.ini not found.");
-
-                SaveIniFile();
-                ReadIniFile();
-                RefreshInterface();
+                SaveXmlFile();
             }
 
             newClientVersion = clientVersion;
@@ -56,13 +59,13 @@ namespace KolpaqueClient
             NewVersionThread.Start();
         }
 
-        string livestreamerPath;
         string iniFilePath;
+        string xmlFilePath;
         List<string> poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent" });
         List<string> poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/admin/", "http://podkolpakom.net/tv/admin/", "http://podkolpakom.net/murshun/admin/", "http://vps.podkolpakom.net/" });
         int twitchCooldown = 0;
         
-        double clientVersion = 0.257;
+        double clientVersion = 0.258;
         double newClientVersion;
         string newClientVersionLink = "https://github.com/rebelvg/KolpaqueClient/releases";
 
@@ -74,97 +77,121 @@ namespace KolpaqueClient
         {
             foreach (string X in poddyChannelsList)
             {
-                listView2.Items.Add(X);
-                poddyChannelsToolStripMenuItem.DropDownItems.Add(X, null, new EventHandler(contextMenu_Click));
+                if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
+                {
+                    channels_listView.Items.Add(X);
+                    poddyChannelsToolStripMenuItem.DropDownItems.Add(X, null, new EventHandler(contextMenu_Click));
+                }
             }
 
             string[] infoFromIniFile = File.ReadAllLines(iniFilePath);
-
+                        
             foreach (string X in infoFromIniFile)
             {
                 if (X.Contains("LIVESTREAMERPATH="))
                 {
-                    livestreamerPath = X.Replace("LIVESTREAMERPATH=", "");
-                    textBox1.Text = livestreamerPath;
+                    livestreamerPath_textBox.Text = X.Replace("LIVESTREAMERPATH=", "");
                 }
                 if (X.Contains("LQ=True"))
                 {
-                    checkBox1.Checked = true;
+                    LQ_checkBox.Checked = true;
                 }
                 if (X.Contains("OPENCHAT=True"))
                 {
-                    checkBox2.Checked = true;
+                    openChat_checkBox.Checked = true;
                 }
                 if (X.Contains("SHOWNOTIFICATIONS=False"))
                 {
-                    checkBox3.Checked = false;
+                    notifications_checkBox.Checked = false;
                 }
                 if (X.Contains("AUTOPLAY=True"))
                 {
-                    checkBox4.Checked = true;
+                    autoPlay_checkBox.Checked = true;
                 }
                 if (X.Contains("CUSTOMCHANNEL="))
                 {
-                    listView2.Items.Add(X.Replace("CUSTOMCHANNEL=", ""));
-                    customChannelsToolStripMenuItem.DropDownItems.Add(X.Replace("CUSTOMCHANNEL=", ""), null, new EventHandler(contextMenu_Click));
+                    if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
+                    {
+                        channels_listView.Items.Add(X.Replace("CUSTOMCHANNEL=", ""));
+                        customChannelsToolStripMenuItem.DropDownItems.Add(X.Replace("CUSTOMCHANNEL=", ""), null, new EventHandler(contextMenu_Click));
+                    }
                 }
                 if (X.Contains("MINIMIZEATSTART=True"))
                 {
-                    checkBox5.Checked = true;
+                    minimizeAtStart_checkBox.Checked = true;
                 }
             }
+        }
+
+        public class KolpaqueClientXmlSettings
+        {
+            public string livestreamerPath;
+
+            public bool LQ_checkBox;
+
+            public bool openChat_checkBox;
+
+            public bool notifications_checkBox;
+
+            public bool autoPlay_checkBox;
+
+            public List<string> channels_listView;
+
+            public bool minimizeAtStart_checkBox;
+        }
+
+        public void ReadXmlFile()
+        {
+            foreach (string X in poddyChannelsList)
+            {
+                if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
+                {
+                    channels_listView.Items.Add(X);
+                    poddyChannelsToolStripMenuItem.DropDownItems.Add(X, null, new EventHandler(contextMenu_Click));
+                }
+            }
+            
+            System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(KolpaqueClientXmlSettings));
+
+            StreamReader reader = new StreamReader(xmlFilePath);
+            KolpaqueClientXmlSettings ClientSettings = (KolpaqueClientXmlSettings)serializer.Deserialize(reader);
+            reader.Close();
+
+            livestreamerPath_textBox.Text = ClientSettings.livestreamerPath;
+            LQ_checkBox.Checked = ClientSettings.LQ_checkBox;
+            openChat_checkBox.Checked = ClientSettings.openChat_checkBox;
+            notifications_checkBox.Checked = ClientSettings.notifications_checkBox;
+            autoPlay_checkBox.Checked = ClientSettings.autoPlay_checkBox;
+
+            foreach (string X in ClientSettings.channels_listView)
+            {
+                if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
+                {
+                    channels_listView.Items.Add(X.Replace("CUSTOMCHANNEL=", ""));
+                    customChannelsToolStripMenuItem.DropDownItems.Add(X.Replace("CUSTOMCHANNEL=", ""), null, new EventHandler(contextMenu_Click));
+                }
+            }
+
+            minimizeAtStart_checkBox.Checked = ClientSettings.minimizeAtStart_checkBox;
         }
         
-        public void SaveIniFile()
+        public void SaveXmlFile()
         {
-            List<string> infoForSave = new List<string>();
+            KolpaqueClientXmlSettings ClientSettings = new KolpaqueClientXmlSettings();
 
-            infoForSave.Add("LIVESTREAMERPATH=" + livestreamerPath);
+            ClientSettings.livestreamerPath = livestreamerPath_textBox.Text;
+            ClientSettings.LQ_checkBox = LQ_checkBox.Checked;
+            ClientSettings.openChat_checkBox = openChat_checkBox.Checked;
+            ClientSettings.notifications_checkBox = notifications_checkBox.Checked;
+            ClientSettings.autoPlay_checkBox = autoPlay_checkBox.Checked;
+            ClientSettings.channels_listView = channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Where(s => !poddyChannelsList.Contains(s)).ToList();
+            ClientSettings.minimizeAtStart_checkBox = minimizeAtStart_checkBox.Checked;
 
-            infoForSave.Add("LQ=" + checkBox1.Checked);
+            System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(KolpaqueClientXmlSettings));
 
-            infoForSave.Add("OPENCHAT=" + checkBox2.Checked);
-
-            infoForSave.Add("SHOWNOTIFICATIONS=" + checkBox3.Checked);
-
-            infoForSave.Add("AUTOPLAY=" + checkBox4.Checked);
-
-            foreach (ListViewItem X in listView2.Items)
-            {
-                if (!poddyChannelsList.Contains(X.Text))
-                {
-                    infoForSave.Add("CUSTOMCHANNEL=" + X.Text);
-                }
-            }
-
-            infoForSave.Add("MINIMIZEATSTART=" + checkBox5.Checked);
-            
-            File.WriteAllLines(iniFilePath, infoForSave);
-        }
-
-        public void RefreshInterface()
-        {
-            textBox1.Text = livestreamerPath;
-
-            listView1.Items.Clear();
-
-            listView1.Items.Add("LQ=" + checkBox1.Checked);
-
-            listView1.Items.Add("OPENCHAT=" + checkBox2.Checked);
-
-            listView1.Items.Add("SHOWNOTIFICATIONS=" + checkBox3.Checked);
-
-            listView1.Items.Add("AUTOPLAY=" + checkBox4.Checked);
-
-            foreach (ListViewItem X in listView2.Items)
-            {
-                if (!poddyChannelsList.Contains(X.Text))
-                {
-                    listView1.Items.Add("CUSTOMCHANNEL=" + X.Text);
-                }
-            }
-
-            listView1.Items.Add("MINIMIZEATSTART=" + checkBox5.Checked);
+            System.IO.FileStream writer = System.IO.File.Create(xmlFilePath);
+            serializer.Serialize(writer, ClientSettings);
+            writer.Close();
         }
 
         public void GetPoddyStatsNewThread(ListViewItem item, string S, bool showBalloon)
@@ -214,6 +241,10 @@ namespace KolpaqueClient
                         {
                             ChannelWentOffline(item);
                         }
+                    }
+                    else
+                    {
+                        ChannelWentOffline(item);
                     }
                 }
             }
@@ -271,7 +302,7 @@ namespace KolpaqueClient
                     NewThread.Start();
                 }
 
-                if (checkBox4.Checked)
+                if (autoPlay_checkBox.Checked)
                 {
                     PlayStream(item);
                 }
@@ -299,7 +330,7 @@ namespace KolpaqueClient
 
         public void PrintBalloon(ListViewItem item)
         {
-            if (checkBox3.Checked)
+            if (notifications_checkBox.Checked)
             {
                 notifyIcon1.BalloonTipTitle = "Stream is Live";
                 notifyIcon1.BalloonTipText = item.Text;
@@ -433,7 +464,7 @@ namespace KolpaqueClient
 
             int twitchCooldownLocal = twitchCooldown;
 
-            foreach (ListViewItem item in listView2.Items)
+            foreach (ListViewItem item in channels_listView.Items)
             {
                 Thread NewThread = new Thread(() => GetStatsPerItem(item, showBalloon, twitchCooldownLocal));
                 NewThread.Start();
@@ -450,19 +481,19 @@ namespace KolpaqueClient
                 {
                     commandLine = "\"" + X.Text + " live=1\"" + " best";
 
-                    if (checkBox1.Checked)
+                    if (LQ_checkBox.Checked)
                     {
                         commandLine = commandLine.Replace("podkolpakom.net/live", "podkolpakom.net/restream");
                     }
 
-                    if (checkBox2.Checked)
+                    if (openChat_checkBox.Checked)
                     {
                         System.Diagnostics.Process.Start(poddyChannelsChatList[poddyChannelsList.IndexOf(X.Text)]);
                     }
                 }
                 else
                 {
-                    if (checkBox1.Checked)
+                    if (LQ_checkBox.Checked)
                     {
                         commandLine = "\"" + X.Text + "\"" + " high";
                     }
@@ -471,7 +502,7 @@ namespace KolpaqueClient
                         commandLine = "\"" + X.Text + "\"" + " best";
                     }
 
-                    if (X.Text.Contains("http") && checkBox2.Checked)
+                    if (X.Text.Contains("http") && openChat_checkBox.Checked)
                     {
                         System.Diagnostics.Process.Start(X.Text);
                     }
@@ -479,11 +510,11 @@ namespace KolpaqueClient
 
                 commandLine = commandLine.Replace("https://","http://");
 
-                if (File.Exists(livestreamerPath))
+                if (File.Exists(livestreamerPath_textBox.Text))
                 {
                     Process myProcess = new Process();
 
-                    myProcess.StartInfo.FileName = livestreamerPath;
+                    myProcess.StartInfo.FileName = livestreamerPath_textBox.Text;
                     myProcess.StartInfo.Arguments = commandLine;
                     myProcess.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                     myProcess.Start();
@@ -492,16 +523,15 @@ namespace KolpaqueClient
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (textBox3.Text != "" && !listView2.Items.Cast<ListViewItem>().Select(X => X.Text).Contains(textBox3.Text.Replace(" ", "")))
+            if (addChannel_textBox.Text != "" && !channels_listView.Items.Cast<ListViewItem>().Select(X => X.Text).Contains(addChannel_textBox.Text.Replace(" ", "")))
             {
-                listView2.Items.Add(textBox3.Text.Replace(" ",""));
-                customChannelsToolStripMenuItem.DropDownItems.Add(textBox3.Text.Replace(" ", ""), null, new EventHandler(contextMenu_Click));
+                channels_listView.Items.Add(addChannel_textBox.Text.Replace(" ",""));
+                customChannelsToolStripMenuItem.DropDownItems.Add(addChannel_textBox.Text.Replace(" ", ""), null, new EventHandler(contextMenu_Click));
                 
-                SaveIniFile();
-                RefreshInterface();
+                SaveXmlFile();
             }
 
-            textBox3.Text = "";
+            addChannel_textBox.Text = "";
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -549,26 +579,22 @@ namespace KolpaqueClient
 
         private void checkBox1_Click(object sender, EventArgs e)
         {
-            SaveIniFile();
-            RefreshInterface();
+            SaveXmlFile();
         }
 
         private void checkBox3_Click(object sender, EventArgs e)
         {
-            SaveIniFile();
-            RefreshInterface();
+            SaveXmlFile();
         }
 
         private void checkBox2_Click(object sender, EventArgs e)
         {
-            SaveIniFile();
-            RefreshInterface();
+            SaveXmlFile();
         }
 
         private void checkBox4_Click(object sender, EventArgs e)
         {
-            SaveIniFile();
-            RefreshInterface();
+            SaveXmlFile();
         }
 
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -596,7 +622,7 @@ namespace KolpaqueClient
 
         private void listView2_MouseClick(object sender, MouseEventArgs e)
         {
-            listView2LastSelectedItem = listView2.SelectedItems[0];
+            listView2LastSelectedItem = channels_listView.SelectedItems[0];
             
             if (e.Button == MouseButtons.Right)
             {
@@ -609,12 +635,12 @@ namespace KolpaqueClient
                     removeChannelToolStripMenuItem.Visible = true;
                 }
 
-                var hitTestInfo = listView2.HitTest(e.X, e.Y);
+                var hitTestInfo = channels_listView.HitTest(e.X, e.Y);
 
                 if (hitTestInfo.Item != null)
                 {
                     var loc = e.Location;
-                    loc.Offset(listView2.Location);
+                    loc.Offset(channels_listView.Location);
 
                     this.contextMenuStrip2.Show(this, loc);
                 }
@@ -641,13 +667,12 @@ namespace KolpaqueClient
 
         private void checkBox5_Click(object sender, EventArgs e)
         {
-            SaveIniFile();
-            RefreshInterface();
+            SaveXmlFile();
         }
 
         private void Form1_Shown(object sender, EventArgs e)
         {
-            if (checkBox5.Checked)
+            if (minimizeAtStart_checkBox.Checked)
             {
                 this.WindowState = FormWindowState.Minimized;
             }
@@ -670,8 +695,7 @@ namespace KolpaqueClient
 
                 listView2LastSelectedItem.Remove();
 
-                SaveIniFile();
-                RefreshInterface();
+                SaveXmlFile();
         }
 
         private void openChatToolStripMenuItem_Click(object sender, EventArgs e)
@@ -714,11 +738,10 @@ namespace KolpaqueClient
 
             if (selectExePath.ShowDialog() == DialogResult.OK)
             {
-                livestreamerPath = selectExePath.FileName;
+                livestreamerPath_textBox.Text = selectExePath.FileName;
             }
 
-            SaveIniFile();
-            RefreshInterface();
+            SaveXmlFile();
         }
 
         private void timer2_Tick(object sender, EventArgs e)
