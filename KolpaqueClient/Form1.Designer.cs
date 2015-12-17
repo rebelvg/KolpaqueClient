@@ -31,9 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.livestreamerPath_textBox = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.xmlPath_textBox = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.LQ_checkBox = new System.Windows.Forms.CheckBox();
             this.addChannel_button = new System.Windows.Forms.Button();
             this.addChannel_textBox = new System.Windows.Forms.TextBox();
@@ -67,38 +65,20 @@
             // livestreamerPath_textBox
             // 
             this.livestreamerPath_textBox.Enabled = false;
-            this.livestreamerPath_textBox.Location = new System.Drawing.Point(12, 25);
+            this.livestreamerPath_textBox.Location = new System.Drawing.Point(12, 38);
             this.livestreamerPath_textBox.Name = "livestreamerPath_textBox";
             this.livestreamerPath_textBox.ReadOnly = true;
             this.livestreamerPath_textBox.Size = new System.Drawing.Size(352, 20);
             this.livestreamerPath_textBox.TabIndex = 2;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(92, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Livestreamer Path";
-            // 
             // xmlPath_textBox
             // 
             this.xmlPath_textBox.Enabled = false;
-            this.xmlPath_textBox.Location = new System.Drawing.Point(12, 67);
+            this.xmlPath_textBox.Location = new System.Drawing.Point(12, 12);
             this.xmlPath_textBox.Name = "xmlPath_textBox";
             this.xmlPath_textBox.ReadOnly = true;
             this.xmlPath_textBox.Size = new System.Drawing.Size(384, 20);
             this.xmlPath_textBox.TabIndex = 7;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 51);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(49, 13);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "Xml Path";
             // 
             // LQ_checkBox
             // 
@@ -322,7 +302,7 @@
             // 
             // changeLivestreamerPath_button
             // 
-            this.changeLivestreamerPath_button.Location = new System.Drawing.Point(370, 25);
+            this.changeLivestreamerPath_button.Location = new System.Drawing.Point(370, 38);
             this.changeLivestreamerPath_button.Name = "changeLivestreamerPath_button";
             this.changeLivestreamerPath_button.Size = new System.Drawing.Size(26, 20);
             this.changeLivestreamerPath_button.TabIndex = 25;
@@ -353,12 +333,11 @@
             this.Controls.Add(this.addChannel_textBox);
             this.Controls.Add(this.addChannel_button);
             this.Controls.Add(this.LQ_checkBox);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.xmlPath_textBox);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.livestreamerPath_textBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Kolpaque Client";
@@ -374,9 +353,7 @@
         #endregion
 
         private System.Windows.Forms.TextBox livestreamerPath_textBox;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox xmlPath_textBox;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox LQ_checkBox;
         private System.Windows.Forms.Button addChannel_button;
         private System.Windows.Forms.TextBox addChannel_textBox;

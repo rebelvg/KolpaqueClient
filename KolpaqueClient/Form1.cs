@@ -29,8 +29,6 @@ namespace KolpaqueClient
                 livestreamerPath_textBox.Text = "https://github.com/chrippa/livestreamer/releases";
             }
 
-            iniFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.ini";
-            xmlFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.xml";
             xmlPath_textBox.Text = xmlFilePath;
 
             if (File.Exists(iniFilePath))
@@ -59,8 +57,8 @@ namespace KolpaqueClient
             NewVersionThread.Start();
         }
 
-        string iniFilePath;
-        string xmlFilePath;
+        string iniFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.ini";
+        string xmlFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.xml";
         List<string> poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent" });
         List<string> poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/admin/", "http://podkolpakom.net/tv/admin/", "http://podkolpakom.net/murshun/admin/", "http://vps.podkolpakom.net/" });
         int twitchCooldown = 0;
@@ -88,26 +86,6 @@ namespace KolpaqueClient
                         
             foreach (string X in infoFromIniFile)
             {
-                if (X.Contains("LIVESTREAMERPATH="))
-                {
-                    livestreamerPath_textBox.Text = X.Replace("LIVESTREAMERPATH=", "");
-                }
-                if (X.Contains("LQ=True"))
-                {
-                    LQ_checkBox.Checked = true;
-                }
-                if (X.Contains("OPENCHAT=True"))
-                {
-                    openChat_checkBox.Checked = true;
-                }
-                if (X.Contains("SHOWNOTIFICATIONS=False"))
-                {
-                    notifications_checkBox.Checked = false;
-                }
-                if (X.Contains("AUTOPLAY=True"))
-                {
-                    autoPlay_checkBox.Checked = true;
-                }
                 if (X.Contains("CUSTOMCHANNEL="))
                 {
                     if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
@@ -116,27 +94,17 @@ namespace KolpaqueClient
                         customChannelsToolStripMenuItem.DropDownItems.Add(X.Replace("CUSTOMCHANNEL=", ""), null, new EventHandler(contextMenu_Click));
                     }
                 }
-                if (X.Contains("MINIMIZEATSTART=True"))
-                {
-                    minimizeAtStart_checkBox.Checked = true;
-                }
             }
         }
 
         public class KolpaqueClientXmlSettings
         {
-            public string livestreamerPath;
-
+            public string livestreamerPath_textBox;
             public bool LQ_checkBox;
-
             public bool openChat_checkBox;
-
             public bool notifications_checkBox;
-
             public bool autoPlay_checkBox;
-
             public List<string> channels_listView;
-
             public bool minimizeAtStart_checkBox;
         }
 
@@ -150,36 +118,55 @@ namespace KolpaqueClient
                     poddyChannelsToolStripMenuItem.DropDownItems.Add(X, null, new EventHandler(contextMenu_Click));
                 }
             }
-            
+
             System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(KolpaqueClientXmlSettings));
 
             StreamReader reader = new StreamReader(xmlFilePath);
-            KolpaqueClientXmlSettings ClientSettings = (KolpaqueClientXmlSettings)serializer.Deserialize(reader);
-            reader.Close();
 
-            livestreamerPath_textBox.Text = ClientSettings.livestreamerPath;
-            LQ_checkBox.Checked = ClientSettings.LQ_checkBox;
-            openChat_checkBox.Checked = ClientSettings.openChat_checkBox;
-            notifications_checkBox.Checked = ClientSettings.notifications_checkBox;
-            autoPlay_checkBox.Checked = ClientSettings.autoPlay_checkBox;
-
-            foreach (string X in ClientSettings.channels_listView)
+            try
             {
-                if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
+                KolpaqueClientXmlSettings ClientSettings = (KolpaqueClientXmlSettings)serializer.Deserialize(reader);
+                reader.Close();
+
+                livestreamerPath_textBox.Text = ClientSettings.livestreamerPath_textBox;
+                LQ_checkBox.Checked = ClientSettings.LQ_checkBox;
+                openChat_checkBox.Checked = ClientSettings.openChat_checkBox;
+                notifications_checkBox.Checked = ClientSettings.notifications_checkBox;
+                autoPlay_checkBox.Checked = ClientSettings.autoPlay_checkBox;
+
+                foreach (string X in ClientSettings.channels_listView)
                 {
-                    channels_listView.Items.Add(X.Replace("CUSTOMCHANNEL=", ""));
-                    customChannelsToolStripMenuItem.DropDownItems.Add(X.Replace("CUSTOMCHANNEL=", ""), null, new EventHandler(contextMenu_Click));
+                    if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
+                    {
+                        channels_listView.Items.Add(X);
+                        customChannelsToolStripMenuItem.DropDownItems.Add(X, null, new EventHandler(contextMenu_Click));
+                    }
+                }
+
+                minimizeAtStart_checkBox.Checked = ClientSettings.minimizeAtStart_checkBox;
+            }
+            catch
+            {
+                reader.Close();
+
+                DialogResult dialogResult = MessageBox.Show("Create a new one?", "Xml file is corrupted", MessageBoxButtons.YesNo);
+
+                if (dialogResult == DialogResult.Yes)
+                {
+                    SaveXmlFile();
+                }
+                if (dialogResult == DialogResult.No)
+                {
+                    System.Environment.Exit(1);
                 }
             }
-
-            minimizeAtStart_checkBox.Checked = ClientSettings.minimizeAtStart_checkBox;
         }
         
         public void SaveXmlFile()
         {
             KolpaqueClientXmlSettings ClientSettings = new KolpaqueClientXmlSettings();
 
-            ClientSettings.livestreamerPath = livestreamerPath_textBox.Text;
+            ClientSettings.livestreamerPath_textBox = livestreamerPath_textBox.Text;
             ClientSettings.LQ_checkBox = LQ_checkBox.Checked;
             ClientSettings.openChat_checkBox = openChat_checkBox.Checked;
             ClientSettings.notifications_checkBox = notifications_checkBox.Checked;
@@ -519,6 +506,10 @@ namespace KolpaqueClient
                     myProcess.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                     myProcess.Start();
                 }
+                else
+                {
+                    MessageBox.Show("livestreamer.exe not found.");
+                }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -685,17 +676,17 @@ namespace KolpaqueClient
 
         private void removeChannelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-                for (int i = 0; i < customChannelsToolStripMenuItem.DropDownItems.Count; i++)
+            for (int i = 0; i < customChannelsToolStripMenuItem.DropDownItems.Count; i++)
+            {
+                if (customChannelsToolStripMenuItem.DropDownItems[i].Text.Contains(listView2LastSelectedItem.Text))
                 {
-                    if (customChannelsToolStripMenuItem.DropDownItems[i].Text.Contains(listView2LastSelectedItem.Text))
-                    {
-                        customChannelsToolStripMenuItem.DropDownItems.RemoveAt(i);
-                    }
+                    customChannelsToolStripMenuItem.DropDownItems.RemoveAt(i);
                 }
+            }
 
-                listView2LastSelectedItem.Remove();
+            listView2LastSelectedItem.Remove();
 
-                SaveXmlFile();
+            SaveXmlFile();
         }
 
         private void openChatToolStripMenuItem_Click(object sender, EventArgs e)
