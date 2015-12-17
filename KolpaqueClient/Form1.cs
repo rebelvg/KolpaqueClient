@@ -726,6 +726,7 @@ namespace KolpaqueClient
 
             selectExePath.Title = "Select livestreamer.exe";
             selectExePath.Filter = "Executable File (.exe) | *.exe";
+            selectExePath.RestoreDirectory = true;
 
             if (selectExePath.ShowDialog() == DialogResult.OK)
             {
