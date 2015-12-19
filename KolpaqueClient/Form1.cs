@@ -22,13 +22,7 @@ namespace KolpaqueClient
             InitializeComponent();
 
             livestreamerPath_textBox.Text = "C:\\Program Files (x86)\\Livestreamer\\livestreamer.exe";
-
-            if (!File.Exists(livestreamerPath_textBox.Text))
-            {
-                livestreamerPath_textBox.Enabled = true;
-                livestreamerPath_textBox.Text = "https://github.com/chrippa/livestreamer/releases";
-            }
-
+            
             xmlPath_textBox.Text = xmlFilePath;
 
             if (File.Exists(iniFilePath))
@@ -47,6 +41,12 @@ namespace KolpaqueClient
                 SaveXmlFile();
             }
 
+            if (!File.Exists(livestreamerPath_textBox.Text))
+            {
+                livestreamerPath_textBox.Enabled = true;
+                livestreamerPath_textBox.Text = "https://github.com/chrippa/livestreamer/releases";
+            }
+
             newClientVersion = clientVersion;
 
             label2.Text = "Version " + clientVersion.ToString();
@@ -63,7 +63,7 @@ namespace KolpaqueClient
         List<string> poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/admin/", "http://podkolpakom.net/tv/admin/", "http://podkolpakom.net/murshun/admin/", "http://vps.podkolpakom.net/" });
         int twitchCooldown = 0;
         
-        double clientVersion = 0.259;
+        double clientVersion = 0.26;
         double newClientVersion;
         string newClientVersionLink = "https://github.com/rebelvg/KolpaqueClient/releases";
 
@@ -149,7 +149,7 @@ namespace KolpaqueClient
             {
                 reader.Close();
 
-                DialogResult dialogResult = MessageBox.Show("Create a new one?", "Xml file is corrupted", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show("Create a new one?", "Xml file is corrupted.", MessageBoxButtons.YesNo);
 
                 if (dialogResult == DialogResult.Yes)
                 {
@@ -266,7 +266,7 @@ namespace KolpaqueClient
             }
         }
 
-        public void ChannelWentOnline(ListViewItem item, bool showBalloon)
+        public async void ChannelWentOnline(ListViewItem item, bool showBalloon)
         {
             if (item.BackColor != Color.Green)
             {
@@ -285,8 +285,7 @@ namespace KolpaqueClient
 
                 if (showBalloon)
                 {
-                    Thread NewThread = new Thread(() => PrintBalloon(item));
-                    NewThread.Start();
+                    await PrintBalloon(item);
                 }
 
                 if (autoPlay_checkBox.Checked)
@@ -315,23 +314,20 @@ namespace KolpaqueClient
             }
         }
 
-        public void PrintBalloon(ListViewItem item)
+        public async Task PrintBalloon(ListViewItem item)
         {
             if (notifications_checkBox.Checked)
             {
                 notifyIcon1.BalloonTipTitle = "Stream is Live";
                 notifyIcon1.BalloonTipText = item.Text;
-                notifyIcon1.Visible = true;
                 notifyIcon1.ShowBalloonTip(5000);
-
-                Thread.Sleep(5000);
+                
+                await Task.Delay(TimeSpan.FromSeconds(5));
 
                 try
                 {
                     notifyIcon1.BalloonTipTitle = "";
                     notifyIcon1.BalloonTipText = "";
-                    notifyIcon1.Visible = false;
-                    notifyIcon1.Visible = true;
                 }
                 catch
                 {
@@ -340,7 +336,7 @@ namespace KolpaqueClient
             }
         }
 
-        public void GetNewVersionNewThread()
+        public async void GetNewVersionNewThread()
         {
             try
             {
@@ -372,19 +368,16 @@ namespace KolpaqueClient
                     {
                         notifyIcon1.BalloonTipTitle = "New Version Available";
                         notifyIcon1.BalloonTipText = newClientVersionLink;
-                        notifyIcon1.Visible = true;
                         notifyIcon1.ShowBalloonTip(5000);
 
                         newVersionBalloonShown = true;
 
-                        Thread.Sleep(5000);
+                        await Task.Delay(TimeSpan.FromSeconds(5));
 
                         try
                         {
                             notifyIcon1.BalloonTipTitle = "";
                             notifyIcon1.BalloonTipText = "";
-                            notifyIcon1.Visible = false;
-                            notifyIcon1.Visible = true;
                         }
                         catch
                         {
@@ -606,7 +599,6 @@ namespace KolpaqueClient
 
                 notifyIcon1.BalloonTipTitle = "Launching the Stream";
                 notifyIcon1.BalloonTipText = Clipboard.GetText();
-                notifyIcon1.Visible = true;
                 notifyIcon1.ShowBalloonTip(5000);
             }            
         }
@@ -710,7 +702,6 @@ namespace KolpaqueClient
 
                 notifyIcon1.BalloonTipTitle = "Launching the Stream";
                 notifyIcon1.BalloonTipText = listView2LastSelectedItem.Text;
-                notifyIcon1.Visible = true;
                 notifyIcon1.ShowBalloonTip(5000);
             }
         }
