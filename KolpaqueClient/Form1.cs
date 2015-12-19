@@ -63,12 +63,13 @@ namespace KolpaqueClient
         List<string> poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/admin/", "http://podkolpakom.net/tv/admin/", "http://podkolpakom.net/murshun/admin/", "http://vps.podkolpakom.net/" });
         int twitchCooldown = 0;
         
-        string clientVersion = "0.263";
+        string clientVersion = "0.264";
         string newClientVersion;
         string newClientVersionLink = "https://github.com/rebelvg/KolpaqueClient/releases";
 
         bool newVersionBalloonShown = false;
         bool channelsListViewIsActive;
+        bool ignoreBalloonClickEvent = true;
 
         ListViewItem listView2LastSelectedItem;
 
@@ -328,21 +329,15 @@ namespace KolpaqueClient
         {
             if (notifications_checkBox.Checked)
             {
+                ignoreBalloonClickEvent = false;
+
                 notifyIcon1.BalloonTipTitle = "Stream is Live";
                 notifyIcon1.BalloonTipText = item.Text;
                 notifyIcon1.ShowBalloonTip(5000);
                 
                 await Task.Delay(TimeSpan.FromSeconds(5));
 
-                try
-                {
-                    notifyIcon1.BalloonTipTitle = "";
-                    notifyIcon1.BalloonTipText = "";
-                }
-                catch
-                {
-
-                }
+                ignoreBalloonClickEvent = true;
             }
         }
 
@@ -376,6 +371,8 @@ namespace KolpaqueClient
 
                     if (!newVersionBalloonShown)
                     {
+                        ignoreBalloonClickEvent = false;
+
                         notifyIcon1.BalloonTipTitle = "New Version Available";
                         notifyIcon1.BalloonTipText = newClientVersionLink;
                         notifyIcon1.ShowBalloonTip(5000);
@@ -384,15 +381,7 @@ namespace KolpaqueClient
 
                         await Task.Delay(TimeSpan.FromSeconds(5));
 
-                        try
-                        {
-                            notifyIcon1.BalloonTipTitle = "";
-                            notifyIcon1.BalloonTipText = "";
-                        }
-                        catch
-                        {
-
-                        }
+                        ignoreBalloonClickEvent = true;
                     }
                 }
                 else
@@ -540,6 +529,11 @@ namespace KolpaqueClient
 
         private void notifyIcon1_BalloonTipClicked(object sender, EventArgs e)
         {
+            if (ignoreBalloonClickEvent)
+            {
+                return;
+            }
+
             if (notifyIcon1.BalloonTipTitle == "Stream is Live")
             {
                 PlayStream(new ListViewItem(notifyIcon1.BalloonTipText));
