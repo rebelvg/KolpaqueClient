@@ -58,6 +58,7 @@
             this.minimizeAtStart_checkBox = new System.Windows.Forms.CheckBox();
             this.changeLivestreamerPath_button = new System.Windows.Forms.Button();
             this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.linkLabel2 = new System.Windows.Forms.LinkLabel();
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             this.SuspendLayout();
@@ -82,8 +83,9 @@
             // 
             // LQ_checkBox
             // 
+            this.LQ_checkBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.LQ_checkBox.AutoSize = true;
-            this.LQ_checkBox.Location = new System.Drawing.Point(385, 420);
+            this.LQ_checkBox.Location = new System.Drawing.Point(275, 540);
             this.LQ_checkBox.Name = "LQ_checkBox";
             this.LQ_checkBox.Size = new System.Drawing.Size(81, 17);
             this.LQ_checkBox.TabIndex = 10;
@@ -93,7 +95,8 @@
             // 
             // addChannel_button
             // 
-            this.addChannel_button.Location = new System.Drawing.Point(592, 420);
+            this.addChannel_button.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.addChannel_button.Location = new System.Drawing.Point(275, 511);
             this.addChannel_button.Name = "addChannel_button";
             this.addChannel_button.Size = new System.Drawing.Size(104, 23);
             this.addChannel_button.TabIndex = 11;
@@ -103,9 +106,10 @@
             // 
             // addChannel_textBox
             // 
-            this.addChannel_textBox.Location = new System.Drawing.Point(385, 394);
+            this.addChannel_textBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.addChannel_textBox.Location = new System.Drawing.Point(6, 485);
             this.addChannel_textBox.Name = "addChannel_textBox";
-            this.addChannel_textBox.Size = new System.Drawing.Size(311, 20);
+            this.addChannel_textBox.Size = new System.Drawing.Size(373, 20);
             this.addChannel_textBox.TabIndex = 13;
             // 
             // notifyIcon1
@@ -155,8 +159,9 @@
             // 
             // linkLabel1
             // 
+            this.linkLabel1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(4, 484);
+            this.linkLabel1.Location = new System.Drawing.Point(4, 579);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(83, 13);
             this.linkLabel1.TabIndex = 16;
@@ -166,8 +171,9 @@
             // 
             // openChat_checkBox
             // 
+            this.openChat_checkBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.openChat_checkBox.AutoSize = true;
-            this.openChat_checkBox.Location = new System.Drawing.Point(385, 443);
+            this.openChat_checkBox.Location = new System.Drawing.Point(275, 563);
             this.openChat_checkBox.Name = "openChat_checkBox";
             this.openChat_checkBox.Size = new System.Drawing.Size(77, 17);
             this.openChat_checkBox.TabIndex = 18;
@@ -177,26 +183,29 @@
             // 
             // channels_listView
             // 
+            this.channels_listView.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.channels_listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader2});
             this.channels_listView.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.channels_listView.FullRowSelect = true;
             this.channels_listView.GridLines = true;
             this.channels_listView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.channels_listView.Location = new System.Drawing.Point(385, 9);
+            this.channels_listView.Location = new System.Drawing.Point(7, 64);
             this.channels_listView.MultiSelect = false;
             this.channels_listView.Name = "channels_listView";
-            this.channels_listView.Size = new System.Drawing.Size(311, 379);
+            this.channels_listView.Size = new System.Drawing.Size(372, 415);
             this.channels_listView.TabIndex = 19;
             this.channels_listView.UseCompatibleStateImageBehavior = false;
-            this.channels_listView.View = System.Windows.Forms.View.SmallIcon;
+            this.channels_listView.View = System.Windows.Forms.View.Details;
+            this.channels_listView.ColumnWidthChanged += new System.Windows.Forms.ColumnWidthChangedEventHandler(this.channels_listView_ColumnWidthChanged);
+            this.channels_listView.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.channels_listView_ColumnWidthChanging);
             this.channels_listView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView2_MouseClick);
             this.channels_listView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listView2_MouseDoubleClick);
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "Channels";
-            this.columnHeader2.Width = 290;
+            this.columnHeader2.Width = 348;
             // 
             // timer1
             // 
@@ -206,10 +215,11 @@
             // 
             // notifications_checkBox
             // 
+            this.notifications_checkBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.notifications_checkBox.AutoSize = true;
             this.notifications_checkBox.Checked = true;
             this.notifications_checkBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.notifications_checkBox.Location = new System.Drawing.Point(472, 420);
+            this.notifications_checkBox.Location = new System.Drawing.Point(7, 511);
             this.notifications_checkBox.Name = "notifications_checkBox";
             this.notifications_checkBox.Size = new System.Drawing.Size(114, 17);
             this.notifications_checkBox.TabIndex = 20;
@@ -219,8 +229,9 @@
             // 
             // autoPlay_checkBox
             // 
+            this.autoPlay_checkBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.autoPlay_checkBox.AutoSize = true;
-            this.autoPlay_checkBox.Location = new System.Drawing.Point(385, 466);
+            this.autoPlay_checkBox.Location = new System.Drawing.Point(275, 586);
             this.autoPlay_checkBox.Name = "autoPlay_checkBox";
             this.autoPlay_checkBox.Size = new System.Drawing.Size(71, 17);
             this.autoPlay_checkBox.TabIndex = 21;
@@ -230,8 +241,9 @@
             // 
             // label2
             // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(4, 505);
+            this.label2.Location = new System.Drawing.Point(4, 618);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(66, 13);
             this.label2.TabIndex = 22;
@@ -239,8 +251,9 @@
             // 
             // linkLabel3
             // 
+            this.linkLabel3.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.linkLabel3.AutoSize = true;
-            this.linkLabel3.Location = new System.Drawing.Point(76, 505);
+            this.linkLabel3.Location = new System.Drawing.Point(76, 618);
             this.linkLabel3.Name = "linkLabel3";
             this.linkLabel3.Size = new System.Drawing.Size(113, 13);
             this.linkLabel3.TabIndex = 23;
@@ -291,8 +304,9 @@
             // 
             // minimizeAtStart_checkBox
             // 
+            this.minimizeAtStart_checkBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.minimizeAtStart_checkBox.AutoSize = true;
-            this.minimizeAtStart_checkBox.Location = new System.Drawing.Point(472, 443);
+            this.minimizeAtStart_checkBox.Location = new System.Drawing.Point(7, 534);
             this.minimizeAtStart_checkBox.Name = "minimizeAtStart_checkBox";
             this.minimizeAtStart_checkBox.Size = new System.Drawing.Size(103, 17);
             this.minimizeAtStart_checkBox.TabIndex = 24;
@@ -316,11 +330,24 @@
             this.timer2.Interval = 60000;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
+            // linkLabel2
+            // 
+            this.linkLabel2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.linkLabel2.AutoSize = true;
+            this.linkLabel2.Location = new System.Drawing.Point(4, 597);
+            this.linkLabel2.Name = "linkLabel2";
+            this.linkLabel2.Size = new System.Drawing.Size(40, 13);
+            this.linkLabel2.TabIndex = 26;
+            this.linkLabel2.TabStop = true;
+            this.linkLabel2.Text = "GitHub";
+            this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(703, 527);
+            this.ClientSize = new System.Drawing.Size(391, 640);
+            this.Controls.Add(this.linkLabel2);
             this.Controls.Add(this.changeLivestreamerPath_button);
             this.Controls.Add(this.minimizeAtStart_checkBox);
             this.Controls.Add(this.linkLabel3);
@@ -335,13 +362,15 @@
             this.Controls.Add(this.LQ_checkBox);
             this.Controls.Add(this.xmlPath_textBox);
             this.Controls.Add(this.livestreamerPath_textBox);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(397, 1200);
+            this.MinimumSize = new System.Drawing.Size(397, 665);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Kolpaque Client";
             this.Shown += new System.EventHandler(this.Form1_Shown);
+            this.ResizeEnd += new System.EventHandler(this.Form1_ResizeEnd);
             this.ClientSizeChanged += new System.EventHandler(this.Form1_ClientSizeChanged);
             this.contextMenuStrip1.ResumeLayout(false);
             this.contextMenuStrip2.ResumeLayout(false);
@@ -380,5 +409,6 @@
         private System.Windows.Forms.ToolStripMenuItem openChatToolStripMenuItem;
         private System.Windows.Forms.Button changeLivestreamerPath_button;
         private System.Windows.Forms.Timer timer2;
+        private System.Windows.Forms.LinkLabel linkLabel2;
     }
 }

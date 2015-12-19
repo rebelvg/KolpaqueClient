@@ -63,13 +63,16 @@ namespace KolpaqueClient
         List<string> poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/admin/", "http://podkolpakom.net/tv/admin/", "http://podkolpakom.net/murshun/admin/", "http://vps.podkolpakom.net/" });
         int twitchCooldown = 0;
         
-        double clientVersion = 0.26;
+        double clientVersion = 0.261;
         double newClientVersion;
         string newClientVersionLink = "https://github.com/rebelvg/KolpaqueClient/releases";
 
         bool newVersionBalloonShown = false;
+        bool channelsListViewIsActive;
 
         ListViewItem listView2LastSelectedItem;
+
+        KolpaqueClientXmlSettings ClientSettings;
 
         public void ReadIniFile()
         {
@@ -106,6 +109,8 @@ namespace KolpaqueClient
             public bool autoPlay_checkBox;
             public List<string> channels_listView;
             public bool minimizeAtStart_checkBox;
+            public int channels_listView_ColumnWidth;
+            public int[] form1_size;
         }
 
         public void ReadXmlFile()
@@ -125,10 +130,11 @@ namespace KolpaqueClient
 
             try
             {
-                KolpaqueClientXmlSettings ClientSettings = (KolpaqueClientXmlSettings)serializer.Deserialize(reader);
+                ClientSettings = (KolpaqueClientXmlSettings)serializer.Deserialize(reader);
                 reader.Close();
 
-                livestreamerPath_textBox.Text = ClientSettings.livestreamerPath_textBox;
+                if (ClientSettings.livestreamerPath_textBox != "")
+                    livestreamerPath_textBox.Text = ClientSettings.livestreamerPath_textBox;
                 LQ_checkBox.Checked = ClientSettings.LQ_checkBox;
                 openChat_checkBox.Checked = ClientSettings.openChat_checkBox;
                 notifications_checkBox.Checked = ClientSettings.notifications_checkBox;
@@ -144,6 +150,8 @@ namespace KolpaqueClient
                 }
 
                 minimizeAtStart_checkBox.Checked = ClientSettings.minimizeAtStart_checkBox;
+                if (ClientSettings.channels_listView_ColumnWidth != 0)
+                    columnHeader2.Width = ClientSettings.channels_listView_ColumnWidth;               
             }
             catch
             {
@@ -164,7 +172,7 @@ namespace KolpaqueClient
         
         public void SaveXmlFile()
         {
-            KolpaqueClientXmlSettings ClientSettings = new KolpaqueClientXmlSettings();
+            ClientSettings = new KolpaqueClientXmlSettings();
 
             ClientSettings.livestreamerPath_textBox = livestreamerPath_textBox.Text;
             ClientSettings.LQ_checkBox = LQ_checkBox.Checked;
@@ -173,6 +181,8 @@ namespace KolpaqueClient
             ClientSettings.autoPlay_checkBox = autoPlay_checkBox.Checked;
             ClientSettings.channels_listView = channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Where(s => !poddyChannelsList.Contains(s)).ToList();
             ClientSettings.minimizeAtStart_checkBox = minimizeAtStart_checkBox.Checked;
+            ClientSettings.channels_listView_ColumnWidth = columnHeader2.Width;
+            ClientSettings.form1_size = new int[] { this.Width, this.Height };
 
             System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(KolpaqueClientXmlSettings));
 
@@ -659,6 +669,11 @@ namespace KolpaqueClient
             {
                 this.WindowState = FormWindowState.Minimized;
             }
+
+            if (ClientSettings.form1_size[0] != 0)
+                Form1.ActiveForm.Height = ClientSettings.form1_size[0];
+            if (ClientSettings.form1_size[1] != 0)
+                Form1.ActiveForm.Width = ClientSettings.form1_size[1];
         }
 
         private void copyToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
@@ -732,6 +747,29 @@ namespace KolpaqueClient
         {
             Thread NewVersionThread = new Thread(() => GetNewVersionNewThread());
             NewVersionThread.Start();
+        }
+
+        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/rebelvg/KolpaqueClient/releases");
+        }
+
+        private void channels_listView_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            channelsListViewIsActive = true;
+        }
+
+        private void channels_listView_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
+        {
+            if (channelsListViewIsActive)
+                SaveXmlFile();
+
+            channelsListViewIsActive = false;
+        }
+
+        private void Form1_ResizeEnd(object sender, EventArgs e)
+        {
+            SaveXmlFile();
         }
     }
 }
