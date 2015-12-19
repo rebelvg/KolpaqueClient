@@ -665,15 +665,16 @@ namespace KolpaqueClient
 
         private void Form1_Shown(object sender, EventArgs e)
         {
+            if (ClientSettings.form1_size[0] != 0)
+                Form1.ActiveForm.Width = ClientSettings.form1_size[0];
+            if (ClientSettings.form1_size[1] != 0)
+                Form1.ActiveForm.Height = ClientSettings.form1_size[1];
+
             if (minimizeAtStart_checkBox.Checked)
             {
+                
                 this.WindowState = FormWindowState.Minimized;
             }
-
-            if (ClientSettings.form1_size[0] != 0)
-                Form1.ActiveForm.Height = ClientSettings.form1_size[0];
-            if (ClientSettings.form1_size[1] != 0)
-                Form1.ActiveForm.Width = ClientSettings.form1_size[1];
         }
 
         private void copyToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
