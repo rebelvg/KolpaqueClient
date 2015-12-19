@@ -63,8 +63,8 @@ namespace KolpaqueClient
         List<string> poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/admin/", "http://podkolpakom.net/tv/admin/", "http://podkolpakom.net/murshun/admin/", "http://vps.podkolpakom.net/" });
         int twitchCooldown = 0;
         
-        double clientVersion = 0.261;
-        double newClientVersion;
+        string clientVersion = "0.263";
+        string newClientVersion;
         string newClientVersionLink = "https://github.com/rebelvg/KolpaqueClient/releases";
 
         bool newVersionBalloonShown = false;
@@ -366,11 +366,11 @@ namespace KolpaqueClient
 
                 dynamic gitHubAPIStats = JsonConvert.DeserializeObject(gitHubApiString);
             
-                newClientVersion = Double.Parse(gitHubAPIStats[0].tag_name.ToString());
+                newClientVersion = gitHubAPIStats[0].tag_name;
 
                 newClientVersionLink = gitHubAPIStats[0].assets[0].browser_download_url;
 
-                if (newClientVersion > clientVersion)
+                if (newClientVersion != clientVersion)
                 {
                     this.Invoke(new Action(() => linkLabel3.Visible = true));
 
@@ -666,13 +666,12 @@ namespace KolpaqueClient
         private void Form1_Shown(object sender, EventArgs e)
         {
             if (ClientSettings.form1_size[0] != 0)
-                Form1.ActiveForm.Width = ClientSettings.form1_size[0];
+                this.Width = ClientSettings.form1_size[0];
             if (ClientSettings.form1_size[1] != 0)
-                Form1.ActiveForm.Height = ClientSettings.form1_size[1];
+                this.Height = ClientSettings.form1_size[1];
 
             if (minimizeAtStart_checkBox.Checked)
-            {
-                
+            {                
                 this.WindowState = FormWindowState.Minimized;
             }
         }
