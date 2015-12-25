@@ -25,15 +25,17 @@ namespace KolpaqueClient
             
             xmlPath_textBox.Text = xmlFilePath;
 
-            if (File.Exists(iniFilePath))
+            foreach (string X in poddyChannelsList)
             {
-                ReadIniFile();
-                SaveXmlFile();
-                File.Delete(iniFilePath);
+                if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
+                {
+                    channels_listView.Items.Add(X);
+                    poddyChannelsToolStripMenuItem.DropDownItems.Add(X, null, new EventHandler(contextMenu_Click));
+                }
             }
             
             if (File.Exists(xmlFilePath))
-            {      
+            {
                 ReadXmlFile();
             }
             else
@@ -49,7 +51,7 @@ namespace KolpaqueClient
 
             newClientVersion = clientVersion;
 
-            label2.Text = "Version " + clientVersion.ToString();
+            label2.Text = "Version " + clientVersion;
 
             GetStats(false);
 
@@ -57,49 +59,24 @@ namespace KolpaqueClient
             NewVersionThread.Start();
         }
 
-        string iniFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.ini";
         string xmlFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.xml";
         List<string> poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent" });
         List<string> poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/admin/", "http://podkolpakom.net/tv/admin/", "http://podkolpakom.net/murshun/admin/", "http://vps.podkolpakom.net/" });
         int twitchCooldown = 0;
         
-        string clientVersion = "0.264";
+        string clientVersion = "0.265";
         string newClientVersion;
         string newClientVersionLink = "https://github.com/rebelvg/KolpaqueClient/releases";
 
         bool newVersionBalloonShown = false;
         bool channelsListViewIsActive;
-        bool ignoreBalloonClickEvent = true;
+        bool ignoreUpdates;
+
+        DateTime balloonLastShown;
 
         ListViewItem listView2LastSelectedItem;
 
         KolpaqueClientXmlSettings ClientSettings;
-
-        public void ReadIniFile()
-        {
-            foreach (string X in poddyChannelsList)
-            {
-                if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
-                {
-                    channels_listView.Items.Add(X);
-                    poddyChannelsToolStripMenuItem.DropDownItems.Add(X, null, new EventHandler(contextMenu_Click));
-                }
-            }
-
-            string[] infoFromIniFile = File.ReadAllLines(iniFilePath);
-                        
-            foreach (string X in infoFromIniFile)
-            {
-                if (X.Contains("CUSTOMCHANNEL="))
-                {
-                    if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
-                    {
-                        channels_listView.Items.Add(X.Replace("CUSTOMCHANNEL=", ""));
-                        customChannelsToolStripMenuItem.DropDownItems.Add(X.Replace("CUSTOMCHANNEL=", ""), null, new EventHandler(contextMenu_Click));
-                    }
-                }
-            }
-        }
 
         public class KolpaqueClientXmlSettings
         {
@@ -112,19 +89,11 @@ namespace KolpaqueClient
             public bool minimizeAtStart_checkBox;
             public int channels_listView_ColumnWidth;
             public int[] form1_size;
+            public bool ignoreUpdates;
         }
 
         public void ReadXmlFile()
         {
-            foreach (string X in poddyChannelsList)
-            {
-                if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
-                {
-                    channels_listView.Items.Add(X);
-                    poddyChannelsToolStripMenuItem.DropDownItems.Add(X, null, new EventHandler(contextMenu_Click));
-                }
-            }
-
             System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(KolpaqueClientXmlSettings));
 
             StreamReader reader = new StreamReader(xmlFilePath);
@@ -152,7 +121,8 @@ namespace KolpaqueClient
 
                 minimizeAtStart_checkBox.Checked = ClientSettings.minimizeAtStart_checkBox;
                 if (ClientSettings.channels_listView_ColumnWidth != 0)
-                    columnHeader2.Width = ClientSettings.channels_listView_ColumnWidth;               
+                    columnHeader2.Width = ClientSettings.channels_listView_ColumnWidth;
+                ignoreUpdates = ClientSettings.ignoreUpdates;
             }
             catch
             {
@@ -184,6 +154,7 @@ namespace KolpaqueClient
             ClientSettings.minimizeAtStart_checkBox = minimizeAtStart_checkBox.Checked;
             ClientSettings.channels_listView_ColumnWidth = columnHeader2.Width;
             ClientSettings.form1_size = new int[] { this.Width, this.Height };
+            ClientSettings.ignoreUpdates = ignoreUpdates;
 
             System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(KolpaqueClientXmlSettings));
 
@@ -277,7 +248,7 @@ namespace KolpaqueClient
             }
         }
 
-        public async void ChannelWentOnline(ListViewItem item, bool showBalloon)
+        public void ChannelWentOnline(ListViewItem item, bool showBalloon)
         {
             if (item.BackColor != Color.Green)
             {
@@ -296,7 +267,7 @@ namespace KolpaqueClient
 
                 if (showBalloon)
                 {
-                    await PrintBalloon(item);
+                    PrintBalloon("Stream is Live", item.Text);
                 }
 
                 if (autoPlay_checkBox.Checked)
@@ -325,24 +296,23 @@ namespace KolpaqueClient
             }
         }
 
-        public async Task PrintBalloon(ListViewItem item)
+        public void PrintBalloon(string balloonTitle, string balloonText)
         {
             if (notifications_checkBox.Checked)
             {
-                ignoreBalloonClickEvent = false;
+                notifyIcon1.BalloonTipTitle = balloonTitle;
+                notifyIcon1.BalloonTipText = balloonText;
+                notifyIcon1.ShowBalloonTip(10000);
 
-                notifyIcon1.BalloonTipTitle = "Stream is Live";
-                notifyIcon1.BalloonTipText = item.Text;
-                notifyIcon1.ShowBalloonTip(5000);
-                
-                await Task.Delay(TimeSpan.FromSeconds(5));
-
-                ignoreBalloonClickEvent = true;
+                balloonLastShown = DateTime.Now;
             }
         }
 
-        public async void GetNewVersionNewThread()
+        public void GetNewVersionNewThread()
         {
+            if (ignoreUpdates)
+                return;
+
             try
             {
                 HttpWebRequest request = WebRequest.Create("https://api.github.com/repos/rebelvg/KolpaqueClient/releases") as HttpWebRequest;
@@ -371,17 +341,7 @@ namespace KolpaqueClient
 
                     if (!newVersionBalloonShown)
                     {
-                        ignoreBalloonClickEvent = false;
-
-                        notifyIcon1.BalloonTipTitle = "New Version Available";
-                        notifyIcon1.BalloonTipText = newClientVersionLink;
-                        notifyIcon1.ShowBalloonTip(5000);
-
-                        newVersionBalloonShown = true;
-
-                        await Task.Delay(TimeSpan.FromSeconds(5));
-
-                        ignoreBalloonClickEvent = true;
+                        PrintBalloon("New Version Available", newClientVersionLink);
                     }
                 }
                 else
@@ -529,10 +489,12 @@ namespace KolpaqueClient
 
         private void notifyIcon1_BalloonTipClicked(object sender, EventArgs e)
         {
-            if (ignoreBalloonClickEvent)
-            {
+            TimeSpan timeSpanLastBalloonShown;
+
+            timeSpanLastBalloonShown = DateTime.Now - balloonLastShown;
+
+            if (timeSpanLastBalloonShown.Seconds > 9)
                 return;
-            }
 
             if (notifyIcon1.BalloonTipTitle == "Stream is Live")
             {
@@ -601,9 +563,7 @@ namespace KolpaqueClient
             {
                 PlayStream(new ListViewItem(Clipboard.GetText()));
 
-                notifyIcon1.BalloonTipTitle = "Launching the Stream";
-                notifyIcon1.BalloonTipText = Clipboard.GetText();
-                notifyIcon1.ShowBalloonTip(5000);
+                PrintBalloon("Launching the Stream", Clipboard.GetText());
             }            
         }
 
@@ -709,9 +669,7 @@ namespace KolpaqueClient
             {
                 PlayStream(listView2LastSelectedItem);
 
-                notifyIcon1.BalloonTipTitle = "Launching the Stream";
-                notifyIcon1.BalloonTipText = listView2LastSelectedItem.Text;
-                notifyIcon1.ShowBalloonTip(5000);
+                PrintBalloon("Launching the Stream", listView2LastSelectedItem.Text);
             }
         }
 
