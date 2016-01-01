@@ -21,9 +21,22 @@ namespace KolpaqueClient
         {
             InitializeComponent();
 
-            livestreamerPath_textBox.Text = "C:\\Program Files (x86)\\Livestreamer\\livestreamer.exe";
-            
+            if (Process.GetProcessesByName("KolpaqueClient").Length > 1)
+            {
+                MessageBox.Show("Client is already running.");
+                notifyIcon1.Visible = false;
+                System.Environment.Exit(1);       
+            }
+
+            xmlFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.xml";
             xmlPath_textBox.Text = xmlFilePath;
+
+            livestreamerPath_textBox.Text = "C:\\Program Files (x86)\\Livestreamer\\livestreamer.exe";
+
+            poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent" });
+            poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/admin/", "http://podkolpakom.net/tv/admin/", "http://podkolpakom.net/murshun/admin/", "http://vps.podkolpakom.net/" });
+            
+            clientVersion = "0.266";
 
             foreach (string X in poddyChannelsList)
             {
@@ -49,27 +62,22 @@ namespace KolpaqueClient
                 livestreamerPath_textBox.Text = "https://github.com/chrippa/livestreamer/releases";
             }
 
-            newClientVersion = clientVersion;
-
             label2.Text = "Version " + clientVersion;
 
-            GetStats(false);
+            GetStats(false, 0);
 
             Thread NewVersionThread = new Thread(() => GetNewVersionNewThread());
             NewVersionThread.Start();
         }
 
-        string xmlFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.xml";
-        List<string> poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent" });
-        List<string> poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/admin/", "http://podkolpakom.net/tv/admin/", "http://podkolpakom.net/murshun/admin/", "http://vps.podkolpakom.net/" });
-        int twitchCooldown = 0;
-        
-        string clientVersion = "0.265";
-        string newClientVersion;
-        string newClientVersionLink = "https://github.com/rebelvg/KolpaqueClient/releases";
+        string xmlFilePath;
+        string clientVersion;
+        string newClientVersionLink;
 
-        bool newVersionBalloonShown = false;
-        bool channelsListViewIsActive;
+        List<string> poddyChannelsList;
+        List<string> poddyChannelsChatList;
+        
+        bool newVersionBalloonShown;
         bool ignoreUpdates;
 
         DateTime balloonLastShown;
@@ -80,15 +88,15 @@ namespace KolpaqueClient
 
         public class KolpaqueClientXmlSettings
         {
-            public string livestreamerPath_textBox;
+            public string livestreamerPath_textBox = "C:\\Program Files (x86)\\Livestreamer\\livestreamer.exe";
             public bool LQ_checkBox;
             public bool openChat_checkBox;
-            public bool notifications_checkBox;
+            public bool notifications_checkBox = true;
             public bool autoPlay_checkBox;
             public List<string> channels_listView;
             public bool minimizeAtStart_checkBox;
-            public int channels_listView_ColumnWidth;
-            public int[] form1_size;
+            public int channels_listView_ColumnWidth = 348;
+            public int[] form1_size = {400, 667};
             public bool ignoreUpdates;
         }
 
@@ -102,9 +110,8 @@ namespace KolpaqueClient
             {
                 ClientSettings = (KolpaqueClientXmlSettings)serializer.Deserialize(reader);
                 reader.Close();
-
-                if (ClientSettings.livestreamerPath_textBox != "")
-                    livestreamerPath_textBox.Text = ClientSettings.livestreamerPath_textBox;
+                
+                livestreamerPath_textBox.Text = ClientSettings.livestreamerPath_textBox;
                 LQ_checkBox.Checked = ClientSettings.LQ_checkBox;
                 openChat_checkBox.Checked = ClientSettings.openChat_checkBox;
                 notifications_checkBox.Checked = ClientSettings.notifications_checkBox;
@@ -120,8 +127,7 @@ namespace KolpaqueClient
                 }
 
                 minimizeAtStart_checkBox.Checked = ClientSettings.minimizeAtStart_checkBox;
-                if (ClientSettings.channels_listView_ColumnWidth != 0)
-                    columnHeader2.Width = ClientSettings.channels_listView_ColumnWidth;
+                columnHeader2.Width = ClientSettings.channels_listView_ColumnWidth;
                 ignoreUpdates = ClientSettings.ignoreUpdates;
             }
             catch
@@ -136,6 +142,7 @@ namespace KolpaqueClient
                 }
                 if (dialogResult == DialogResult.No)
                 {
+                    notifyIcon1.Visible = false;
                     System.Environment.Exit(1);
                 }
             }
@@ -143,24 +150,31 @@ namespace KolpaqueClient
         
         public void SaveXmlFile()
         {
-            ClientSettings = new KolpaqueClientXmlSettings();
+            try
+            {
+                ClientSettings = new KolpaqueClientXmlSettings();
 
-            ClientSettings.livestreamerPath_textBox = livestreamerPath_textBox.Text;
-            ClientSettings.LQ_checkBox = LQ_checkBox.Checked;
-            ClientSettings.openChat_checkBox = openChat_checkBox.Checked;
-            ClientSettings.notifications_checkBox = notifications_checkBox.Checked;
-            ClientSettings.autoPlay_checkBox = autoPlay_checkBox.Checked;
-            ClientSettings.channels_listView = channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Where(s => !poddyChannelsList.Contains(s)).ToList();
-            ClientSettings.minimizeAtStart_checkBox = minimizeAtStart_checkBox.Checked;
-            ClientSettings.channels_listView_ColumnWidth = columnHeader2.Width;
-            ClientSettings.form1_size = new int[] { this.Width, this.Height };
-            ClientSettings.ignoreUpdates = ignoreUpdates;
+                ClientSettings.livestreamerPath_textBox = livestreamerPath_textBox.Text;
+                ClientSettings.LQ_checkBox = LQ_checkBox.Checked;
+                ClientSettings.openChat_checkBox = openChat_checkBox.Checked;
+                ClientSettings.notifications_checkBox = notifications_checkBox.Checked;
+                ClientSettings.autoPlay_checkBox = autoPlay_checkBox.Checked;
+                ClientSettings.channels_listView = channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Where(s => !poddyChannelsList.Contains(s)).ToList();
+                ClientSettings.minimizeAtStart_checkBox = minimizeAtStart_checkBox.Checked;
+                ClientSettings.channels_listView_ColumnWidth = columnHeader2.Width;
+                ClientSettings.form1_size = new int[] { this.Width, this.Height };
+                ClientSettings.ignoreUpdates = ignoreUpdates;
 
-            System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(KolpaqueClientXmlSettings));
+                System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(KolpaqueClientXmlSettings));
 
-            System.IO.FileStream writer = System.IO.File.Create(xmlFilePath);
-            serializer.Serialize(writer, ClientSettings);
-            writer.Close();
+                System.IO.FileStream writer = System.IO.File.Create(xmlFilePath);
+                serializer.Serialize(writer, ClientSettings);
+                writer.Close();
+            }
+            catch
+            {
+                MessageBox.Show("Saving xml settings failed.");
+            }
         }
 
         public void GetPoddyStatsNewThread(ListViewItem item, string S, bool showBalloon)
@@ -331,7 +345,7 @@ namespace KolpaqueClient
 
                 dynamic gitHubAPIStats = JsonConvert.DeserializeObject(gitHubApiString);
             
-                newClientVersion = gitHubAPIStats[0].tag_name;
+                string newClientVersion = gitHubAPIStats[0].tag_name;
 
                 newClientVersionLink = gitHubAPIStats[0].assets[0].browser_download_url;
 
@@ -342,6 +356,8 @@ namespace KolpaqueClient
                     if (!newVersionBalloonShown)
                     {
                         PrintBalloon("New Version Available", newClientVersionLink);
+
+                        newVersionBalloonShown = true;
                     }
                 }
                 else
@@ -358,58 +374,52 @@ namespace KolpaqueClient
             }
         }
 
-        public void GetStatsPerItem(ListViewItem item, bool showBalloon, int twitchCooldownLocal)
+        public void GetStatsPerItem(ListViewItem item, bool showBalloon, int schedule)
         {
             string S = item.Text;
-            
-            if (S.Contains("podkolpakom.net") && !S.Contains("vps."))
+
+            if (schedule == 0 || schedule == 1)
             {
-                S = S.Replace("rtmp://", "");
-                S = S.Replace("dedick.", "");
-                
-                Thread NewThread = new Thread(() => GetPoddyStatsNewThread(item, S, showBalloon));
-                NewThread.Start();
+                if (S.Contains("podkolpakom.net") && !S.Contains("vps."))
+                {
+                    S = S.Replace("rtmp://", "");
+                    S = S.Replace("dedick.", "");
+
+                    Thread NewThread = new Thread(() => GetPoddyStatsNewThread(item, S, showBalloon));
+                    NewThread.Start();
+                }
+
+                if (S.Contains("podkolpakom.net") && S.Contains("vps."))
+                {
+                    S = S.Replace("rtmp://", "");
+                    S = S.Replace("vps.", "");
+
+                    Thread NewThread = new Thread(() => GetPoddyVpsStatsNewThread(item, S, showBalloon));
+                    NewThread.Start();
+                }
             }
 
-            if (S.Contains("podkolpakom.net") && S.Contains("vps."))
+            if (schedule == 0 || schedule == 2)
             {
-                S = S.Replace("rtmp://", "");
-                S = S.Replace("vps.", "");
-
-                Thread NewThread = new Thread(() => GetPoddyVpsStatsNewThread(item, S, showBalloon));
-                NewThread.Start();
-            }
-            
-            if (S.Contains("twitch.tv"))
-            {
-                if (twitchCooldownLocal == 0)
+                if (S.Contains("twitch.tv"))
                 {
                     S = S.Replace("http://", "");
                     S = S.Replace("https://", "");
                     S = S.Replace("www.", "");
-                    
+
                     Thread NewThread = new Thread(() => GetTwitchStatsNewThread(item, S, showBalloon));
                     NewThread.Start();
                 }
             }
         }
 
-        public void GetStats(bool showBalloon)
+        public void GetStats(bool showBalloon, int schedule)
         {
-            if (twitchCooldown > 5)
-            {
-                twitchCooldown = 0;
-            }
-
-            int twitchCooldownLocal = twitchCooldown;
-
             foreach (ListViewItem item in channels_listView.Items)
             {
-                Thread NewThread = new Thread(() => GetStatsPerItem(item, showBalloon, twitchCooldownLocal));
+                Thread NewThread = new Thread(() => GetStatsPerItem(item, showBalloon, schedule));
                 NewThread.Start();
             }
-
-            twitchCooldown++;
         }
 
         public void PlayStream(ListViewItem X)
@@ -470,8 +480,6 @@ namespace KolpaqueClient
             {
                 channels_listView.Items.Add(addChannel_textBox.Text.Replace(" ",""));
                 customChannelsToolStripMenuItem.DropDownItems.Add(addChannel_textBox.Text.Replace(" ", ""), null, new EventHandler(contextMenu_Click));
-                
-                SaveXmlFile();
             }
 
             addChannel_textBox.Text = "";
@@ -484,7 +492,7 @@ namespace KolpaqueClient
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            GetStats(true);
+            GetStats(true, 1);
         }
 
         private void notifyIcon1_BalloonTipClicked(object sender, EventArgs e)
@@ -529,22 +537,22 @@ namespace KolpaqueClient
 
         private void checkBox1_Click(object sender, EventArgs e)
         {
-            SaveXmlFile();
+
         }
 
         private void checkBox3_Click(object sender, EventArgs e)
         {
-            SaveXmlFile();
+
         }
 
         private void checkBox2_Click(object sender, EventArgs e)
         {
-            SaveXmlFile();
+
         }
 
         private void checkBox4_Click(object sender, EventArgs e)
         {
-            SaveXmlFile();
+
         }
 
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -614,18 +622,16 @@ namespace KolpaqueClient
 
         private void checkBox5_Click(object sender, EventArgs e)
         {
-            SaveXmlFile();
+
         }
 
         private void Form1_Shown(object sender, EventArgs e)
         {
-            if (ClientSettings.form1_size[0] != 0)
-                this.Width = ClientSettings.form1_size[0];
-            if (ClientSettings.form1_size[1] != 0)
-                this.Height = ClientSettings.form1_size[1];
+            this.Width = ClientSettings.form1_size[0];            
+            this.Height = ClientSettings.form1_size[1];
 
             if (minimizeAtStart_checkBox.Checked)
-            {                
+            {
                 this.WindowState = FormWindowState.Minimized;
             }
         }
@@ -646,8 +652,6 @@ namespace KolpaqueClient
             }
 
             listView2LastSelectedItem.Remove();
-
-            SaveXmlFile();
         }
 
         private void openChatToolStripMenuItem_Click(object sender, EventArgs e)
@@ -691,8 +695,6 @@ namespace KolpaqueClient
                 livestreamerPath_textBox.Enabled = false;
                 livestreamerPath_textBox.Text = selectExePath.FileName;
             }
-
-            SaveXmlFile();
         }
 
         private void timer2_Tick(object sender, EventArgs e)
@@ -708,20 +710,27 @@ namespace KolpaqueClient
 
         private void channels_listView_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
-            channelsListViewIsActive = true;
+
         }
 
         private void channels_listView_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
         {
-            if (channelsListViewIsActive)
-                SaveXmlFile();
 
-            channelsListViewIsActive = false;
         }
 
         private void Form1_ResizeEnd(object sender, EventArgs e)
         {
+
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
             SaveXmlFile();
+        }
+
+        private void thirtySecTimer_Tick(object sender, EventArgs e)
+        {
+            GetStats(true, 2);
         }
     }
 }

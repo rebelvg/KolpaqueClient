@@ -59,6 +59,7 @@
             this.changeLivestreamerPath_button = new System.Windows.Forms.Button();
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
+            this.thirtySecTimer = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             this.SuspendLayout();
@@ -342,6 +343,12 @@
             this.linkLabel2.Text = "GitHub";
             this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
             // 
+            // thirtySecTimer
+            // 
+            this.thirtySecTimer.Enabled = true;
+            this.thirtySecTimer.Interval = 30000;
+            this.thirtySecTimer.Tick += new System.EventHandler(this.thirtySecTimer_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -365,10 +372,11 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(400, 1200);
-            this.MinimumSize = new System.Drawing.Size(400, 665);
+            this.MinimumSize = new System.Drawing.Size(400, 667);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Kolpaque Client";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.ResizeEnd += new System.EventHandler(this.Form1_ResizeEnd);
             this.ClientSizeChanged += new System.EventHandler(this.Form1_ClientSizeChanged);
@@ -410,5 +418,6 @@
         private System.Windows.Forms.Button changeLivestreamerPath_button;
         private System.Windows.Forms.Timer timer2;
         private System.Windows.Forms.LinkLabel linkLabel2;
+        private System.Windows.Forms.Timer thirtySecTimer;
     }
 }
