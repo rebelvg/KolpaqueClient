@@ -31,12 +31,12 @@ namespace KolpaqueClient
             xmlFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.xml";
             xmlPath_textBox.Text = xmlFilePath;
 
-            livestreamerPath_textBox.Text = "C:\\Program Files (x86)\\Livestreamer\\livestreamer.exe";
+            logFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.log";
 
             poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent" });
             poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/admin/", "http://podkolpakom.net/tv/admin/", "http://podkolpakom.net/murshun/admin/", "http://vps.podkolpakom.net/" });
             
-            clientVersion = "0.266";
+            clientVersion = "0.267";
 
             foreach (string X in poddyChannelsList)
             {
@@ -53,7 +53,22 @@ namespace KolpaqueClient
             }
             else
             {
-                SaveXmlFile();
+                try
+                {
+                    ClientSettings = new KolpaqueClientXmlSettings();
+
+                    System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(KolpaqueClientXmlSettings));
+
+                    System.IO.FileStream writer = System.IO.File.Create(xmlFilePath);
+                    serializer.Serialize(writer, ClientSettings);
+                    writer.Close();
+
+                    ReadXmlFile();
+                }
+                catch
+                {
+                    MessageBox.Show("Saving xml settings failed.");
+                }
             }
 
             if (!File.Exists(livestreamerPath_textBox.Text))
@@ -73,12 +88,14 @@ namespace KolpaqueClient
         string xmlFilePath;
         string clientVersion;
         string newClientVersionLink;
+        string logFilePath;
 
         List<string> poddyChannelsList;
         List<string> poddyChannelsChatList;
         
         bool newVersionBalloonShown;
         bool ignoreUpdates;
+        bool debugLog;
 
         DateTime balloonLastShown;
 
@@ -98,6 +115,7 @@ namespace KolpaqueClient
             public int channels_listView_ColumnWidth = 348;
             public int[] form1_size = {400, 667};
             public bool ignoreUpdates;
+            public bool debugLog;
         }
 
         public void ReadXmlFile()
@@ -129,6 +147,7 @@ namespace KolpaqueClient
                 minimizeAtStart_checkBox.Checked = ClientSettings.minimizeAtStart_checkBox;
                 columnHeader2.Width = ClientSettings.channels_listView_ColumnWidth;
                 ignoreUpdates = ClientSettings.ignoreUpdates;
+                debugLog = ClientSettings.debugLog;
             }
             catch
             {
@@ -164,6 +183,7 @@ namespace KolpaqueClient
                 ClientSettings.channels_listView_ColumnWidth = columnHeader2.Width;
                 ClientSettings.form1_size = new int[] { this.Width, this.Height };
                 ClientSettings.ignoreUpdates = ignoreUpdates;
+                ClientSettings.debugLog = debugLog;
 
                 System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(KolpaqueClientXmlSettings));
 
@@ -198,7 +218,7 @@ namespace KolpaqueClient
             }
             catch (Exception)
             {
-
+                writeLog("GetPoddyStatsNewThread Crashed " + S);
             }
         }
 
@@ -233,7 +253,7 @@ namespace KolpaqueClient
             }
             catch (Exception)
             {
-
+                writeLog("GetPoddyVpsStatsNewThread Crashed " + S);
             }
         }
 
@@ -258,7 +278,7 @@ namespace KolpaqueClient
             }
             catch
             {
-
+                writeLog("GetTwitchStatsNewThread Crashed " + S);
             }
         }
 
@@ -266,6 +286,8 @@ namespace KolpaqueClient
         {
             if (item.BackColor != Color.Green)
             {
+                writeLog("ChannelWentOnline " + item.Text);
+
                 this.Invoke(new Action(() => item.BackColor = Color.Green));
 
                 foreach (ToolStripMenuItem toolStripMenuitem1 in contextMenuStrip1.Items)
@@ -281,7 +303,7 @@ namespace KolpaqueClient
 
                 if (showBalloon)
                 {
-                    PrintBalloon("Stream is Live", item.Text);
+                    PrintBalloon("Stream is Live (" + DateTime.Now + ")", item.Text);
                 }
 
                 if (autoPlay_checkBox.Checked)
@@ -293,8 +315,10 @@ namespace KolpaqueClient
 
         public void ChannelWentOffline(ListViewItem item)
         {
-            if (item.BackColor != default(Color))
+            if (item.BackColor == Color.Green)
             {
+                writeLog("ChannelWentOffline " + item.Text);
+
                 this.Invoke(new Action(() => item.BackColor = default(Color)));
 
                 foreach (ToolStripMenuItem toolStripMenuitem1 in contextMenuStrip1.Items)
@@ -312,6 +336,8 @@ namespace KolpaqueClient
 
         public void PrintBalloon(string balloonTitle, string balloonText)
         {
+            writeLog("PrintBalloon " + balloonTitle + " " + balloonText + " " + notifications_checkBox.Checked);
+
             if (notifications_checkBox.Checked)
             {
                 notifyIcon1.BalloonTipTitle = balloonTitle;
@@ -370,7 +396,7 @@ namespace KolpaqueClient
             }
             catch
             {
-
+                writeLog("GetNewVersionNewThread Crashed");
             }
         }
 
@@ -424,54 +450,91 @@ namespace KolpaqueClient
 
         public void PlayStream(ListViewItem X)
         {
-                string commandLine = "";
+            writeLog("PlayStream " + X.Text);
 
-                if (poddyChannelsList.Contains(X.Text))
+            string commandLine = "";
+
+            if (poddyChannelsList.Contains(X.Text))
+            {
+                commandLine = "\"" + X.Text + " live=1\"" + " best";
+
+                if (LQ_checkBox.Checked)
                 {
-                    commandLine = "\"" + X.Text + " live=1\"" + " best";
+                    commandLine = commandLine.Replace("podkolpakom.net/live", "podkolpakom.net/restream");
+                }
 
-                    if (LQ_checkBox.Checked)
-                    {
-                        commandLine = commandLine.Replace("podkolpakom.net/live", "podkolpakom.net/restream");
-                    }
-
-                    if (openChat_checkBox.Checked)
-                    {
-                        System.Diagnostics.Process.Start(poddyChannelsChatList[poddyChannelsList.IndexOf(X.Text)]);
-                    }
+                if (openChat_checkBox.Checked)
+                {
+                    System.Diagnostics.Process.Start(poddyChannelsChatList[poddyChannelsList.IndexOf(X.Text)]);
+                }
+            }
+            else
+            {
+                if (LQ_checkBox.Checked)
+                {
+                    commandLine = "\"" + X.Text + "\"" + " high";
                 }
                 else
                 {
-                    if (LQ_checkBox.Checked)
-                    {
-                        commandLine = "\"" + X.Text + "\"" + " high";
-                    }
-                    else
-                    {
-                        commandLine = "\"" + X.Text + "\"" + " best";
-                    }
-
-                    if (X.Text.Contains("http") && openChat_checkBox.Checked)
-                    {
-                        System.Diagnostics.Process.Start(X.Text);
-                    }
+                    commandLine = "\"" + X.Text + "\"" + " best";
                 }
 
-                commandLine = commandLine.Replace("https://","http://");
-
-                if (File.Exists(livestreamerPath_textBox.Text))
+                if (X.Text.Contains("http") && openChat_checkBox.Checked)
                 {
-                    Process myProcess = new Process();
+                    System.Diagnostics.Process.Start(X.Text);
+                }
+            }
 
-                    myProcess.StartInfo.FileName = livestreamerPath_textBox.Text;
-                    myProcess.StartInfo.Arguments = commandLine;
-                    myProcess.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                    myProcess.Start();
-                }
-                else
+            commandLine = commandLine.Replace("https://", "http://");
+
+            if (File.Exists(livestreamerPath_textBox.Text))
+            {
+                Process myProcess = new Process();
+
+                myProcess.StartInfo.FileName = livestreamerPath_textBox.Text;
+                myProcess.StartInfo.Arguments = commandLine;
+                myProcess.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                myProcess.Start();
+            }
+            else
+            {
+                MessageBox.Show("livestreamer.exe not found.");
+            }
+        }
+
+        public void writeLog(string log)
+        {
+            if (!debugLog)
+                return;
+
+            log = DateTime.Now.ToString() + " " + log;
+            
+            if (!File.Exists(logFilePath))
+            {
+                try
                 {
-                    MessageBox.Show("livestreamer.exe not found.");
+                    System.IO.StreamWriter file = new System.IO.StreamWriter(logFilePath, true);
+                    file.WriteLine(log);
+                    file.Close();
                 }
+                catch
+                {
+
+                }
+            }
+            else
+            {
+                try
+                {
+                    System.IO.StreamWriter file = new System.IO.StreamWriter(logFilePath, true);
+                    file.WriteLine(log);
+                    file.Close();
+                }
+                catch
+                {
+
+                }
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -497,6 +560,8 @@ namespace KolpaqueClient
 
         private void notifyIcon1_BalloonTipClicked(object sender, EventArgs e)
         {
+            writeLog("notifyIcon1_BalloonTipClicked");
+
             TimeSpan timeSpanLastBalloonShown;
 
             timeSpanLastBalloonShown = DateTime.Now - balloonLastShown;
@@ -504,11 +569,11 @@ namespace KolpaqueClient
             if (timeSpanLastBalloonShown.Seconds > 9)
                 return;
 
-            if (notifyIcon1.BalloonTipTitle == "Stream is Live")
+            if (notifyIcon1.BalloonTipTitle.Contains("Stream is Live"))
             {
                 PlayStream(new ListViewItem(notifyIcon1.BalloonTipText));
             }
-            if (notifyIcon1.BalloonTipTitle == "New Version Available")
+            if (notifyIcon1.BalloonTipTitle.Contains("New Version Available"))
             {
                 System.Diagnostics.Process.Start(notifyIcon1.BalloonTipText);
             }
@@ -521,6 +586,8 @@ namespace KolpaqueClient
 
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
+            writeLog("notifyIcon1_MouseClick " + e.Button);
+
             if (e.Button == MouseButtons.Left)
             {
                 if (this.WindowState == FormWindowState.Minimized)
@@ -569,9 +636,9 @@ namespace KolpaqueClient
         {
             if (Clipboard.GetText().Contains("http") || Clipboard.GetText().Contains("rtmp"))
             {
-                PlayStream(new ListViewItem(Clipboard.GetText()));
-
                 PrintBalloon("Launching the Stream", Clipboard.GetText());
+
+                PlayStream(new ListViewItem(Clipboard.GetText()));
             }            
         }
 
