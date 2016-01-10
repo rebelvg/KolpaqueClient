@@ -32,11 +32,11 @@ namespace KolpaqueClient
             xmlPath_textBox.Text = xmlFilePath;
 
             logFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.log";
-
+            
             poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent" });
             poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/admin/", "http://podkolpakom.net/tv/admin/", "http://podkolpakom.net/murshun/admin/", "http://vps.podkolpakom.net/" });
             
-            clientVersion = "0.267";
+            clientVersion = "0.268";
 
             foreach (string X in poddyChannelsList)
             {
@@ -71,6 +71,8 @@ namespace KolpaqueClient
                 }
             }
 
+            writeLog("---KolpaqueClient Launched---");
+            
             if (!File.Exists(livestreamerPath_textBox.Text))
             {
                 livestreamerPath_textBox.Enabled = true;
@@ -93,7 +95,6 @@ namespace KolpaqueClient
         List<string> poddyChannelsList;
         List<string> poddyChannelsChatList;
         
-        bool newVersionBalloonShown;
         bool ignoreUpdates;
         bool debugLog;
 
@@ -308,7 +309,7 @@ namespace KolpaqueClient
 
                 if (autoPlay_checkBox.Checked)
                 {
-                    PlayStream(item);
+                    PlayStream(item, "autoPlay");
                 }
             }
         }
@@ -350,9 +351,6 @@ namespace KolpaqueClient
 
         public void GetNewVersionNewThread()
         {
-            if (ignoreUpdates)
-                return;
-
             try
             {
                 HttpWebRequest request = WebRequest.Create("https://api.github.com/repos/rebelvg/KolpaqueClient/releases") as HttpWebRequest;
@@ -375,15 +373,13 @@ namespace KolpaqueClient
 
                 newClientVersionLink = gitHubAPIStats[0].assets[0].browser_download_url;
 
-                if (newClientVersion != clientVersion)
+                if (newClientVersion != clientVersion && !ignoreUpdates)
                 {
-                    this.Invoke(new Action(() => linkLabel3.Visible = true));
-
-                    if (!newVersionBalloonShown)
+                    if (!linkLabel3.Visible)
                     {
+                        this.Invoke(new Action(() => linkLabel3.Visible = true));
+                        
                         PrintBalloon("New Version Available", newClientVersionLink);
-
-                        newVersionBalloonShown = true;
                     }
                 }
                 else
@@ -448,9 +444,9 @@ namespace KolpaqueClient
             }
         }
 
-        public void PlayStream(ListViewItem X)
+        public void PlayStream(ListViewItem X, string whoCalled)
         {
-            writeLog("PlayStream " + X.Text);
+            writeLog("PlayStream " + X.Text + " " + whoCalled);
 
             string commandLine = "";
 
@@ -571,7 +567,7 @@ namespace KolpaqueClient
 
             if (notifyIcon1.BalloonTipTitle.Contains("Stream is Live"))
             {
-                PlayStream(new ListViewItem(notifyIcon1.BalloonTipText));
+                PlayStream(new ListViewItem(notifyIcon1.BalloonTipText), "notifyIcon1_BalloonTipClicked");
             }
             if (notifyIcon1.BalloonTipTitle.Contains("New Version Available"))
             {
@@ -581,7 +577,7 @@ namespace KolpaqueClient
 
         private void contextMenu_Click(object sender, EventArgs e)
         {
-            PlayStream(new ListViewItem(sender.ToString()));
+            PlayStream(new ListViewItem(sender.ToString()), "contextMenu_Click");
         }
 
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
@@ -638,7 +634,7 @@ namespace KolpaqueClient
             {
                 PrintBalloon("Launching the Stream", Clipboard.GetText());
 
-                PlayStream(new ListViewItem(Clipboard.GetText()));
+                PlayStream(new ListViewItem(Clipboard.GetText()), "playFromClipboardToolStripMenuItem_Click");
             }            
         }
 
@@ -676,7 +672,7 @@ namespace KolpaqueClient
 
         private void playStreamToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PlayStream(listView2LastSelectedItem);
+            PlayStream(listView2LastSelectedItem, "playStreamToolStripMenuItem_Click");
         }
 
         private void Form1_ClientSizeChanged(object sender, EventArgs e)
@@ -738,7 +734,7 @@ namespace KolpaqueClient
         {
             if (e.Button == MouseButtons.Left)
             {
-                PlayStream(listView2LastSelectedItem);
+                PlayStream(listView2LastSelectedItem, "listView2_MouseDoubleClick");
 
                 PrintBalloon("Launching the Stream", listView2LastSelectedItem.Text);
             }
