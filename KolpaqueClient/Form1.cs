@@ -36,7 +36,7 @@ namespace KolpaqueClient
             poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent" });
             poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/admin/", "http://podkolpakom.net/tv/admin/", "http://podkolpakom.net/murshun/admin/", "http://vps.podkolpakom.net/" });
             
-            clientVersion = "0.268";
+            clientVersion = "0.269";
 
             foreach (string X in poddyChannelsList)
             {
@@ -72,6 +72,7 @@ namespace KolpaqueClient
             }
 
             writeLog("---KolpaqueClient Launched---");
+            writeLog("Client Version - " + clientVersion);
             
             if (!File.Exists(livestreamerPath_textBox.Text))
             {
