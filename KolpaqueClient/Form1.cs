@@ -99,7 +99,7 @@ namespace KolpaqueClient
         bool ignoreUpdates;
         bool debugLog;
 
-        DateTime balloonLastShown;
+        Int32 balloonLastShown;
 
         ListViewItem listView2LastSelectedItem;
 
@@ -346,7 +346,7 @@ namespace KolpaqueClient
                 notifyIcon1.BalloonTipText = balloonText;
                 notifyIcon1.ShowBalloonTip(10000);
 
-                balloonLastShown = DateTime.Now;
+                balloonLastShown = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             }
         }
 
@@ -557,13 +557,11 @@ namespace KolpaqueClient
 
         private void notifyIcon1_BalloonTipClicked(object sender, EventArgs e)
         {
-            writeLog("notifyIcon1_BalloonTipClicked");
+            Int32 timeSpanLastBalloonShown = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds - balloonLastShown;
 
-            TimeSpan timeSpanLastBalloonShown;
-
-            timeSpanLastBalloonShown = DateTime.Now - balloonLastShown;
-
-            if (timeSpanLastBalloonShown.Seconds > 9)
+            writeLog("notifyIcon1_BalloonTipClicked " + timeSpanLastBalloonShown + " " + balloonLastShown);
+            
+            if (timeSpanLastBalloonShown > 9)
                 return;
 
             if (notifyIcon1.BalloonTipTitle.Contains("Stream is Live"))
