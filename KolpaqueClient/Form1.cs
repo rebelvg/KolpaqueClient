@@ -25,7 +25,7 @@ namespace KolpaqueClient
             {
                 MessageBox.Show("Client is already running.");
                 notifyIcon1.Visible = false;
-                System.Environment.Exit(1);       
+                System.Environment.Exit(1);
             }
 
             xmlFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.xml";
@@ -34,7 +34,7 @@ namespace KolpaqueClient
             logFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.log";
             
             poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent" });
-            poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/main/admin/", "http://podkolpakom.net/stream/tv/admin/", "http://podkolpakom.net/stream/murshun/admin/", "http://vps.podkolpakom.net/" });
+            poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/main/chat/", "http://podkolpakom.net/stream/tv/chat/", "http://podkolpakom.net/stream/murshun/chat/", "http://vps.podkolpakom.net/chat/" });
             
             clientVersion = "0.27";
 
@@ -390,7 +390,10 @@ namespace KolpaqueClient
                     Thread NewThread = new Thread(() => GetPoddyStatsNewThread(item, S, showBalloon));
                     NewThread.Start();
                 }
+            }
 
+            if (schedule == 0 || schedule == 2)
+            {
                 if (S.Contains("podkolpakom.net") && S.Contains("vps."))
                 {
                     S = S.Replace("rtmp://", "");
@@ -399,10 +402,7 @@ namespace KolpaqueClient
                     Thread NewThread = new Thread(() => GetPoddyVpsStatsNewThread(item, S, showBalloon));
                     NewThread.Start();
                 }
-            }
 
-            if (schedule == 0 || schedule == 2)
-            {
                 if (S.Contains("twitch.tv"))
                 {
                     S = S.Replace("http://", "");
@@ -464,7 +464,7 @@ namespace KolpaqueClient
 
                 if (X.Text.Contains("http") && openChat_checkBox.Checked)
                 {
-                    System.Diagnostics.Process.Start(X.Text);
+                    System.Diagnostics.Process.Start(X.Text + "/chat/");
                 }
             }
 
@@ -711,7 +711,7 @@ namespace KolpaqueClient
 
             if (listView2LastSelectedItem.Text.Contains("http"))
             {
-                System.Diagnostics.Process.Start(listView2LastSelectedItem.Text);
+                System.Diagnostics.Process.Start(listView2LastSelectedItem.Text + "/chat/");
             }
         }
 
