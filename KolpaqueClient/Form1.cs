@@ -34,9 +34,9 @@ namespace KolpaqueClient
             logFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.log";
             
             poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent" });
-            poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/admin/", "http://podkolpakom.net/tv/admin/", "http://podkolpakom.net/murshun/admin/", "http://vps.podkolpakom.net/" });
+            poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/main/admin/", "http://podkolpakom.net/stream/tv/admin/", "http://podkolpakom.net/stream/murshun/admin/", "http://vps.podkolpakom.net/" });
             
-            clientVersion = "0.269";
+            clientVersion = "0.27";
 
             foreach (string X in poddyChannelsList)
             {
@@ -230,28 +230,7 @@ namespace KolpaqueClient
 
             try
             {
-                string vpsStatsString = client.DownloadString("http://vps.podkolpakom.net/stats" + S.Replace("podkolpakom.net/live/", ""));
-
-                List<string> vpsStatsStringList = vpsStatsString.Split(new string[] { "<stream>" }, StringSplitOptions.None).ToList();
-
-                foreach (string X in vpsStatsStringList)
-                {
-                    if (X.Contains("<name>" + S.Replace("podkolpakom.net/live/", "") + "</name>"))
-                    {
-                        if (X.Contains("publishing/"))
-                        {
-                            ChannelWentOnline(item, showBalloon);
-                        }
-                        if (!X.Contains("publishing/"))
-                        {
-                            ChannelWentOffline(item);
-                        }
-                    }
-                    else
-                    {
-                        ChannelWentOffline(item);
-                    }
-                }
+                string vpsStatsString = client.DownloadString("http://vps.podkolpakom.net/stats");
             }
             catch (Exception)
             {
@@ -451,7 +430,7 @@ namespace KolpaqueClient
 
             string commandLine = "";
 
-            if (poddyChannelsList.Contains(X.Text))
+            if (X.Text.Contains("podkolpakom.net"))
             {
                 commandLine = "\"" + X.Text + " live=1\"" + " best";
 
@@ -462,7 +441,14 @@ namespace KolpaqueClient
 
                 if (openChat_checkBox.Checked)
                 {
-                    System.Diagnostics.Process.Start(poddyChannelsChatList[poddyChannelsList.IndexOf(X.Text)]);
+                    try
+                    {
+                        System.Diagnostics.Process.Start(poddyChannelsChatList[poddyChannelsList.IndexOf(X.Text)]);
+                    }
+                    catch
+                    {
+
+                    }
                 }
             }
             else
