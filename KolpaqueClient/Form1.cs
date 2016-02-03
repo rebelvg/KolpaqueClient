@@ -36,7 +36,7 @@ namespace KolpaqueClient
             poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent" });
             poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/main/chat/", "http://podkolpakom.net/stream/tv/chat/", "http://podkolpakom.net/stream/murshun/chat/", "http://vps.podkolpakom.net/chat/" });
             
-            clientVersion = "0.27";
+            clientVersion = "0.271";
 
             foreach (string X in poddyChannelsList)
             {
@@ -323,7 +323,7 @@ namespace KolpaqueClient
             {
                 notifyIcon1.BalloonTipTitle = balloonTitle;
                 notifyIcon1.BalloonTipText = balloonText;
-                notifyIcon1.ShowBalloonTip(10000);
+                notifyIcon1.ShowBalloonTip(30000);
 
                 balloonLastShown = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             }
@@ -547,7 +547,7 @@ namespace KolpaqueClient
 
             writeLog("notifyIcon1_BalloonTipClicked " + timeSpanLastBalloonShown + " " + balloonLastShown);
             
-            if (timeSpanLastBalloonShown > 9)
+            if (timeSpanLastBalloonShown >= 30)
                 return;
 
             if (notifyIcon1.BalloonTipTitle.Contains("Stream is Live"))
