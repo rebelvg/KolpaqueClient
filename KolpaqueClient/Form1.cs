@@ -37,7 +37,7 @@ namespace KolpaqueClient
             poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent" });
             poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/main/chat/", "http://podkolpakom.net/stream/tv/chat/", "http://podkolpakom.net/stream/murshun/chat/", "http://vps.podkolpakom.net/chat/" });
             
-            clientVersion = "0.271";
+            clientVersion = "0.272";
 
             foreach (string X in poddyChannelsList)
             {
@@ -647,7 +647,7 @@ namespace KolpaqueClient
                 if (hitTestInfo.Item != null)
                 {
                     var loc = e.Location;
-                    loc.Offset(channels_listView.Location);
+                    loc.Offset(tabPage1.Location);
 
                     this.contextMenuStrip2.Show(this, loc);
                 }
@@ -814,6 +814,12 @@ namespace KolpaqueClient
             EncoderParameters myEncoderParameters = new EncoderParameters(1);
             EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, 100L);
             myEncoderParameters.Param[0] = myEncoderParameter;
+
+            if (!Directory.Exists(screenshotsPath_textBox.Text))
+            {
+                MessageBox.Show("Screenshot folder doesn't exist.");
+                return;
+            }
 
             printscreen.Save(screenshotsPath_textBox.Text + "\\" + DateTime.Now.ToString().Replace("/", ".").Replace(":", ".").Replace(" ", "_") + ".jpg", jpgEncoder, myEncoderParameters);
         }
