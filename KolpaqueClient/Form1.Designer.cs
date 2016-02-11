@@ -40,6 +40,7 @@
             this.poddyChannelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customChannelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.playFromClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.makeAPrintScreenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeClientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.openChat_checkBox = new System.Windows.Forms.CheckBox();
@@ -60,15 +61,18 @@
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
             this.thirtySecTimer = new System.Windows.Forms.Timer(this.components);
-            this.makeAPrintScreenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.screenshotsPath_textBox = new System.Windows.Forms.TextBox();
-            this.changeScreenshotsPath_button = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.changeScreenshotsPath_button = new System.Windows.Forms.Button();
+            this.screenshotsPath_textBox = new System.Windows.Forms.TextBox();
+            this.ignoreBalloonClicks_checkBox = new System.Windows.Forms.CheckBox();
+            this.checkChatMessages_checkBox = new System.Windows.Forms.CheckBox();
+            this.ignoreUpdates_checkBox = new System.Windows.Forms.CheckBox();
+            this.enableLog_checkBox = new System.Windows.Forms.CheckBox();
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -163,6 +167,13 @@
             this.playFromClipboardToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.playFromClipboardToolStripMenuItem.Text = "Play from Clipboard";
             this.playFromClipboardToolStripMenuItem.Click += new System.EventHandler(this.playFromClipboardToolStripMenuItem_Click);
+            // 
+            // makeAPrintScreenToolStripMenuItem
+            // 
+            this.makeAPrintScreenToolStripMenuItem.Name = "makeAPrintScreenToolStripMenuItem";
+            this.makeAPrintScreenToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.makeAPrintScreenToolStripMenuItem.Text = "PrintScreen";
+            this.makeAPrintScreenToolStripMenuItem.Click += new System.EventHandler(this.makeAPrintScreenToolStripMenuItem_Click);
             // 
             // closeClientToolStripMenuItem
             // 
@@ -362,13 +373,6 @@
             this.thirtySecTimer.Interval = 30000;
             this.thirtySecTimer.Tick += new System.EventHandler(this.thirtySecTimer_Tick);
             // 
-            // makeAPrintScreenToolStripMenuItem
-            // 
-            this.makeAPrintScreenToolStripMenuItem.Name = "makeAPrintScreenToolStripMenuItem";
-            this.makeAPrintScreenToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.makeAPrintScreenToolStripMenuItem.Text = "PrintScreen";
-            this.makeAPrintScreenToolStripMenuItem.Click += new System.EventHandler(this.makeAPrintScreenToolStripMenuItem_Click);
-            // 
             // tabControl1
             // 
             this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
@@ -407,6 +411,10 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.enableLog_checkBox);
+            this.tabPage2.Controls.Add(this.ignoreUpdates_checkBox);
+            this.tabPage2.Controls.Add(this.checkChatMessages_checkBox);
+            this.tabPage2.Controls.Add(this.ignoreBalloonClicks_checkBox);
             this.tabPage2.Controls.Add(this.label4);
             this.tabPage2.Controls.Add(this.label3);
             this.tabPage2.Controls.Add(this.label1);
@@ -423,14 +431,32 @@
             this.tabPage2.Text = "Settings";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // screenshotsPath_textBox
+            // label4
             // 
-            this.screenshotsPath_textBox.Enabled = false;
-            this.screenshotsPath_textBox.Location = new System.Drawing.Point(6, 97);
-            this.screenshotsPath_textBox.Name = "screenshotsPath_textBox";
-            this.screenshotsPath_textBox.ReadOnly = true;
-            this.screenshotsPath_textBox.Size = new System.Drawing.Size(340, 20);
-            this.screenshotsPath_textBox.TabIndex = 26;
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(3, 81);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(98, 13);
+            this.label4.TabIndex = 30;
+            this.label4.Text = "Screenshots Folder";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(3, 42);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(92, 13);
+            this.label3.TabIndex = 29;
+            this.label3.Text = "Livestreamer Path";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(49, 13);
+            this.label1.TabIndex = 28;
+            this.label1.Text = "Xml Path";
             // 
             // changeScreenshotsPath_button
             // 
@@ -442,32 +468,56 @@
             this.changeScreenshotsPath_button.UseVisualStyleBackColor = true;
             this.changeScreenshotsPath_button.Click += new System.EventHandler(this.changeScreenshotsPath_button_Click);
             // 
-            // label1
+            // screenshotsPath_textBox
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(49, 13);
-            this.label1.TabIndex = 28;
-            this.label1.Text = "Xml Path";
+            this.screenshotsPath_textBox.Enabled = false;
+            this.screenshotsPath_textBox.Location = new System.Drawing.Point(6, 97);
+            this.screenshotsPath_textBox.Name = "screenshotsPath_textBox";
+            this.screenshotsPath_textBox.ReadOnly = true;
+            this.screenshotsPath_textBox.Size = new System.Drawing.Size(340, 20);
+            this.screenshotsPath_textBox.TabIndex = 26;
             // 
-            // label3
+            // ignoreBalloonClicks_checkBox
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 42);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(92, 13);
-            this.label3.TabIndex = 29;
-            this.label3.Text = "Livestreamer Path";
+            this.ignoreBalloonClicks_checkBox.AutoSize = true;
+            this.ignoreBalloonClicks_checkBox.Location = new System.Drawing.Point(6, 123);
+            this.ignoreBalloonClicks_checkBox.Name = "ignoreBalloonClicks_checkBox";
+            this.ignoreBalloonClicks_checkBox.Size = new System.Drawing.Size(125, 17);
+            this.ignoreBalloonClicks_checkBox.TabIndex = 31;
+            this.ignoreBalloonClicks_checkBox.Text = "Ignore Balloon Clicks";
+            this.ignoreBalloonClicks_checkBox.UseVisualStyleBackColor = true;
             // 
-            // label4
+            // checkChatMessages_checkBox
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 81);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(98, 13);
-            this.label4.TabIndex = 30;
-            this.label4.Text = "Screenshots Folder";
+            this.checkChatMessages_checkBox.AutoSize = true;
+            this.checkChatMessages_checkBox.Checked = true;
+            this.checkChatMessages_checkBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkChatMessages_checkBox.Location = new System.Drawing.Point(6, 146);
+            this.checkChatMessages_checkBox.Name = "checkChatMessages_checkBox";
+            this.checkChatMessages_checkBox.Size = new System.Drawing.Size(133, 17);
+            this.checkChatMessages_checkBox.TabIndex = 32;
+            this.checkChatMessages_checkBox.Text = "Check Chat Messages";
+            this.checkChatMessages_checkBox.UseVisualStyleBackColor = true;
+            // 
+            // ignoreUpdates_checkBox
+            // 
+            this.ignoreUpdates_checkBox.AutoSize = true;
+            this.ignoreUpdates_checkBox.Location = new System.Drawing.Point(6, 169);
+            this.ignoreUpdates_checkBox.Name = "ignoreUpdates_checkBox";
+            this.ignoreUpdates_checkBox.Size = new System.Drawing.Size(99, 17);
+            this.ignoreUpdates_checkBox.TabIndex = 33;
+            this.ignoreUpdates_checkBox.Text = "Ignore Updates";
+            this.ignoreUpdates_checkBox.UseVisualStyleBackColor = true;
+            // 
+            // enableLog_checkBox
+            // 
+            this.enableLog_checkBox.AutoSize = true;
+            this.enableLog_checkBox.Location = new System.Drawing.Point(6, 192);
+            this.enableLog_checkBox.Name = "enableLog_checkBox";
+            this.enableLog_checkBox.Size = new System.Drawing.Size(80, 17);
+            this.enableLog_checkBox.TabIndex = 34;
+            this.enableLog_checkBox.Text = "Enable Log";
+            this.enableLog_checkBox.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -538,5 +588,9 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox ignoreBalloonClicks_checkBox;
+        private System.Windows.Forms.CheckBox checkChatMessages_checkBox;
+        private System.Windows.Forms.CheckBox enableLog_checkBox;
+        private System.Windows.Forms.CheckBox ignoreUpdates_checkBox;
     }
 }
