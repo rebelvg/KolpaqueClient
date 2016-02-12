@@ -37,7 +37,7 @@ namespace KolpaqueClient
             poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent" });
             poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/main/chat/", "http://podkolpakom.net/stream/tv/chat/", "http://podkolpakom.net/stream/murshun/chat/", "http://vps.podkolpakom.net/chat/" });
             
-            clientVersion = "0.273";
+            clientVersion = "0.274";
 
             foreach (string X in poddyChannelsList)
             {
@@ -294,6 +294,10 @@ namespace KolpaqueClient
                             lastChatMessageShown = chatMessage.last_message.text.ToString();
                             chatMessageLastShown = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
                             PrintBalloon("New Chat Message", chatMessage.last_message.name.ToString() + ": " + chatMessage.last_message.text.ToString());
+                        }
+                        else
+                        {
+                            lastChatMessageShown = chatMessage.last_message.text.ToString();
                         }
                     }
                 }
@@ -588,7 +592,7 @@ namespace KolpaqueClient
 
         private void notifyIcon1_BalloonTipClicked(object sender, EventArgs e)
         {
-            if (ignoreBalloonClicks_checkBox.Checked)
+            if (!ignoreBalloonClicks_checkBox.Checked)
             {
                 Int32 timeSpanLastBalloonShown = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds - balloonLastShown;
 
