@@ -22,64 +22,72 @@ namespace KolpaqueClient
         {
             InitializeComponent();
 
-            if (Process.GetProcessesByName("KolpaqueClient").Length > 1)
+            try
             {
-                MessageBox.Show("Client is already running.");
+                if (Process.GetProcessesByName("KolpaqueClient").Length > 1)
+                {
+                    MessageBox.Show("Client is already running.");
+                    notifyIcon1.Visible = false;
+                    System.Environment.Exit(1);
+                }
+
+                xmlPath_textBox.Text = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.xml";
+
+                logFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.log";
+
+                poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent" });
+                poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/main/chat/", "http://podkolpakom.net/stream/tv/chat/", "http://podkolpakom.net/stream/murshun/chat/", "http://vps.podkolpakom.net/chat/" });
+
+                foreach (string X in poddyChannelsList)
+                {
+                    if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
+                    {
+                        channels_listView.Items.Add(X);
+                        poddyChannelsToolStripMenuItem.DropDownItems.Add(X, null, new EventHandler(contextMenu_Click));
+                    }
+                }
+
+                if (File.Exists(xmlPath_textBox.Text))
+                {
+                    ReadXmlFile();
+                }
+                else
+                {
+                    try
+                    {
+                        ClientSettings = new KolpaqueClientXmlSettings();
+
+                        System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(KolpaqueClientXmlSettings));
+
+                        System.IO.FileStream writer = System.IO.File.Create(xmlPath_textBox.Text);
+                        serializer.Serialize(writer, ClientSettings);
+                        writer.Close();
+
+                        ReadXmlFile();
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Saving xml settings failed.");
+                    }
+                }
+
+                clientVersion = "0.275";
+                label2.Text = "Version " + clientVersion;
+
+                GetStats(false, 0);
+
+                Thread NewVersionThread = new Thread(() => GetNewVersionNewThread());
+                NewVersionThread.Start();
+
+                writeLog("---KolpaqueClient Launched---");
+                writeLog("Client Version - " + clientVersion);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Client crashed while initializing.\n\n" + e);
                 notifyIcon1.Visible = false;
                 System.Environment.Exit(1);
             }
-
-            xmlPath_textBox.Text = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.xml";
-
-            logFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.log";
-            
-            poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent" });
-            poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/main/chat/", "http://podkolpakom.net/stream/tv/chat/", "http://podkolpakom.net/stream/murshun/chat/", "http://vps.podkolpakom.net/chat/" });
-            
-            foreach (string X in poddyChannelsList)
-            {
-                if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
-                {
-                    channels_listView.Items.Add(X);
-                    poddyChannelsToolStripMenuItem.DropDownItems.Add(X, null, new EventHandler(contextMenu_Click));
-                }
-            }
-
-            if (File.Exists(xmlPath_textBox.Text))
-            {
-                ReadXmlFile();
-            }
-            else
-            {
-                try
-                {
-                    ClientSettings = new KolpaqueClientXmlSettings();
-
-                    System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(KolpaqueClientXmlSettings));
-
-                    System.IO.FileStream writer = System.IO.File.Create(xmlPath_textBox.Text);
-                    serializer.Serialize(writer, ClientSettings);
-                    writer.Close();
-
-                    ReadXmlFile();
-                }
-                catch
-                {
-                    MessageBox.Show("Saving xml settings failed.");
-                }
-            }
-
-            clientVersion = "0.275";
-
-            writeLog("---KolpaqueClient Launched---");
-            writeLog("Client Version - " + clientVersion);
-
-            label2.Text = "Version " + clientVersion;
-
-            GetStats(false, 0);
-
-            Thread NewVersionThread = new Thread(() => GetNewVersionNewThread());
-            NewVersionThread.Start();
         }
 
         string clientVersion;
