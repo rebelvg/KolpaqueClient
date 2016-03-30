@@ -29,16 +29,13 @@ namespace KolpaqueClient
                 System.Environment.Exit(1);
             }
 
-            xmlFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.xml";
-            xmlPath_textBox.Text = xmlFilePath;
+            xmlPath_textBox.Text = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.xml";
 
             logFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.log";
             
             poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent" });
             poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/main/chat/", "http://podkolpakom.net/stream/tv/chat/", "http://podkolpakom.net/stream/murshun/chat/", "http://vps.podkolpakom.net/chat/" });
             
-            clientVersion = "0.274";
-
             foreach (string X in poddyChannelsList)
             {
                 if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
@@ -47,8 +44,8 @@ namespace KolpaqueClient
                     poddyChannelsToolStripMenuItem.DropDownItems.Add(X, null, new EventHandler(contextMenu_Click));
                 }
             }
-            
-            if (File.Exists(xmlFilePath))
+
+            if (File.Exists(xmlPath_textBox.Text))
             {
                 ReadXmlFile();
             }
@@ -60,7 +57,7 @@ namespace KolpaqueClient
 
                     System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(KolpaqueClientXmlSettings));
 
-                    System.IO.FileStream writer = System.IO.File.Create(xmlFilePath);
+                    System.IO.FileStream writer = System.IO.File.Create(xmlPath_textBox.Text);
                     serializer.Serialize(writer, ClientSettings);
                     writer.Close();
 
@@ -71,6 +68,8 @@ namespace KolpaqueClient
                     MessageBox.Show("Saving xml settings failed.");
                 }
             }
+
+            clientVersion = "0.275";
 
             writeLog("---KolpaqueClient Launched---");
             writeLog("Client Version - " + clientVersion);
@@ -83,17 +82,14 @@ namespace KolpaqueClient
             NewVersionThread.Start();
         }
 
-        string xmlFilePath;
         string clientVersion;
         string newClientVersionLink;
         string logFilePath;
-        string lastChatMessageShown = "";
 
         List<string> poddyChannelsList;
         List<string> poddyChannelsChatList;
 
         Int32 balloonLastShown;
-        Int32 chatMessageLastShown = 0;
 
         ListViewItem listView2LastSelectedItem;
 
@@ -110,9 +106,8 @@ namespace KolpaqueClient
             public bool minimizeAtStart_checkBox;
             public int channels_listView_ColumnWidth = 348;
             public int[] form1_size = {400, 667};
-            public bool ignoreBalloonClicks_checkBox;
-            public bool checkChatMessages_checkBox = true;
-            public bool ignoreUpdates;
+            public bool launchStreamOnBalloonClick_checkBox = true;
+            public bool checkUpdates_checkBox = true;
             public bool enableLog;
             public string screenshotsPath_textBox = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         }
@@ -121,7 +116,7 @@ namespace KolpaqueClient
         {
             System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(KolpaqueClientXmlSettings));
 
-            StreamReader reader = new StreamReader(xmlFilePath);
+            StreamReader reader = new StreamReader(xmlPath_textBox.Text);
 
             try
             {
@@ -145,9 +140,8 @@ namespace KolpaqueClient
 
                 minimizeAtStart_checkBox.Checked = ClientSettings.minimizeAtStart_checkBox;
                 columnHeader2.Width = ClientSettings.channels_listView_ColumnWidth;
-                ignoreBalloonClicks_checkBox.Checked = ClientSettings.ignoreBalloonClicks_checkBox;
-                checkChatMessages_checkBox.Checked = ClientSettings.checkChatMessages_checkBox;
-                ignoreUpdates_checkBox.Checked = ClientSettings.ignoreUpdates;
+                launchStreamOnBalloonClick_checkBox.Checked = ClientSettings.launchStreamOnBalloonClick_checkBox;
+                checkUpdates_checkBox.Checked = ClientSettings.checkUpdates_checkBox;
                 enableLog_checkBox.Checked = ClientSettings.enableLog;
                 screenshotsPath_textBox.Text = ClientSettings.screenshotsPath_textBox;
             }
@@ -184,15 +178,14 @@ namespace KolpaqueClient
                 ClientSettings.minimizeAtStart_checkBox = minimizeAtStart_checkBox.Checked;
                 ClientSettings.channels_listView_ColumnWidth = columnHeader2.Width;
                 ClientSettings.form1_size = new int[] { this.Width, this.Height };
-                ClientSettings.ignoreBalloonClicks_checkBox = ignoreBalloonClicks_checkBox.Checked;
-                ClientSettings.checkChatMessages_checkBox = checkChatMessages_checkBox.Checked;
-                ClientSettings.ignoreUpdates = ignoreUpdates_checkBox.Checked;
+                ClientSettings.launchStreamOnBalloonClick_checkBox = launchStreamOnBalloonClick_checkBox.Checked;
+                ClientSettings.checkUpdates_checkBox = checkUpdates_checkBox.Checked;
                 ClientSettings.enableLog = enableLog_checkBox.Checked;
                 ClientSettings.screenshotsPath_textBox = screenshotsPath_textBox.Text;
 
                 System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(KolpaqueClientXmlSettings));
 
-                System.IO.FileStream writer = System.IO.File.Create(xmlFilePath);
+                System.IO.FileStream writer = System.IO.File.Create(xmlPath_textBox.Text);
                 serializer.Serialize(writer, ClientSettings);
                 writer.Close();
             }
@@ -263,48 +256,6 @@ namespace KolpaqueClient
             catch
             {
                 writeLog("GetTwitchStatsNewThread Crashed " + S);
-            }
-        }
-
-        public void GetLastChatMessage()
-        {
-            if (!checkChatMessages_checkBox.Checked)
-                return;
-
-            WebClient client = new WebClient();
-
-            try
-            {
-                string chatMessageJson = client.DownloadString("http://dedick.podkolpakom.net/stats/last_message.php");
-
-                dynamic chatMessage = JsonConvert.DeserializeObject(chatMessageJson);
-
-                if (lastChatMessageShown == "")
-                {
-                    lastChatMessageShown = chatMessage.last_message.text.ToString();
-                }
-                else
-                {
-                    if (lastChatMessageShown != chatMessage.last_message.text.ToString())
-                    {
-                        Int32 timeSpanLastMessageShown = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds - chatMessageLastShown;
-
-                        if (timeSpanLastMessageShown >= 3600 && chatMessage.last_message.name.ToString() != "HAL9000")
-                        {
-                            lastChatMessageShown = chatMessage.last_message.text.ToString();
-                            chatMessageLastShown = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-                            PrintBalloon("New Chat Message", chatMessage.last_message.name.ToString() + ": " + chatMessage.last_message.text.ToString());
-                        }
-                        else
-                        {
-                            lastChatMessageShown = chatMessage.last_message.text.ToString();
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                writeLog("GetLastChatMessage Crashed");
             }
         }
 
@@ -398,7 +349,7 @@ namespace KolpaqueClient
 
                 newClientVersionLink = gitHubAPIStats[0].assets[0].browser_download_url;
 
-                if (newClientVersion != clientVersion && !ignoreUpdates_checkBox.Checked)
+                if (newClientVersion != clientVersion && checkUpdates_checkBox.Checked)
                 {
                     if (!linkLabel3.Visible)
                     {
@@ -585,30 +536,27 @@ namespace KolpaqueClient
         private void timer1_Tick(object sender, EventArgs e)
         {
             GetStats(true, 1);
-
-            Thread CheckChatNewThread = new Thread(() => GetLastChatMessage());
-            CheckChatNewThread.Start();
         }
 
         private void notifyIcon1_BalloonTipClicked(object sender, EventArgs e)
         {
-            if (!ignoreBalloonClicks_checkBox.Checked)
+            Int32 timeSpanLastBalloonShown = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds - balloonLastShown;
+
+            writeLog("notifyIcon1_BalloonTipClicked " + timeSpanLastBalloonShown + " " + balloonLastShown);
+
+            if (timeSpanLastBalloonShown >= 30)
+                return;
+
+            if (notifyIcon1.BalloonTipTitle.Contains("Stream is Live"))
             {
-                Int32 timeSpanLastBalloonShown = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds - balloonLastShown;
-
-                writeLog("notifyIcon1_BalloonTipClicked " + timeSpanLastBalloonShown + " " + balloonLastShown);
-
-                if (timeSpanLastBalloonShown >= 30)
-                    return;
-
-                if (notifyIcon1.BalloonTipTitle.Contains("Stream is Live"))
+                if (launchStreamOnBalloonClick_checkBox.Checked)
                 {
                     PlayStream(new ListViewItem(notifyIcon1.BalloonTipText), "notifyIcon1_BalloonTipClicked");
                 }
-                if (notifyIcon1.BalloonTipTitle.Contains("New Version Available"))
-                {
-                    System.Diagnostics.Process.Start(notifyIcon1.BalloonTipText);
-                }
+            }
+            if (notifyIcon1.BalloonTipTitle.Contains("New Version Available"))
+            {
+                System.Diagnostics.Process.Start(notifyIcon1.BalloonTipText);
             }
         }
 
@@ -633,26 +581,6 @@ namespace KolpaqueClient
                     this.WindowState = FormWindowState.Minimized;
                 }
             }
-        }
-
-        private void checkBox1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void checkBox3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void checkBox2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void checkBox4_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -718,11 +646,6 @@ namespace KolpaqueClient
             {
                 this.Hide();
             }            
-        }
-
-        private void checkBox5_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void Form1_Shown(object sender, EventArgs e)
@@ -806,21 +729,6 @@ namespace KolpaqueClient
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://github.com/rebelvg/KolpaqueClient/releases");
-        }
-
-        private void channels_listView_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
-        {
-
-        }
-
-        private void channels_listView_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
-        {
-
-        }
-
-        private void Form1_ResizeEnd(object sender, EventArgs e)
-        {
-
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
