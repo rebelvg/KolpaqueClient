@@ -46,7 +46,7 @@
             this.openChat_checkBox = new System.Windows.Forms.CheckBox();
             this.channels_listView = new System.Windows.Forms.ListView();
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.fiveSecTimer = new System.Windows.Forms.Timer(this.components);
             this.autoPlay_checkBox = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.linkLabel3 = new System.Windows.Forms.LinkLabel();
@@ -56,7 +56,7 @@
             this.copyToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeChannelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeLivestreamerPath_button = new System.Windows.Forms.Button();
-            this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.sixtySecTimer = new System.Windows.Forms.Timer(this.components);
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
             this.thirtySecTimer = new System.Windows.Forms.Timer(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -81,7 +81,6 @@
             // 
             // livestreamerPath_textBox
             // 
-            this.livestreamerPath_textBox.Enabled = false;
             this.livestreamerPath_textBox.Location = new System.Drawing.Point(6, 58);
             this.livestreamerPath_textBox.Name = "livestreamerPath_textBox";
             this.livestreamerPath_textBox.ReadOnly = true;
@@ -90,7 +89,6 @@
             // 
             // xmlPath_textBox
             // 
-            this.xmlPath_textBox.Enabled = false;
             this.xmlPath_textBox.Location = new System.Drawing.Point(6, 19);
             this.xmlPath_textBox.Name = "xmlPath_textBox";
             this.xmlPath_textBox.ReadOnly = true;
@@ -101,7 +99,7 @@
             // 
             this.LQ_checkBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.LQ_checkBox.AutoSize = true;
-            this.LQ_checkBox.Location = new System.Drawing.Point(297, 542);
+            this.LQ_checkBox.Location = new System.Drawing.Point(295, 542);
             this.LQ_checkBox.Name = "LQ_checkBox";
             this.LQ_checkBox.Size = new System.Drawing.Size(81, 17);
             this.LQ_checkBox.TabIndex = 10;
@@ -196,7 +194,7 @@
             // 
             this.openChat_checkBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.openChat_checkBox.AutoSize = true;
-            this.openChat_checkBox.Location = new System.Drawing.Point(297, 565);
+            this.openChat_checkBox.Location = new System.Drawing.Point(295, 565);
             this.openChat_checkBox.Name = "openChat_checkBox";
             this.openChat_checkBox.Size = new System.Drawing.Size(77, 17);
             this.openChat_checkBox.TabIndex = 18;
@@ -227,17 +225,17 @@
             this.columnHeader2.Text = "Channels";
             this.columnHeader2.Width = 348;
             // 
-            // timer1
+            // fiveSecTimer
             // 
-            this.timer1.Enabled = true;
-            this.timer1.Interval = 5000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.fiveSecTimer.Enabled = true;
+            this.fiveSecTimer.Interval = 5000;
+            this.fiveSecTimer.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // autoPlay_checkBox
             // 
             this.autoPlay_checkBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.autoPlay_checkBox.AutoSize = true;
-            this.autoPlay_checkBox.Location = new System.Drawing.Point(297, 588);
+            this.autoPlay_checkBox.Location = new System.Drawing.Point(295, 588);
             this.autoPlay_checkBox.Name = "autoPlay_checkBox";
             this.autoPlay_checkBox.Size = new System.Drawing.Size(71, 17);
             this.autoPlay_checkBox.TabIndex = 21;
@@ -248,7 +246,7 @@
             // 
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 593);
+            this.label2.Location = new System.Drawing.Point(2, 593);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(72, 13);
             this.label2.TabIndex = 22;
@@ -258,7 +256,7 @@
             // 
             this.linkLabel3.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.linkLabel3.AutoSize = true;
-            this.linkLabel3.Location = new System.Drawing.Point(81, 593);
+            this.linkLabel3.Location = new System.Drawing.Point(80, 593);
             this.linkLabel3.Name = "linkLabel3";
             this.linkLabel3.Size = new System.Drawing.Size(113, 13);
             this.linkLabel3.TabIndex = 23;
@@ -317,11 +315,11 @@
             this.changeLivestreamerPath_button.UseVisualStyleBackColor = true;
             this.changeLivestreamerPath_button.Click += new System.EventHandler(this.button1_Click);
             // 
-            // timer2
+            // sixtySecTimer
             // 
-            this.timer2.Enabled = true;
-            this.timer2.Interval = 60000;
-            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            this.sixtySecTimer.Enabled = true;
+            this.sixtySecTimer.Interval = 60000;
+            this.sixtySecTimer.Tick += new System.EventHandler(this.timer2_Tick);
             // 
             // linkLabel2
             // 
@@ -457,7 +455,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 81);
+            this.label4.Location = new System.Drawing.Point(7, 81);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(98, 13);
             this.label4.TabIndex = 30;
@@ -466,7 +464,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 42);
+            this.label3.Location = new System.Drawing.Point(7, 42);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(92, 13);
             this.label3.TabIndex = 29;
@@ -475,7 +473,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 3);
+            this.label1.Location = new System.Drawing.Point(7, 3);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(49, 13);
             this.label1.TabIndex = 28;
@@ -493,7 +491,6 @@
             // 
             // screenshotsPath_textBox
             // 
-            this.screenshotsPath_textBox.Enabled = false;
             this.screenshotsPath_textBox.Location = new System.Drawing.Point(6, 97);
             this.screenshotsPath_textBox.Name = "screenshotsPath_textBox";
             this.screenshotsPath_textBox.ReadOnly = true;
@@ -538,7 +535,7 @@
         private System.Windows.Forms.CheckBox openChat_checkBox;
         private System.Windows.Forms.ListView channels_listView;
         private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer fiveSecTimer;
         private System.Windows.Forms.CheckBox autoPlay_checkBox;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.Label label2;
@@ -554,7 +551,7 @@
         private System.Windows.Forms.ToolStripMenuItem removeChannelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openChatToolStripMenuItem;
         private System.Windows.Forms.Button changeLivestreamerPath_button;
-        private System.Windows.Forms.Timer timer2;
+        private System.Windows.Forms.Timer sixtySecTimer;
         private System.Windows.Forms.LinkLabel linkLabel2;
         private System.Windows.Forms.Timer thirtySecTimer;
         private System.Windows.Forms.ToolStripMenuItem makeAPrintScreenToolStripMenuItem;

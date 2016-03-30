@@ -33,11 +33,6 @@ namespace KolpaqueClient
 
                 xmlPath_textBox.Text = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.xml";
 
-                logFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.log";
-
-                poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent" });
-                poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/main/chat/", "http://podkolpakom.net/stream/tv/chat/", "http://podkolpakom.net/stream/murshun/chat/", "http://vps.podkolpakom.net/chat/" });
-
                 foreach (string X in poddyChannelsList)
                 {
                     if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
@@ -71,7 +66,6 @@ namespace KolpaqueClient
                     }
                 }
 
-                clientVersion = "0.275";
                 label2.Text = "Version " + clientVersion;
 
                 GetStats(false, 0);
@@ -79,8 +73,8 @@ namespace KolpaqueClient
                 Thread NewVersionThread = new Thread(() => GetNewVersionNewThread());
                 NewVersionThread.Start();
 
-                writeLog("---KolpaqueClient Launched---");
-                writeLog("Client Version - " + clientVersion);
+                WriteLog("---KolpaqueClient Launched---");
+                WriteLog("Client Version - " + clientVersion);
             }
             catch (Exception e)
             {
@@ -90,16 +84,14 @@ namespace KolpaqueClient
             }
         }
 
-        string clientVersion;
-        string newClientVersionLink;
-        string logFilePath;
+        string clientVersion = "0.276";
 
-        List<string> poddyChannelsList;
-        List<string> poddyChannelsChatList;
+        List<string> poddyChannelsList = new List<string>(new string[] {"rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent"});
+        List<string> poddyChannelsChatList = new List<string>(new string[] {"http://podkolpakom.net/stream/main/chat/", "http://podkolpakom.net/stream/tv/chat/", "http://podkolpakom.net/stream/murshun/chat/", "http://vps.podkolpakom.net/chat/"});
+        
+        ListViewItem channelsLastSelectedItem;
 
-        Int32 balloonLastShown;
-
-        ListViewItem listView2LastSelectedItem;
+        int lastBalloonPrint = 0;
 
         KolpaqueClientXmlSettings ClientSettings;
 
@@ -224,7 +216,7 @@ namespace KolpaqueClient
             }
             catch (Exception)
             {
-                writeLog("GetPoddyStatsNewThread Crashed " + S);
+                WriteLog("GetPoddyStatsNewThread Crashed " + S);
             }
         }
 
@@ -238,7 +230,7 @@ namespace KolpaqueClient
             }
             catch (Exception)
             {
-                writeLog("GetPoddyVpsStatsNewThread Crashed " + S);
+                WriteLog("GetPoddyVpsStatsNewThread Crashed " + S);
             }
         }
 
@@ -263,7 +255,7 @@ namespace KolpaqueClient
             }
             catch
             {
-                writeLog("GetTwitchStatsNewThread Crashed " + S);
+                WriteLog("GetTwitchStatsNewThread Crashed " + S);
             }
         }
 
@@ -271,7 +263,7 @@ namespace KolpaqueClient
         {
             if (item.BackColor != Color.Green)
             {
-                writeLog("ChannelWentOnline " + item.Text);
+                WriteLog("ChannelWentOnline " + item.Text);
 
                 this.Invoke(new Action(() => item.BackColor = Color.Green));
 
@@ -302,7 +294,7 @@ namespace KolpaqueClient
         {
             if (item.BackColor == Color.Green)
             {
-                writeLog("ChannelWentOffline " + item.Text);
+                WriteLog("ChannelWentOffline " + item.Text);
 
                 this.Invoke(new Action(() => item.BackColor = default(Color)));
 
@@ -321,15 +313,15 @@ namespace KolpaqueClient
 
         public void PrintBalloon(string balloonTitle, string balloonText)
         {
-            writeLog("PrintBalloon " + balloonTitle + " " + balloonText + " " + notifications_checkBox.Checked);
+            WriteLog("PrintBalloon " + balloonTitle + " " + balloonText + " " + notifications_checkBox.Checked);
 
             if (notifications_checkBox.Checked)
             {
                 notifyIcon1.BalloonTipTitle = balloonTitle;
                 notifyIcon1.BalloonTipText = balloonText;
-                notifyIcon1.ShowBalloonTip(30000);
+                notifyIcon1.ShowBalloonTip(15000);
 
-                balloonLastShown = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+                lastBalloonPrint = 0;
             }
         }
 
@@ -355,7 +347,7 @@ namespace KolpaqueClient
             
                 string newClientVersion = gitHubAPIStats[0].tag_name;
 
-                newClientVersionLink = gitHubAPIStats[0].assets[0].browser_download_url;
+                string newClientVersionLink = gitHubAPIStats[0].assets[0].browser_download_url;
 
                 if (newClientVersion != clientVersion && checkUpdates_checkBox.Checked)
                 {
@@ -376,7 +368,7 @@ namespace KolpaqueClient
             }
             catch
             {
-                writeLog("GetNewVersionNewThread Crashed");
+                WriteLog("GetNewVersionNewThread Crashed");
             }
         }
 
@@ -430,7 +422,7 @@ namespace KolpaqueClient
 
         public void PlayStream(ListViewItem X, string whoCalled)
         {
-            writeLog("PlayStream " + X.Text + " " + whoCalled);
+            WriteLog("PlayStream " + X.Text + " " + whoCalled);
 
             string commandLine = "";
 
@@ -490,8 +482,10 @@ namespace KolpaqueClient
             }
         }
 
-        public void writeLog(string log)
+        public void WriteLog(string log)
         {
+            string logFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.log";
+
             if (!enableLog_checkBox.Checked)
                 return;
 
@@ -543,16 +537,22 @@ namespace KolpaqueClient
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            lastBalloonPrint = lastBalloonPrint + 5;
+
+            if (lastBalloonPrint == 15)
+            {
+                notifyIcon1.BalloonTipTitle = "";
+                notifyIcon1.BalloonTipText = "";
+            }
+
             GetStats(true, 1);
         }
 
         private void notifyIcon1_BalloonTipClicked(object sender, EventArgs e)
         {
-            Int32 timeSpanLastBalloonShown = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds - balloonLastShown;
+            WriteLog("notifyIcon1_BalloonTipClicked");
 
-            writeLog("notifyIcon1_BalloonTipClicked " + timeSpanLastBalloonShown + " " + balloonLastShown);
-
-            if (timeSpanLastBalloonShown >= 30)
+            if (lastBalloonPrint > 10)
                 return;
 
             if (notifyIcon1.BalloonTipTitle.Contains("Stream is Live"))
@@ -566,6 +566,9 @@ namespace KolpaqueClient
             {
                 System.Diagnostics.Process.Start(notifyIcon1.BalloonTipText);
             }
+
+            notifyIcon1.BalloonTipTitle = "";
+            notifyIcon1.BalloonTipText = "";
         }
 
         private void contextMenu_Click(object sender, EventArgs e)
@@ -575,7 +578,7 @@ namespace KolpaqueClient
 
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
-            writeLog("notifyIcon1_MouseClick " + e.Button);
+            WriteLog("notifyIcon1_MouseClick " + e.Button);
 
             if (e.Button == MouseButtons.Left)
             {
@@ -593,7 +596,7 @@ namespace KolpaqueClient
 
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start(newClientVersionLink);
+            System.Diagnostics.Process.Start("https://github.com/rebelvg/KolpaqueClient/releases");
         }
 
         private void closeClientToolStripMenuItem_Click(object sender, EventArgs e)
@@ -613,11 +616,11 @@ namespace KolpaqueClient
 
         private void listView2_MouseClick(object sender, MouseEventArgs e)
         {
-            listView2LastSelectedItem = channels_listView.SelectedItems[0];
+            channelsLastSelectedItem = channels_listView.SelectedItems[0];
             
             if (e.Button == MouseButtons.Right)
             {
-                if (poddyChannelsList.Contains(listView2LastSelectedItem.Text))
+                if (poddyChannelsList.Contains(channelsLastSelectedItem.Text))
                 {
                     removeChannelToolStripMenuItem.Visible = false;
                 }
@@ -639,13 +642,13 @@ namespace KolpaqueClient
 
             if (e.Button == MouseButtons.Left)
             {
-                listView2LastSelectedItem.Selected = false;
+                channelsLastSelectedItem.Selected = false;
             }
         }
 
         private void playStreamToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PlayStream(listView2LastSelectedItem, "playStreamToolStripMenuItem_Click");
+            PlayStream(channelsLastSelectedItem, "playStreamToolStripMenuItem_Click");
         }
 
         private void Form1_ClientSizeChanged(object sender, EventArgs e)
@@ -669,32 +672,32 @@ namespace KolpaqueClient
 
         private void copyToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(listView2LastSelectedItem.Text);
+            Clipboard.SetText(channelsLastSelectedItem.Text);
         }
 
         private void removeChannelToolStripMenuItem_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < customChannelsToolStripMenuItem.DropDownItems.Count; i++)
             {
-                if (customChannelsToolStripMenuItem.DropDownItems[i].Text.Contains(listView2LastSelectedItem.Text))
+                if (customChannelsToolStripMenuItem.DropDownItems[i].Text.Contains(channelsLastSelectedItem.Text))
                 {
                     customChannelsToolStripMenuItem.DropDownItems.RemoveAt(i);
                 }
             }
 
-            listView2LastSelectedItem.Remove();
+            channelsLastSelectedItem.Remove();
         }
 
         private void openChatToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (poddyChannelsList.Contains(listView2LastSelectedItem.Text))
+            if (poddyChannelsList.Contains(channelsLastSelectedItem.Text))
             {
-                System.Diagnostics.Process.Start(poddyChannelsChatList[poddyChannelsList.IndexOf(listView2LastSelectedItem.Text)]);
+                System.Diagnostics.Process.Start(poddyChannelsChatList[poddyChannelsList.IndexOf(channelsLastSelectedItem.Text)]);
             }
 
-            if (listView2LastSelectedItem.Text.Contains("http"))
+            if (channelsLastSelectedItem.Text.Contains("http"))
             {
-                System.Diagnostics.Process.Start(listView2LastSelectedItem.Text + "/chat/");
+                System.Diagnostics.Process.Start(channelsLastSelectedItem.Text + "/chat/");
             }
         }
 
@@ -702,15 +705,15 @@ namespace KolpaqueClient
         {
             if (e.Button == MouseButtons.Left)
             {
-                PlayStream(listView2LastSelectedItem, "listView2_MouseDoubleClick");
+                PlayStream(channelsLastSelectedItem, "listView2_MouseDoubleClick");
 
-                PrintBalloon("Launching the Stream", listView2LastSelectedItem.Text);
+                PrintBalloon("Launching the Stream", channelsLastSelectedItem.Text);
             }
         }
 
         private void contextMenuStrip2_Closed(object sender, ToolStripDropDownClosedEventArgs e)
         {
-            listView2LastSelectedItem.Selected = false;
+            channelsLastSelectedItem.Selected = false;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -768,10 +771,10 @@ namespace KolpaqueClient
         {
             contextMenuStrip1.Visible = false;
 
-            Bitmap printscreen = new Bitmap
+            Bitmap printScreen = new Bitmap
             (Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
-            Graphics graphics = Graphics.FromImage(printscreen as Image);
-            graphics.CopyFromScreen(0, 0, 0, 0, printscreen.Size);
+            Graphics graphics = Graphics.FromImage(printScreen as Image);
+            graphics.CopyFromScreen(0, 0, 0, 0, printScreen.Size);
 
             ImageCodecInfo jpgEncoder = GetEncoder(ImageFormat.Jpeg);
             System.Drawing.Imaging.Encoder myEncoder = System.Drawing.Imaging.Encoder.Quality;
@@ -785,7 +788,7 @@ namespace KolpaqueClient
                 return;
             }
 
-            printscreen.Save(screenshotsPath_textBox.Text + "\\" + DateTime.Now.ToString().Replace("/", ".").Replace(":", ".").Replace(" ", "_") + ".jpg", jpgEncoder, myEncoderParameters);
+            printScreen.Save(screenshotsPath_textBox.Text + "\\" + DateTime.Now.ToString().Replace("/", ".").Replace(":", ".").Replace(" ", "_") + ".jpg", jpgEncoder, myEncoderParameters);
         }
 
         private void changeScreenshotsPath_button_Click(object sender, EventArgs e)
