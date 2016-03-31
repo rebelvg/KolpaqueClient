@@ -84,14 +84,16 @@ namespace KolpaqueClient
             }
         }
 
-        string clientVersion = "0.276";
+        string clientVersion = "0.277";
 
-        List<string> poddyChannelsList = new List<string>(new string[] {"rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent"});
-        List<string> poddyChannelsChatList = new List<string>(new string[] {"http://podkolpakom.net/stream/main/chat/", "http://podkolpakom.net/stream/tv/chat/", "http://podkolpakom.net/stream/murshun/chat/", "http://vps.podkolpakom.net/chat/"});
+        List<string> poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent" });
+        List<string> poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/main/chat/", "http://podkolpakom.net/stream/tv/chat/", "http://podkolpakom.net/stream/murshun/chat/", "http://vps.podkolpakom.net/chat/" });
         
         ListViewItem channelsLastSelectedItem;
 
         int lastBalloonPrint = 0;
+
+        Dictionary<string, int> offlineChannelsDictionary = new Dictionary<string, int>();
 
         KolpaqueClientXmlSettings ClientSettings;
 
@@ -105,7 +107,7 @@ namespace KolpaqueClient
             public List<string> channels_listView;
             public bool minimizeAtStart_checkBox;
             public int channels_listView_ColumnWidth = 348;
-            public int[] form1_size = {400, 667};
+            public int[] form1_size = { 400, 667 };
             public bool launchStreamOnBalloonClick_checkBox = true;
             public bool checkUpdates_checkBox = true;
             public bool enableLog;
@@ -204,17 +206,17 @@ namespace KolpaqueClient
                 string amsStatsString = client.DownloadString("http://dedick.podkolpakom.net/stats/ams/gib_stats.php?stream=" + S.Replace("podkolpakom.net/live/", ""));
 
                 dynamic amsStatsJSON = JsonConvert.DeserializeObject(amsStatsString);
-                
+
                 if (amsStatsJSON.live.ToString() == "Online")
                 {
-                        ChannelWentOnline(item, showBalloon);
+                    ChannelWentOnline(item, showBalloon);
                 }
                 if (amsStatsJSON.live.ToString() == "Offline")
                 {
-                        ChannelWentOffline(item);
+                    ChannelWentOffline(item);
                 }
             }
-            catch (Exception)
+            catch
             {
                 WriteLog("GetPoddyStatsNewThread Crashed " + S);
             }
@@ -228,7 +230,7 @@ namespace KolpaqueClient
             {
                 string vpsStatsString = client.DownloadString("http://vps.podkolpakom.net/stats");
             }
-            catch (Exception)
+            catch
             {
                 WriteLog("GetPoddyVpsStatsNewThread Crashed " + S);
             }
@@ -265,6 +267,11 @@ namespace KolpaqueClient
             {
                 WriteLog("ChannelWentOnline " + item.Text);
 
+                if (offlineChannelsDictionary.ContainsKey(item.Text))
+                {
+                    offlineChannelsDictionary.Remove(item.Text);
+                }
+
                 this.Invoke(new Action(() => item.BackColor = Color.Green));
 
                 foreach (ToolStripMenuItem toolStripMenuitem1 in contextMenuStrip1.Items)
@@ -296,18 +303,32 @@ namespace KolpaqueClient
             {
                 WriteLog("ChannelWentOffline " + item.Text);
 
-                this.Invoke(new Action(() => item.BackColor = default(Color)));
-
-                foreach (ToolStripMenuItem toolStripMenuitem1 in contextMenuStrip1.Items)
+                if (offlineChannelsDictionary.ContainsKey(item.Text))
                 {
-                    foreach (ToolStripMenuItem toolStripMenuitem2 in toolStripMenuitem1.DropDownItems)
+                    offlineChannelsDictionary[item.Text] = offlineChannelsDictionary[item.Text] + 1;
+
+                    if (offlineChannelsDictionary[item.Text] == 3)
                     {
-                        if (toolStripMenuitem2.Text == item.Text)
+                        this.Invoke(new Action(() => item.BackColor = default(Color)));
+
+                        foreach (ToolStripMenuItem toolStripMenuitem1 in contextMenuStrip1.Items)
                         {
-                            toolStripMenuitem2.BackColor = default(Color);
+                            foreach (ToolStripMenuItem toolStripMenuitem2 in toolStripMenuitem1.DropDownItems)
+                            {
+                                if (toolStripMenuitem2.Text == item.Text)
+                                {
+                                    toolStripMenuitem2.BackColor = default(Color);
+                                }
+                            }
                         }
-                    }
+
+                        offlineChannelsDictionary.Remove(item.Text);
+                    }                    
                 }
+                else
+                {
+                    offlineChannelsDictionary.Add(item.Text, 1);
+                }                
             }
         }
 

@@ -371,7 +371,6 @@
             this.tabPage1.Size = new System.Drawing.Size(384, 611);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
-            this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
