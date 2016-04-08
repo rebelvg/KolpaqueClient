@@ -422,8 +422,8 @@ namespace KolpaqueClient
 
                 if (S.Contains("twitch.tv"))
                 {
-                    S = S.Replace("http://", "");
                     S = S.Replace("https://", "");
+                    S = S.Replace("http://", "");
                     S = S.Replace("www.", "");
 
                     Thread NewThread = new Thread(() => GetTwitchStatsNewThread(item, S, showBalloon));
