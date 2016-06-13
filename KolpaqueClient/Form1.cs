@@ -103,7 +103,7 @@ namespace KolpaqueClient
         
         private void button2_Click(object sender, EventArgs e)
         {
-            if (addChannel_textBox.Text != "" && !channels_listView.Items.Cast<ListViewItem>().Select(X => X.Text).Contains(addChannel_textBox.Text.Replace(" ", "")))
+            if (addChannel_textBox.Text.Replace(" ", "") != "" && !channels_listView.Items.Cast<ListViewItem>().Select(X => X.Text).Contains(addChannel_textBox.Text.Replace(" ", "")))
             {
                 channels_listView.Items.Add(addChannel_textBox.Text.Replace(" ",""));
                 customChannelsToolStripMenuItem.DropDownItems.Add(addChannel_textBox.Text.Replace(" ", ""), null, new EventHandler(contextMenu_Click));
@@ -382,6 +382,16 @@ namespace KolpaqueClient
             {
                 screenshotsPath_textBox.Text = chosenFolder.SelectedPath;
             }
+        }
+
+        private void twitchImport_button_Click(object sender, EventArgs e)
+        {
+            ImportChannel();
+        }
+
+        private void save_button_Click(object sender, EventArgs e)
+        {
+            SaveXmlFile();
         }
     }
 }

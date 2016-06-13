@@ -443,5 +443,45 @@ namespace KolpaqueClient
                 }
             }
         }
+
+        public void ImportChannel()
+        {
+            if (twitchImport_textBox.Text.Replace(" ", "") != "")
+            {
+                WebClient client = new WebClient();
+
+                try
+                {
+                    string twitchFollowsString = client.DownloadString("https://api.twitch.tv/kraken/users/" + twitchImport_textBox.Text + "/follows/channels");
+
+                    dynamic twitchFollowsJSON = JsonConvert.DeserializeObject(twitchFollowsString);
+
+                    int newAdded = 0;
+
+                    if (twitchFollowsJSON.follows.Count > 0) {
+                        foreach (dynamic X in twitchFollowsJSON.follows)
+                        {
+                            string channel = X.channel.url.ToString();
+
+                            if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(channel))
+                            {
+                                channels_listView.Items.Add(channel);
+                                customChannelsToolStripMenuItem.DropDownItems.Add(channel, null, new EventHandler(contextMenu_Click));
+                                newAdded++;
+                            }
+                        }
+                    }              
+
+                    MessageBox.Show(newAdded + " channels added.");
+                }
+                catch(Exception e)
+                {
+                    WriteLog("ImportChannelsNewThread Crashed\n" + e);
+                    MessageBox.Show("Import Crashed\n" + e);
+                }
+            }
+
+            twitchImport_textBox.Text = "";
+        }
     }
 }
