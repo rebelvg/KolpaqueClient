@@ -62,6 +62,10 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.save_button = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.twitchImport_button = new System.Windows.Forms.Button();
+            this.twitchImport_textBox = new System.Windows.Forms.TextBox();
             this.minimizeAtStart_checkBox = new System.Windows.Forms.CheckBox();
             this.notifications_checkBox = new System.Windows.Forms.CheckBox();
             this.enableLog_checkBox = new System.Windows.Forms.CheckBox();
@@ -72,10 +76,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.changeScreenshotsPath_button = new System.Windows.Forms.Button();
             this.screenshotsPath_textBox = new System.Windows.Forms.TextBox();
-            this.twitchImport_textBox = new System.Windows.Forms.TextBox();
-            this.twitchImport_button = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.save_button = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -403,6 +403,42 @@
             this.tabPage2.Text = "Settings";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // save_button
+            // 
+            this.save_button.Location = new System.Drawing.Point(285, 582);
+            this.save_button.Name = "save_button";
+            this.save_button.Size = new System.Drawing.Size(93, 23);
+            this.save_button.TabIndex = 40;
+            this.save_button.Text = "Save Settings";
+            this.save_button.UseVisualStyleBackColor = true;
+            this.save_button.Click += new System.EventHandler(this.save_button_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(7, 254);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(71, 13);
+            this.label5.TabIndex = 39;
+            this.label5.Text = "Twitch Import";
+            // 
+            // twitchImport_button
+            // 
+            this.twitchImport_button.Location = new System.Drawing.Point(303, 296);
+            this.twitchImport_button.Name = "twitchImport_button";
+            this.twitchImport_button.Size = new System.Drawing.Size(75, 23);
+            this.twitchImport_button.TabIndex = 38;
+            this.twitchImport_button.Text = "Import";
+            this.twitchImport_button.UseVisualStyleBackColor = true;
+            this.twitchImport_button.Click += new System.EventHandler(this.twitchImport_button_Click);
+            // 
+            // twitchImport_textBox
+            // 
+            this.twitchImport_textBox.Location = new System.Drawing.Point(6, 270);
+            this.twitchImport_textBox.Name = "twitchImport_textBox";
+            this.twitchImport_textBox.Size = new System.Drawing.Size(372, 20);
+            this.twitchImport_textBox.TabIndex = 37;
+            // 
             // minimizeAtStart_checkBox
             // 
             this.minimizeAtStart_checkBox.AutoSize = true;
@@ -503,42 +539,6 @@
             this.screenshotsPath_textBox.ReadOnly = true;
             this.screenshotsPath_textBox.Size = new System.Drawing.Size(340, 20);
             this.screenshotsPath_textBox.TabIndex = 26;
-            // 
-            // twitchImport_textBox
-            // 
-            this.twitchImport_textBox.Location = new System.Drawing.Point(6, 270);
-            this.twitchImport_textBox.Name = "twitchImport_textBox";
-            this.twitchImport_textBox.Size = new System.Drawing.Size(372, 20);
-            this.twitchImport_textBox.TabIndex = 37;
-            // 
-            // twitchImport_button
-            // 
-            this.twitchImport_button.Location = new System.Drawing.Point(303, 296);
-            this.twitchImport_button.Name = "twitchImport_button";
-            this.twitchImport_button.Size = new System.Drawing.Size(75, 23);
-            this.twitchImport_button.TabIndex = 38;
-            this.twitchImport_button.Text = "Import";
-            this.twitchImport_button.UseVisualStyleBackColor = true;
-            this.twitchImport_button.Click += new System.EventHandler(this.twitchImport_button_Click);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(7, 254);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(71, 13);
-            this.label5.TabIndex = 39;
-            this.label5.Text = "Twitch Import";
-            // 
-            // save_button
-            // 
-            this.save_button.Location = new System.Drawing.Point(303, 582);
-            this.save_button.Name = "save_button";
-            this.save_button.Size = new System.Drawing.Size(75, 23);
-            this.save_button.TabIndex = 40;
-            this.save_button.Text = "Save";
-            this.save_button.UseVisualStyleBackColor = true;
-            this.save_button.Click += new System.EventHandler(this.save_button_Click);
             // 
             // Form1
             // 
