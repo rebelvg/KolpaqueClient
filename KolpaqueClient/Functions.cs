@@ -458,7 +458,8 @@ namespace KolpaqueClient
 
                     int newAdded = 0;
 
-                    if (twitchFollowsJSON.follows.Count > 0) {
+                    if (twitchFollowsJSON.follows.Count > 0)
+                    {
                         foreach (dynamic X in twitchFollowsJSON.follows)
                         {
                             string channel = X.channel.url.ToString();
@@ -470,11 +471,11 @@ namespace KolpaqueClient
                                 newAdded++;
                             }
                         }
-                    }              
+                    }
 
                     MessageBox.Show(newAdded + " channels added.");
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     WriteLog("ImportChannelsNewThread Crashed\n" + e);
                     MessageBox.Show("Import Crashed\n" + e);

@@ -82,7 +82,7 @@ namespace KolpaqueClient
                 notifyIcon1.Visible = false;
                 System.Environment.Exit(1);
             }
-        }        
+        }
 
         public class KolpaqueClientXmlSettings
         {
@@ -100,12 +100,12 @@ namespace KolpaqueClient
             public bool enableLog;
             public string screenshotsPath_textBox = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         }
-        
+
         private void button2_Click(object sender, EventArgs e)
         {
             if (addChannel_textBox.Text.Replace(" ", "") != "" && !channels_listView.Items.Cast<ListViewItem>().Select(X => X.Text).Contains(addChannel_textBox.Text.Replace(" ", "")))
             {
-                channels_listView.Items.Add(addChannel_textBox.Text.Replace(" ",""));
+                channels_listView.Items.Add(addChannel_textBox.Text.Replace(" ", ""));
                 customChannelsToolStripMenuItem.DropDownItems.Add(addChannel_textBox.Text.Replace(" ", ""), null, new EventHandler(contextMenu_Click));
             }
 
@@ -193,13 +193,13 @@ namespace KolpaqueClient
                 PrintBalloon("Launching the Stream", Clipboard.GetText());
 
                 PlayStream(new ListViewItem(Clipboard.GetText()), "playFromClipboardToolStripMenuItem_Click");
-            }            
+            }
         }
 
         private void listView2_MouseClick(object sender, MouseEventArgs e)
         {
             channelsLastSelectedItem = channels_listView.SelectedItems[0];
-            
+
             if (e.Button == MouseButtons.Right)
             {
                 if (poddyChannelsList.Contains(channelsLastSelectedItem.Text))
@@ -238,12 +238,12 @@ namespace KolpaqueClient
             if (this.WindowState == FormWindowState.Minimized)
             {
                 this.Hide();
-            }            
+            }
         }
 
         private void Form1_Shown(object sender, EventArgs e)
         {
-            this.Width = ClientSettings.form1_size[0];            
+            this.Width = ClientSettings.form1_size[0];
             this.Height = ClientSettings.form1_size[1];
 
             if (minimizeAtStart_checkBox.Checked)
