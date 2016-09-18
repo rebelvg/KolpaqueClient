@@ -146,7 +146,7 @@ namespace KolpaqueClient
 
             try
             {
-                string twitchStatsString = client.DownloadString("https://api.twitch.tv/kraken/streams?channel=" + S.Replace("twitch.tv/", ""));
+                string twitchStatsString = client.DownloadString("https://api.twitch.tv/kraken/streams?channel=" + S.Replace("twitch.tv/", "") + "&client_id=dk330061dv4t81s21utnhhdona0a91x");
 
                 dynamic twitchAPIStats = JsonConvert.DeserializeObject(twitchStatsString);
 
