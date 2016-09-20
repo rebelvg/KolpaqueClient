@@ -452,7 +452,7 @@ namespace KolpaqueClient
 
                 try
                 {
-                    string twitchFollowsString = client.DownloadString("https://api.twitch.tv/kraken/users/" + twitchImport_textBox.Text + "/follows/channels");
+                    string twitchFollowsString = client.DownloadString("https://api.twitch.tv/kraken/users/" + twitchImport_textBox.Text + "/follows/channels" + "?client_id=dk330061dv4t81s21utnhhdona0a91x");
 
                     dynamic twitchFollowsJSON = JsonConvert.DeserializeObject(twitchFollowsString);
 
