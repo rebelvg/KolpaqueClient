@@ -303,7 +303,7 @@ namespace KolpaqueClient
 
             if (schedule == 0 || schedule == 1)
             {
-                if (S.Contains("podkolpakom.net") && !S.Contains("vps."))
+                if (S.Contains("dedick.podkolpakom.net"))
                 {
                     S = S.Replace("rtmp://", "");
                     S = S.Replace("dedick.", "");
@@ -315,7 +315,7 @@ namespace KolpaqueClient
 
             if (schedule == 0 || schedule == 2)
             {
-                if (S.Contains("podkolpakom.net") && S.Contains("vps."))
+                if (S.Contains("vps.podkolpakom.net"))
                 {
                     S = S.Replace("rtmp://", "");
                     S = S.Replace("vps.", "");
