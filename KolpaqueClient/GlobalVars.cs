@@ -18,7 +18,7 @@ namespace KolpaqueClient
 {
     public partial class Form1 : Form
     {
-        string clientVersion = "0.281";
+        string clientVersion = "0.282";
 
         List<string> poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent" });
 
