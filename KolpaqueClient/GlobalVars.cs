@@ -18,11 +18,11 @@ namespace KolpaqueClient
 {
     public partial class Form1 : Form
     {
-        string clientVersion = "0.282";
+        string clientVersion = "0.283";
 
-        List<string> poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun", "rtmp://vps.podkolpakom.net/live/liveevent" });
+        List<string> poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun" });
 
-        List<string> poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/main/chat/", "http://podkolpakom.net/stream/tv/chat/", "http://podkolpakom.net/stream/murshun/chat/", "http://vps.podkolpakom.net/chat/" });
+        List<string> poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/main/chat/", "http://podkolpakom.net/stream/tv/chat/", "http://podkolpakom.net/stream/murshun/chat/" });
 
         ListViewItem channelsLastSelectedItem;
 
@@ -31,5 +31,7 @@ namespace KolpaqueClient
         Dictionary<string, int> offlineChannelsDictionary = new Dictionary<string, int>();
 
         KolpaqueClientXmlSettings ClientSettings;
+
+        bool debugMode;
     }
 }

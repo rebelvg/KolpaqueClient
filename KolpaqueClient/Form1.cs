@@ -96,7 +96,7 @@ namespace KolpaqueClient
             public int channels_listView_ColumnWidth = 348;
             public int[] form1_size = { 400, 667 };
             public bool launchStreamOnBalloonClick_checkBox = true;
-            public bool checkUpdates_checkBox = true;
+            public bool debugMode;
             public bool enableLog;
             public string screenshotsPath_textBox = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         }

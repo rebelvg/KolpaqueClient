@@ -69,7 +69,6 @@
             this.minimizeAtStart_checkBox = new System.Windows.Forms.CheckBox();
             this.notifications_checkBox = new System.Windows.Forms.CheckBox();
             this.enableLog_checkBox = new System.Windows.Forms.CheckBox();
-            this.checkUpdates_checkBox = new System.Windows.Forms.CheckBox();
             this.launchStreamOnBalloonClick_checkBox = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -385,7 +384,6 @@
             this.tabPage2.Controls.Add(this.minimizeAtStart_checkBox);
             this.tabPage2.Controls.Add(this.notifications_checkBox);
             this.tabPage2.Controls.Add(this.enableLog_checkBox);
-            this.tabPage2.Controls.Add(this.checkUpdates_checkBox);
             this.tabPage2.Controls.Add(this.launchStreamOnBalloonClick_checkBox);
             this.tabPage2.Controls.Add(this.label4);
             this.tabPage2.Controls.Add(this.label3);
@@ -464,24 +462,12 @@
             // enableLog_checkBox
             // 
             this.enableLog_checkBox.AutoSize = true;
-            this.enableLog_checkBox.Location = new System.Drawing.Point(6, 215);
+            this.enableLog_checkBox.Location = new System.Drawing.Point(6, 192);
             this.enableLog_checkBox.Name = "enableLog_checkBox";
             this.enableLog_checkBox.Size = new System.Drawing.Size(77, 17);
             this.enableLog_checkBox.TabIndex = 34;
             this.enableLog_checkBox.Text = "Write Logs";
             this.enableLog_checkBox.UseVisualStyleBackColor = true;
-            // 
-            // checkUpdates_checkBox
-            // 
-            this.checkUpdates_checkBox.AutoSize = true;
-            this.checkUpdates_checkBox.Checked = true;
-            this.checkUpdates_checkBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkUpdates_checkBox.Location = new System.Drawing.Point(6, 192);
-            this.checkUpdates_checkBox.Name = "checkUpdates_checkBox";
-            this.checkUpdates_checkBox.Size = new System.Drawing.Size(100, 17);
-            this.checkUpdates_checkBox.TabIndex = 33;
-            this.checkUpdates_checkBox.Text = "Check Updates";
-            this.checkUpdates_checkBox.UseVisualStyleBackColor = true;
             // 
             // launchStreamOnBalloonClick_checkBox
             // 
@@ -608,7 +594,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox launchStreamOnBalloonClick_checkBox;
         private System.Windows.Forms.CheckBox enableLog_checkBox;
-        private System.Windows.Forms.CheckBox checkUpdates_checkBox;
         private System.Windows.Forms.CheckBox minimizeAtStart_checkBox;
         private System.Windows.Forms.CheckBox notifications_checkBox;
         private System.Windows.Forms.Label label5;

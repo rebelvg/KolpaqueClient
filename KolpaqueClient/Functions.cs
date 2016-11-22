@@ -47,7 +47,7 @@ namespace KolpaqueClient
                 minimizeAtStart_checkBox.Checked = ClientSettings.minimizeAtStart_checkBox;
                 columnHeader2.Width = ClientSettings.channels_listView_ColumnWidth;
                 launchStreamOnBalloonClick_checkBox.Checked = ClientSettings.launchStreamOnBalloonClick_checkBox;
-                checkUpdates_checkBox.Checked = ClientSettings.checkUpdates_checkBox;
+                debugMode = ClientSettings.debugMode;
                 enableLog_checkBox.Checked = ClientSettings.enableLog;
                 screenshotsPath_textBox.Text = ClientSettings.screenshotsPath_textBox;
             }
@@ -85,7 +85,7 @@ namespace KolpaqueClient
                 ClientSettings.channels_listView_ColumnWidth = columnHeader2.Width;
                 ClientSettings.form1_size = new int[] { this.Width, this.Height };
                 ClientSettings.launchStreamOnBalloonClick_checkBox = launchStreamOnBalloonClick_checkBox.Checked;
-                ClientSettings.checkUpdates_checkBox = checkUpdates_checkBox.Checked;
+                ClientSettings.debugMode = debugMode;
                 ClientSettings.enableLog = enableLog_checkBox.Checked;
                 ClientSettings.screenshotsPath_textBox = screenshotsPath_textBox.Text;
 
@@ -123,20 +123,6 @@ namespace KolpaqueClient
             catch
             {
                 WriteLog("GetPoddyStatsNewThread Crashed " + S);
-            }
-        }
-
-        public void GetPoddyVpsStatsNewThread(ListViewItem item, string S, bool showBalloon)
-        {
-            WebClient client = new WebClient();
-
-            try
-            {
-                string vpsStatsString = client.DownloadString("http://vps.podkolpakom.net/stats");
-            }
-            catch
-            {
-                WriteLog("GetPoddyVpsStatsNewThread Crashed " + S);
             }
         }
 
@@ -274,7 +260,7 @@ namespace KolpaqueClient
 
                 string newClientVersionLink = gitHubAPIStats[0].assets[0].browser_download_url;
 
-                if (newClientVersion != clientVersion && checkUpdates_checkBox.Checked)
+                if (newClientVersion != clientVersion && !debugMode)
                 {
                     if (!linkLabel3.Visible)
                     {
@@ -315,15 +301,6 @@ namespace KolpaqueClient
 
             if (schedule == 0 || schedule == 2)
             {
-                if (S.Contains("vps.podkolpakom.net"))
-                {
-                    S = S.Replace("rtmp://", "");
-                    S = S.Replace("vps.", "");
-
-                    Thread NewThread = new Thread(() => GetPoddyVpsStatsNewThread(item, S, showBalloon));
-                    NewThread.Start();
-                }
-
                 if (S.Contains("twitch.tv"))
                 {
                     S = S.Replace("https://", "");
