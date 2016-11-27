@@ -126,6 +126,31 @@ namespace KolpaqueClient
             }
         }
 
+        public void GetPoddyMenStatsNewThread(ListViewItem item, string S, bool showBalloon)
+        {
+            WebClient client = new WebClient();
+
+            try
+            {
+                string amsStatsString = client.DownloadString("http://main.klpq.men/stats/ams/gib_stats.php?stream=" + S.Replace("klpq.men/live/", ""));
+
+                dynamic amsStatsJSON = JsonConvert.DeserializeObject(amsStatsString);
+
+                if (amsStatsJSON.live.ToString() == "Online")
+                {
+                    ChannelWentOnline(item, showBalloon);
+                }
+                if (amsStatsJSON.live.ToString() == "Offline")
+                {
+                    ChannelWentOffline(item);
+                }
+            }
+            catch
+            {
+                WriteLog("GetPoddyStatsNewThread Crashed " + S);
+            }
+        }
+
         public void GetTwitchStatsNewThread(ListViewItem item, string S, bool showBalloon)
         {
             WebClient client = new WebClient();
@@ -295,6 +320,15 @@ namespace KolpaqueClient
                     S = S.Replace("dedick.", "");
 
                     Thread NewThread = new Thread(() => GetPoddyStatsNewThread(item, S, showBalloon));
+                    NewThread.Start();
+                }
+
+                if (S.Contains("main.klpq.men"))
+                {
+                    S = S.Replace("rtmp://", "");
+                    S = S.Replace("main.", "");
+
+                    Thread NewThread = new Thread(() => GetPoddyMenStatsNewThread(item, S, showBalloon));
                     NewThread.Start();
                 }
             }

@@ -18,11 +18,11 @@ namespace KolpaqueClient
 {
     public partial class Form1 : Form
     {
-        string clientVersion = "0.283";
+        string clientVersion = "0.284";
 
-        List<string> poddyChannelsList = new List<string>(new string[] { "rtmp://dedick.podkolpakom.net/live/liveevent", "rtmp://dedick.podkolpakom.net/live/tvstream", "rtmp://dedick.podkolpakom.net/live/murshun" });
+        List<string> poddyChannelsList = new List<string>(new string[] { "rtmp://main.klpq.men/live/liveevent", "rtmp://main.klpq.men/live/tvstream", "rtmp://main.klpq.men/live/murshun" });
 
-        List<string> poddyChannelsChatList = new List<string>(new string[] { "http://podkolpakom.net/stream/main/chat/", "http://podkolpakom.net/stream/tv/chat/", "http://podkolpakom.net/stream/murshun/chat/" });
+        List<string> poddyChannelsChatList = new List<string>(new string[] { "http://klpq.men/stream/main/chat/", "http://klpq.men/stream/tv/chat/", "http://klpq.men/stream/murshun/chat/" });
 
         ListViewItem channelsLastSelectedItem;
 
