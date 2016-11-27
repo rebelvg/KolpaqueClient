@@ -362,13 +362,13 @@ namespace KolpaqueClient
 
             string commandLine = "";
 
-            if (X.Text.Contains("podkolpakom.net"))
+            if (X.Text.Contains("podkolpakom.net") || X.Text.Contains("klpq.men"))
             {
                 commandLine = "\"" + X.Text + " live=1\"" + " best";
 
                 if (LQ_checkBox.Checked)
                 {
-                    commandLine = commandLine.Replace("podkolpakom.net/live", "podkolpakom.net/restream");
+                    commandLine = commandLine.Replace("/live/", "/restream/");
                 }
 
                 if (openChat_checkBox.Checked)

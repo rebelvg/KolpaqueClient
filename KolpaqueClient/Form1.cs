@@ -114,7 +114,7 @@ namespace KolpaqueClient
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://podkolpakom.net/");
+            System.Diagnostics.Process.Start("http://klpq.men/");
         }
 
         private void timer1_Tick(object sender, EventArgs e)
