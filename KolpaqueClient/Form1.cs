@@ -144,6 +144,7 @@ namespace KolpaqueClient
                     PlayStream(new ListViewItem(notifyIcon1.BalloonTipText), "notifyIcon1_BalloonTipClicked");
                 }
             }
+
             if (notifyIcon1.BalloonTipTitle.Contains("New Version Available"))
             {
                 System.Diagnostics.Process.Start(notifyIcon1.BalloonTipText);
