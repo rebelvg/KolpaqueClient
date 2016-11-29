@@ -287,19 +287,11 @@ namespace KolpaqueClient
 
                 if (newClientVersion != clientVersion && !debugMode)
                 {
-                    if (!linkLabel3.Visible)
-                    {
-                        this.Invoke(new Action(() => linkLabel3.Visible = true));
+                    this.Invoke(new Action(() => linkLabel3.Visible = true));
 
-                        PrintBalloon("New Version Available", newClientVersionLink);
-                    }
-                }
-                else
-                {
-                    if (linkLabel3.Visible)
-                    {
-                        this.Invoke(new Action(() => linkLabel3.Visible = false));
-                    }
+                    PrintBalloon("New Version Available", newClientVersionLink);
+
+                    clientVersion = newClientVersion;
                 }
             }
             catch
