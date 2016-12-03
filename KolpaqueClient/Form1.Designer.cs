@@ -403,6 +403,7 @@
             // 
             // save_button
             // 
+            this.save_button.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.save_button.Location = new System.Drawing.Point(285, 582);
             this.save_button.Name = "save_button";
             this.save_button.Size = new System.Drawing.Size(93, 23);
