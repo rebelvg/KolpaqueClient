@@ -78,7 +78,7 @@ namespace KolpaqueClient
             }
             catch (Exception e)
             {
-                MessageBox.Show("Client crashed while initializing.\n\n" + e);
+                MessageBox.Show("Client crashed while initializing.\n\n" + e.Message);
                 notifyIcon1.Visible = false;
                 System.Environment.Exit(1);
             }
