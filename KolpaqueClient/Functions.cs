@@ -157,7 +157,7 @@ namespace KolpaqueClient
 
             try
             {
-                string twitchStatsString = client.DownloadString("https://api.twitch.tv/kraken/streams?channel=" + S.Replace("twitch.tv/", "") + "&client_id=dk330061dv4t81s21utnhhdona0a91x");
+                string twitchStatsString = client.DownloadString("https://api.twitch.tv/kraken/streams?channel=" + S.Replace("twitch.tv/", "") + "&client_id=" + twitchApiAppKey + "");
 
                 dynamic twitchAPIStats = JsonConvert.DeserializeObject(twitchStatsString);
 
@@ -455,7 +455,7 @@ namespace KolpaqueClient
 
                 try
                 {
-                    string twitchFollowsString = client.DownloadString("https://api.twitch.tv/kraken/users/" + twitchImport_textBox.Text + "/follows/channels" + "?client_id=dk330061dv4t81s21utnhhdona0a91x");
+                    string twitchFollowsString = client.DownloadString("https://api.twitch.tv/kraken/users/" + twitchImport_textBox.Text + "/follows/channels" + "?client_id=" + twitchApiAppKey + "&limit=100");
 
                     dynamic twitchFollowsJSON = JsonConvert.DeserializeObject(twitchFollowsString);
 
@@ -481,7 +481,7 @@ namespace KolpaqueClient
                 catch (Exception e)
                 {
                     WriteLog("ImportChannelsNewThread Crashed\n" + e);
-                    MessageBox.Show("Import Crashed\n" + e);
+                    MessageBox.Show("Import Crashed.\n\n" + e.Message);
                 }
             }
 
