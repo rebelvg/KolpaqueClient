@@ -498,7 +498,7 @@ namespace KolpaqueClient
                             if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(channel))
                             {
                                 channels_listView.Items.Add(channel);
-                                customChannelsToolStripMenuItem.DropDownItems.Add(channel, null, new EventHandler(contextMenu_Click));
+                                //customChannelsToolStripMenuItem.DropDownItems.Add(channel, null, new EventHandler(contextMenu_Click));
                                 newAdded++;
                             }
                         }
