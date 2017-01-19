@@ -40,14 +40,13 @@ namespace KolpaqueClient
                     if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
                     {
                         channels_listView.Items.Add(X);
-                        customChannelsToolStripMenuItem.DropDownItems.Add(X, null, new EventHandler(contextMenu_Click));
+                        //customChannelsToolStripMenuItem.DropDownItems.Add(X, null, new EventHandler(contextMenu_Click));
                     }
                 }
 
                 minimizeAtStart_checkBox.Checked = ClientSettings.minimizeAtStart_checkBox;
                 columnHeader2.Width = ClientSettings.channels_listView_ColumnWidth;
                 launchStreamOnBalloonClick_checkBox.Checked = ClientSettings.launchStreamOnBalloonClick_checkBox;
-                debugMode = ClientSettings.debugMode;
                 enableLog_checkBox.Checked = ClientSettings.enableLog;
                 screenshotsPath_textBox.Text = ClientSettings.screenshotsPath_textBox;
             }
@@ -85,7 +84,6 @@ namespace KolpaqueClient
                 ClientSettings.channels_listView_ColumnWidth = columnHeader2.Width;
                 ClientSettings.form1_size = new int[] { this.Width, this.Height };
                 ClientSettings.launchStreamOnBalloonClick_checkBox = launchStreamOnBalloonClick_checkBox.Checked;
-                ClientSettings.debugMode = debugMode;
                 ClientSettings.enableLog = enableLog_checkBox.Checked;
                 ClientSettings.screenshotsPath_textBox = screenshotsPath_textBox.Text;
 
@@ -189,6 +187,15 @@ namespace KolpaqueClient
 
                 this.Invoke(new Action(() => item.BackColor = Color.Green));
 
+                if (poddyChannelsList.Contains(item.Text))
+                {
+                    poddyChannelsToolStripMenuItem.DropDownItems.Add(item.Text, null, new EventHandler(contextMenu_Click));
+                }
+                else
+                {
+                    customChannelsToolStripMenuItem.DropDownItems.Add(item.Text, null, new EventHandler(contextMenu_Click));
+                }
+
                 foreach (ToolStripMenuItem toolStripMenuitem1 in contextMenuStrip1.Items)
                 {
                     foreach (ToolStripMenuItem toolStripMenuitem2 in toolStripMenuitem1.DropDownItems)
@@ -225,6 +232,27 @@ namespace KolpaqueClient
                     if (offlineChannelsDictionary[item.Text] == 3)
                     {
                         this.Invoke(new Action(() => item.BackColor = default(Color)));
+
+                        if (poddyChannelsList.Contains(item.Text))
+                        {
+                            for (int i = 0; i < poddyChannelsToolStripMenuItem.DropDownItems.Count; i++)
+                            {
+                                if (poddyChannelsToolStripMenuItem.DropDownItems[i].Text.Contains(item.Text))
+                                {
+                                    poddyChannelsToolStripMenuItem.DropDownItems.RemoveAt(i);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < customChannelsToolStripMenuItem.DropDownItems.Count; i++)
+                            {
+                                if (customChannelsToolStripMenuItem.DropDownItems[i].Text.Contains(item.Text))
+                                {
+                                    customChannelsToolStripMenuItem.DropDownItems.RemoveAt(i);
+                                }
+                            }
+                        }
 
                         foreach (ToolStripMenuItem toolStripMenuitem1 in contextMenuStrip1.Items)
                         {

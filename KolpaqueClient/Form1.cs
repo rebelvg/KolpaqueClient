@@ -22,6 +22,12 @@ namespace KolpaqueClient
         {
             InitializeComponent();
 
+#if TRACE
+            debugMode = false;
+#else
+            debugMode = true;
+#endif
+
             try
             {
                 if (Process.GetProcessesByName("KolpaqueClient").Length > 1)
@@ -38,7 +44,7 @@ namespace KolpaqueClient
                     if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
                     {
                         channels_listView.Items.Add(X);
-                        poddyChannelsToolStripMenuItem.DropDownItems.Add(X, null, new EventHandler(contextMenu_Click));
+                        //poddyChannelsToolStripMenuItem.DropDownItems.Add(X, null, new EventHandler(contextMenu_Click));
                     }
                 }
 
@@ -96,7 +102,6 @@ namespace KolpaqueClient
             public int channels_listView_ColumnWidth = 348;
             public int[] form1_size = { 400, 667 };
             public bool launchStreamOnBalloonClick_checkBox = true;
-            public bool debugMode;
             public bool enableLog;
             public string screenshotsPath_textBox = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         }
@@ -106,7 +111,7 @@ namespace KolpaqueClient
             if (addChannel_textBox.Text.Replace(" ", "") != "" && !channels_listView.Items.Cast<ListViewItem>().Select(X => X.Text).Contains(addChannel_textBox.Text.Replace(" ", "")))
             {
                 channels_listView.Items.Add(addChannel_textBox.Text.Replace(" ", ""));
-                customChannelsToolStripMenuItem.DropDownItems.Add(addChannel_textBox.Text.Replace(" ", ""), null, new EventHandler(contextMenu_Click));
+                //customChannelsToolStripMenuItem.DropDownItems.Add(addChannel_textBox.Text.Replace(" ", ""), null, new EventHandler(contextMenu_Click));
             }
 
             addChannel_textBox.Text = "";
@@ -121,7 +126,7 @@ namespace KolpaqueClient
         {
             lastBalloonPrint = lastBalloonPrint + 5;
 
-            if (lastBalloonPrint == 15)
+            if (lastBalloonPrint == 20)
             {
                 notifyIcon1.BalloonTipTitle = "";
                 notifyIcon1.BalloonTipText = "";
@@ -134,7 +139,7 @@ namespace KolpaqueClient
         {
             WriteLog("notifyIcon1_BalloonTipClicked");
 
-            if (lastBalloonPrint > 10)
+            if (lastBalloonPrint > 15)
                 return;
 
             if (notifyIcon1.BalloonTipTitle.Contains("Stream is Live"))
@@ -250,7 +255,7 @@ namespace KolpaqueClient
             this.Width = ClientSettings.form1_size[0];
             this.Height = ClientSettings.form1_size[1];
 
-            if (minimizeAtStart_checkBox.Checked)
+            if (minimizeAtStart_checkBox.Checked && !debugMode)
             {
                 this.WindowState = FormWindowState.Minimized;
             }
