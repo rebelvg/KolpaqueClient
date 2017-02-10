@@ -317,7 +317,6 @@ namespace KolpaqueClient
 
             if (selectExePath.ShowDialog() == DialogResult.OK)
             {
-                livestreamerPath_textBox.Enabled = false;
                 livestreamerPath_textBox.Text = selectExePath.FileName;
             }
         }
