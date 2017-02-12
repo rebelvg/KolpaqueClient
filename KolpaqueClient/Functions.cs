@@ -340,6 +340,7 @@ namespace KolpaqueClient
                     S = S.Replace("dedick.", "");
 
                     Thread NewThread = new Thread(() => GetPoddyStatsNewThread(item, S, showBalloon));
+                    NewThread.IsBackground = true;
                     NewThread.Start();
                 }
 
@@ -349,6 +350,7 @@ namespace KolpaqueClient
                     S = S.Replace("main.", "");
 
                     Thread NewThread = new Thread(() => GetPoddyMenStatsNewThread(item, S, showBalloon));
+                    NewThread.IsBackground = true;
                     NewThread.Start();
                 }
             }
@@ -362,6 +364,7 @@ namespace KolpaqueClient
                     S = S.Replace("www.", "");
 
                     Thread NewThread = new Thread(() => GetTwitchStatsNewThread(item, S, showBalloon));
+                    NewThread.IsBackground = true;
                     NewThread.Start();
                 }
             }
@@ -372,6 +375,7 @@ namespace KolpaqueClient
             foreach (ListViewItem item in channels_listView.Items)
             {
                 Thread NewThread = new Thread(() => GetStatsPerItem(item, showBalloon, schedule));
+                NewThread.IsBackground = true;
                 NewThread.Start();
             }
         }
