@@ -189,9 +189,6 @@ namespace KolpaqueClient
 
         private void closeClientToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Show();
-            this.WindowState = FormWindowState.Normal;
-
             System.Windows.Forms.Application.Exit();
         }
 
@@ -334,6 +331,9 @@ namespace KolpaqueClient
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+
             SaveXmlFile();
         }
 
