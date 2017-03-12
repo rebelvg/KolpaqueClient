@@ -74,8 +74,6 @@ namespace KolpaqueClient
 
                 label2.Text = "Version " + clientVersion;
 
-                GetStats(false, 0);
-
                 Thread NewVersionThread = new Thread(() => GetNewVersionNewThread());
                 NewVersionThread.Start();
 
@@ -146,7 +144,7 @@ namespace KolpaqueClient
             {
                 if (launchStreamOnBalloonClick_checkBox.Checked)
                 {
-                    PlayStream(new ListViewItem(notifyIcon1.BalloonTipText), "notifyIcon1_BalloonTipClicked");
+                    PlayStream(new ListViewItem(notifyIcon1.BalloonTipText), "notifyIcon1_BalloonTipClicked", LQ_checkBox.Checked);
                 }
             }
 
@@ -161,7 +159,7 @@ namespace KolpaqueClient
 
         private void contextMenu_Click(object sender, EventArgs e)
         {
-            PlayStream(new ListViewItem(sender.ToString()), "contextMenu_Click");
+            PlayStream(new ListViewItem(sender.ToString()), "contextMenu_Click", LQ_checkBox.Checked);
         }
 
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
@@ -198,7 +196,7 @@ namespace KolpaqueClient
             {
                 PrintBalloon("Launching the Stream", Clipboard.GetText());
 
-                PlayStream(new ListViewItem(Clipboard.GetText()), "playFromClipboardToolStripMenuItem_Click");
+                PlayStream(new ListViewItem(Clipboard.GetText()), "playFromClipboardToolStripMenuItem_Click", LQ_checkBox.Checked);
             }
         }
 
@@ -236,7 +234,7 @@ namespace KolpaqueClient
 
         private void playStreamToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PlayStream(channelsLastSelectedItem, "playStreamToolStripMenuItem_Click");
+            PlayStream(channelsLastSelectedItem, "playStreamToolStripMenuItem_Click", false);
         }
 
         private void Form1_ClientSizeChanged(object sender, EventArgs e)
@@ -249,6 +247,8 @@ namespace KolpaqueClient
 
         private void Form1_Shown(object sender, EventArgs e)
         {
+            GetStats(false, 0);
+
             this.Width = ClientSettings.form1_size[0];
             this.Height = ClientSettings.form1_size[1];
 
@@ -280,7 +280,9 @@ namespace KolpaqueClient
         {
             if (poddyChannelsList.Contains(channelsLastSelectedItem.Text))
             {
-                System.Diagnostics.Process.Start(poddyChannelsChatList[poddyChannelsList.IndexOf(channelsLastSelectedItem.Text)]);
+                string[] name = channelsLastSelectedItem.Text.Split(new string[] { "/" }, StringSplitOptions.None);
+
+                System.Diagnostics.Process.Start("http://stream.klpq.men/" + name.Last() + "/chat");
             }
 
             if (channelsLastSelectedItem.Text.Contains("http"))
@@ -293,7 +295,7 @@ namespace KolpaqueClient
         {
             if (e.Button == MouseButtons.Left)
             {
-                PlayStream(channelsLastSelectedItem, "listView2_MouseDoubleClick");
+                PlayStream(channelsLastSelectedItem, "listView2_MouseDoubleClick", LQ_checkBox.Checked);
 
                 PrintBalloon("Launching the Stream", channelsLastSelectedItem.Text);
             }
@@ -361,8 +363,7 @@ namespace KolpaqueClient
         {
             contextMenuStrip1.Visible = false;
 
-            Bitmap printScreen = new Bitmap
-            (Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+            Bitmap printScreen = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             Graphics graphics = Graphics.FromImage(printScreen as Image);
             graphics.CopyFromScreen(0, 0, 0, 0, printScreen.Size);
 
@@ -400,6 +401,26 @@ namespace KolpaqueClient
         private void save_button_Click(object sender, EventArgs e)
         {
             SaveXmlFile();
+        }
+
+        private void playLowQualityToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PlayStream(channelsLastSelectedItem, "playLowQualityToolStripMenuItem_Click", true);
+        }
+
+        private void openPageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (poddyChannelsList.Contains(channelsLastSelectedItem.Text))
+            {
+                string[] name = channelsLastSelectedItem.Text.Split(new string[] { "/" }, StringSplitOptions.None);
+
+                System.Diagnostics.Process.Start("http://stream.klpq.men/" + name.Last());
+            }
+
+            if (channelsLastSelectedItem.Text.Contains("http"))
+            {
+                System.Diagnostics.Process.Start(channelsLastSelectedItem.Text);
+            }
         }
     }
 }

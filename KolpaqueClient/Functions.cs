@@ -31,7 +31,6 @@ namespace KolpaqueClient
 
                 livestreamerPath_textBox.Text = ClientSettings.livestreamerPath_textBox;
                 LQ_checkBox.Checked = ClientSettings.LQ_checkBox;
-                openChat_checkBox.Checked = ClientSettings.openChat_checkBox;
                 notifications_checkBox.Checked = ClientSettings.notifications_checkBox;
                 autoPlay_checkBox.Checked = ClientSettings.autoPlay_checkBox;
 
@@ -76,7 +75,6 @@ namespace KolpaqueClient
 
                 ClientSettings.livestreamerPath_textBox = livestreamerPath_textBox.Text;
                 ClientSettings.LQ_checkBox = LQ_checkBox.Checked;
-                ClientSettings.openChat_checkBox = openChat_checkBox.Checked;
                 ClientSettings.notifications_checkBox = notifications_checkBox.Checked;
                 ClientSettings.autoPlay_checkBox = autoPlay_checkBox.Checked;
                 ClientSettings.channels_listView = channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Where(s => !poddyChannelsList.Contains(s)).ToList();
@@ -99,53 +97,28 @@ namespace KolpaqueClient
             }
         }
 
-        public void GetPoddyStatsNewThread(ListViewItem item, string S, bool showBalloon)
-        {
-            WebClient client = new WebClient();
-
-            try
-            {
-                string amsStatsString = client.DownloadString("http://dedick.podkolpakom.net/stats/ams/gib_stats.php?stream=" + S.Replace("podkolpakom.net/live/", ""));
-
-                dynamic amsStatsJSON = JsonConvert.DeserializeObject(amsStatsString);
-
-                if (amsStatsJSON.live.ToString() == "Online")
-                {
-                    ChannelWentOnline(item, showBalloon);
-                }
-                if (amsStatsJSON.live.ToString() == "Offline")
-                {
-                    ChannelWentOffline(item);
-                }
-            }
-            catch
-            {
-                WriteLog("GetPoddyStatsNewThread Crashed " + S);
-            }
-        }
-
         public void GetPoddyMenStatsNewThread(ListViewItem item, string S, bool showBalloon)
         {
             WebClient client = new WebClient();
 
             try
             {
-                string amsStatsString = client.DownloadString("http://main.klpq.men/stats/ams/gib_stats.php?stream=" + S.Replace("klpq.men/live/", ""));
+                string amsStatsString = client.DownloadString("http://stats.klpq.men/channel/" + S);
 
                 dynamic amsStatsJSON = JsonConvert.DeserializeObject(amsStatsString);
 
-                if (amsStatsJSON.live.ToString() == "Online")
+                if ((bool)amsStatsJSON.isLive)
                 {
                     ChannelWentOnline(item, showBalloon);
                 }
-                if (amsStatsJSON.live.ToString() == "Offline")
+                if (!(bool)amsStatsJSON.isLive)
                 {
                     ChannelWentOffline(item);
                 }
             }
-            catch
+            catch (Exception e)
             {
-                WriteLog("GetPoddyStatsNewThread Crashed " + S);
+                WriteLog("GetPoddyStatsNewThread Crashed " + S + " " + e.Message);
             }
         }
 
@@ -155,7 +128,7 @@ namespace KolpaqueClient
 
             try
             {
-                string twitchStatsString = client.DownloadString("https://api.twitch.tv/kraken/streams?channel=" + S.Replace("twitch.tv/", "") + "&client_id=" + twitchApiAppKey + "");
+                string twitchStatsString = client.DownloadString("https://api.twitch.tv/kraken/streams?channel=" + S + "&client_id=" + twitchApiAppKey);
 
                 dynamic twitchAPIStats = JsonConvert.DeserializeObject(twitchStatsString);
 
@@ -168,9 +141,9 @@ namespace KolpaqueClient
                     ChannelWentOffline(item);
                 }
             }
-            catch
+            catch (Exception e)
             {
-                WriteLog("GetTwitchStatsNewThread Crashed " + S);
+                WriteLog("GetTwitchStatsNewThread Crashed " + S + " " + e.Message);
             }
         }
 
@@ -214,7 +187,7 @@ namespace KolpaqueClient
 
                 if (autoPlay_checkBox.Checked)
                 {
-                    PlayStream(item, "autoPlay");
+                    PlayStream(item, "autoPlay", LQ_checkBox.Checked);
                 }
             }
         }
@@ -334,22 +307,11 @@ namespace KolpaqueClient
 
             if (schedule == 0 || schedule == 1)
             {
-                if (S.Contains("dedick.podkolpakom.net"))
+                if (S.Contains("klpq.men/live/"))
                 {
-                    S = S.Replace("rtmp://", "");
-                    S = S.Replace("dedick.", "");
+                    string[] name = S.Split(new string[] { "/" }, StringSplitOptions.None);
 
-                    Thread NewThread = new Thread(() => GetPoddyStatsNewThread(item, S, showBalloon));
-                    NewThread.IsBackground = true;
-                    NewThread.Start();
-                }
-
-                if (S.Contains("main.klpq.men"))
-                {
-                    S = S.Replace("rtmp://", "");
-                    S = S.Replace("main.", "");
-
-                    Thread NewThread = new Thread(() => GetPoddyMenStatsNewThread(item, S, showBalloon));
+                    Thread NewThread = new Thread(() => GetPoddyMenStatsNewThread(item, name.Last(), showBalloon));
                     NewThread.IsBackground = true;
                     NewThread.Start();
                 }
@@ -357,13 +319,11 @@ namespace KolpaqueClient
 
             if (schedule == 0 || schedule == 2)
             {
-                if (S.Contains("twitch.tv"))
+                if (S.Contains("twitch.tv/"))
                 {
-                    S = S.Replace("https://", "");
-                    S = S.Replace("http://", "");
-                    S = S.Replace("www.", "");
+                    string[] name = S.Split(new string[] { "/" }, StringSplitOptions.None);
 
-                    Thread NewThread = new Thread(() => GetTwitchStatsNewThread(item, S, showBalloon));
+                    Thread NewThread = new Thread(() => GetTwitchStatsNewThread(item, name.Last(), showBalloon));
                     NewThread.IsBackground = true;
                     NewThread.Start();
                 }
@@ -380,47 +340,30 @@ namespace KolpaqueClient
             }
         }
 
-        public void PlayStream(ListViewItem X, string whoCalled)
+        public void PlayStream(ListViewItem X, string whoCalled, bool launchLowQuality)
         {
             WriteLog("PlayStream " + X.Text + " " + whoCalled);
 
             string commandLine = "";
 
-            if (X.Text.Contains("podkolpakom.net") || X.Text.Contains("klpq.men"))
+            if (X.Text.Contains("klpq.men/live/"))
             {
                 commandLine = "\"" + X.Text + " live=1\"" + " best";
 
-                if (LQ_checkBox.Checked)
+                if (launchLowQuality)
                 {
                     commandLine = commandLine.Replace("/live/", "/restream/");
-                }
-
-                if (openChat_checkBox.Checked)
-                {
-                    try
-                    {
-                        System.Diagnostics.Process.Start(poddyChannelsChatList[poddyChannelsList.IndexOf(X.Text)]);
-                    }
-                    catch
-                    {
-
-                    }
                 }
             }
             else
             {
-                if (LQ_checkBox.Checked)
+                if (launchLowQuality)
                 {
                     commandLine = "\"" + X.Text + "\"" + " high";
                 }
                 else
                 {
                     commandLine = "\"" + X.Text + "\"" + " best";
-                }
-
-                if (X.Text.Contains("http") && openChat_checkBox.Checked)
-                {
-                    System.Diagnostics.Process.Start(X.Text + "/chat/");
                 }
             }
 
@@ -438,7 +381,6 @@ namespace KolpaqueClient
             else
             {
                 MessageBox.Show("livestreamer.exe not found.");
-                System.Diagnostics.Process.Start("https://github.com/chrippa/livestreamer/releases");
             }
         }
 

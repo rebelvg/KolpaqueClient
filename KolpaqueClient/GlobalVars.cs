@@ -18,13 +18,11 @@ namespace KolpaqueClient
 {
     public partial class Form1 : Form
     {
-        string clientVersion = "0.287";
+        string clientVersion = "0.288";
 
         string twitchApiAppKey = "dk330061dv4t81s21utnhhdona0a91x";
 
-        List<string> poddyChannelsList = new List<string>(new string[] { "rtmp://main.klpq.men/live/liveevent", "rtmp://main.klpq.men/live/tvstream", "rtmp://main.klpq.men/live/murshun" });
-
-        List<string> poddyChannelsChatList = new List<string>(new string[] { "http://klpq.men/stream/main/chat/", "http://klpq.men/stream/tv/chat/", "http://klpq.men/stream/murshun/chat/" });
+        List<string> poddyChannelsList = new List<string>(new string[] { "rtmp://stream.klpq.men/live/liveevent", "rtmp://stream.klpq.men/live/tvstream", "rtmp://stream.klpq.men/live/murshun" });
 
         ListViewItem channelsLastSelectedItem;
 

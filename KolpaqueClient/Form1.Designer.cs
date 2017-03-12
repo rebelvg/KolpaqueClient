@@ -43,7 +43,6 @@
             this.makeAPrintScreenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeClientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.openChat_checkBox = new System.Windows.Forms.CheckBox();
             this.channels_listView = new System.Windows.Forms.ListView();
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.fiveSecTimer = new System.Windows.Forms.Timer(this.components);
@@ -75,6 +74,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.changeScreenshotsPath_button = new System.Windows.Forms.Button();
             this.screenshotsPath_textBox = new System.Windows.Forms.TextBox();
+            this.playLowQualityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openPageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -193,17 +194,6 @@
             this.linkLabel1.Text = "Kolpaque Home";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
-            // openChat_checkBox
-            // 
-            this.openChat_checkBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.openChat_checkBox.AutoSize = true;
-            this.openChat_checkBox.Location = new System.Drawing.Point(297, 565);
-            this.openChat_checkBox.Name = "openChat_checkBox";
-            this.openChat_checkBox.Size = new System.Drawing.Size(77, 17);
-            this.openChat_checkBox.TabIndex = 18;
-            this.openChat_checkBox.Text = "Open Chat";
-            this.openChat_checkBox.UseVisualStyleBackColor = true;
-            // 
             // channels_listView
             // 
             this.channels_listView.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
@@ -238,7 +228,7 @@
             // 
             this.autoPlay_checkBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.autoPlay_checkBox.AutoSize = true;
-            this.autoPlay_checkBox.Location = new System.Drawing.Point(297, 588);
+            this.autoPlay_checkBox.Location = new System.Drawing.Point(297, 565);
             this.autoPlay_checkBox.Name = "autoPlay_checkBox";
             this.autoPlay_checkBox.Size = new System.Drawing.Size(71, 17);
             this.autoPlay_checkBox.TabIndex = 21;
@@ -272,11 +262,13 @@
             // 
             this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.playStreamToolStripMenuItem,
+            this.playLowQualityToolStripMenuItem,
+            this.openPageToolStripMenuItem,
             this.openChatToolStripMenuItem,
             this.copyToClipboardToolStripMenuItem,
             this.removeChannelToolStripMenuItem});
             this.contextMenuStrip2.Name = "contextMenuStrip2";
-            this.contextMenuStrip2.Size = new System.Drawing.Size(161, 92);
+            this.contextMenuStrip2.Size = new System.Drawing.Size(161, 158);
             this.contextMenuStrip2.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuStrip2_Closed);
             // 
             // playStreamToolStripMenuItem
@@ -284,7 +276,7 @@
             this.playStreamToolStripMenuItem.BackColor = System.Drawing.SystemColors.Control;
             this.playStreamToolStripMenuItem.Name = "playStreamToolStripMenuItem";
             this.playStreamToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.playStreamToolStripMenuItem.Text = "Play Stream";
+            this.playStreamToolStripMenuItem.Text = "Play Original";
             this.playStreamToolStripMenuItem.Click += new System.EventHandler(this.playStreamToolStripMenuItem_Click);
             // 
             // openChatToolStripMenuItem
@@ -363,7 +355,6 @@
             this.tabPage1.Controls.Add(this.addChannel_button);
             this.tabPage1.Controls.Add(this.linkLabel2);
             this.tabPage1.Controls.Add(this.LQ_checkBox);
-            this.tabPage1.Controls.Add(this.openChat_checkBox);
             this.tabPage1.Controls.Add(this.linkLabel3);
             this.tabPage1.Controls.Add(this.autoPlay_checkBox);
             this.tabPage1.Controls.Add(this.label2);
@@ -527,6 +518,20 @@
             this.screenshotsPath_textBox.Size = new System.Drawing.Size(340, 20);
             this.screenshotsPath_textBox.TabIndex = 26;
             // 
+            // playLowQualityToolStripMenuItem
+            // 
+            this.playLowQualityToolStripMenuItem.Name = "playLowQualityToolStripMenuItem";
+            this.playLowQualityToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.playLowQualityToolStripMenuItem.Text = "Play Low Quality";
+            this.playLowQualityToolStripMenuItem.Click += new System.EventHandler(this.playLowQualityToolStripMenuItem_Click);
+            // 
+            // openPageToolStripMenuItem
+            // 
+            this.openPageToolStripMenuItem.Name = "openPageToolStripMenuItem";
+            this.openPageToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.openPageToolStripMenuItem.Text = "Open Page";
+            this.openPageToolStripMenuItem.Click += new System.EventHandler(this.openPageToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -562,7 +567,6 @@
         private System.Windows.Forms.Button addChannel_button;
         private System.Windows.Forms.TextBox addChannel_textBox;
         private System.Windows.Forms.LinkLabel linkLabel1;
-        private System.Windows.Forms.CheckBox openChat_checkBox;
         private System.Windows.Forms.ListView channels_listView;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.Timer fiveSecTimer;
@@ -601,5 +605,7 @@
         private System.Windows.Forms.Button twitchImport_button;
         private System.Windows.Forms.TextBox twitchImport_textBox;
         private System.Windows.Forms.Button save_button;
+        private System.Windows.Forms.ToolStripMenuItem playLowQualityToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openPageToolStripMenuItem;
     }
 }
