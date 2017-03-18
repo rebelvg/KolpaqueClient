@@ -346,11 +346,11 @@ namespace KolpaqueClient
 
             string commandLine = "";
 
-            if (X.Text.Contains("klpq.men/live/"))
+            if (X.Text.StartsWith("rtmp"))
             {
                 commandLine = "\"" + X.Text + " live=1\"" + " best";
 
-                if (launchLowQuality)
+                if (X.Text.Contains("klpq.men/live/") && launchLowQuality)
                 {
                     commandLine = commandLine.Replace("/live/", "/restream/");
                 }

@@ -282,7 +282,7 @@ namespace KolpaqueClient
             {
                 string[] name = channelsLastSelectedItem.Text.Split(new string[] { "/" }, StringSplitOptions.None);
 
-                System.Diagnostics.Process.Start("http://stream.klpq.men/" + name.Last() + "/chat");
+                System.Diagnostics.Process.Start("http://stream.klpq.men/chat");
             }
 
             if (channelsLastSelectedItem.Text.Contains("http"))
