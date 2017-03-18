@@ -380,7 +380,7 @@ namespace KolpaqueClient
             }
             else
             {
-                MessageBox.Show("livestreamer.exe not found.");
+                MessageBox.Show(Path.GetFileName(livestreamerPath_textBox.Text) + " not found.");
             }
         }
 
