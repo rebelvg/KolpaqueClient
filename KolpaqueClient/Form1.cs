@@ -92,7 +92,6 @@ namespace KolpaqueClient
         {
             public string livestreamerPath_textBox = "C:\\Program Files (x86)\\Livestreamer\\livestreamer.exe";
             public bool LQ_checkBox;
-            public bool openChat_checkBox;
             public bool notifications_checkBox = true;
             public bool autoPlay_checkBox;
             public List<string> channels_listView;
