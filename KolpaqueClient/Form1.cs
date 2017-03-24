@@ -30,7 +30,7 @@ namespace KolpaqueClient
 
             try
             {
-                if (Process.GetProcessesByName("KolpaqueClient").Length > 1)
+                if (Process.GetProcessesByName(Path.GetFileNameWithoutExtension(AppDomain.CurrentDomain.FriendlyName)).Length > 1)
                 {
                     MessageBox.Show("Client is already running.");
                     notifyIcon1.Visible = false;

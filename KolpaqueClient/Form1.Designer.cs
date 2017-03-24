@@ -51,6 +51,8 @@
             this.linkLabel3 = new System.Windows.Forms.LinkLabel();
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.playStreamToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.playLowQualityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openPageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openChatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeChannelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -74,8 +76,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.changeScreenshotsPath_button = new System.Windows.Forms.Button();
             this.screenshotsPath_textBox = new System.Windows.Forms.TextBox();
-            this.playLowQualityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openPageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -103,7 +103,7 @@
             // 
             this.LQ_checkBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.LQ_checkBox.AutoSize = true;
-            this.LQ_checkBox.Location = new System.Drawing.Point(297, 542);
+            this.LQ_checkBox.Location = new System.Drawing.Point(297, 513);
             this.LQ_checkBox.Name = "LQ_checkBox";
             this.LQ_checkBox.Size = new System.Drawing.Size(81, 17);
             this.LQ_checkBox.TabIndex = 10;
@@ -113,11 +113,11 @@
             // addChannel_button
             // 
             this.addChannel_button.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.addChannel_button.Location = new System.Drawing.Point(274, 513);
+            this.addChannel_button.Location = new System.Drawing.Point(351, 487);
             this.addChannel_button.Name = "addChannel_button";
-            this.addChannel_button.Size = new System.Drawing.Size(104, 23);
+            this.addChannel_button.Size = new System.Drawing.Size(29, 20);
             this.addChannel_button.TabIndex = 11;
-            this.addChannel_button.Text = "Add Channel";
+            this.addChannel_button.Text = "+";
             this.addChannel_button.UseVisualStyleBackColor = true;
             this.addChannel_button.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -126,7 +126,7 @@
             this.addChannel_textBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.addChannel_textBox.Location = new System.Drawing.Point(6, 487);
             this.addChannel_textBox.Name = "addChannel_textBox";
-            this.addChannel_textBox.Size = new System.Drawing.Size(372, 20);
+            this.addChannel_textBox.Size = new System.Drawing.Size(339, 20);
             this.addChannel_textBox.TabIndex = 13;
             // 
             // notifyIcon1
@@ -228,7 +228,7 @@
             // 
             this.autoPlay_checkBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.autoPlay_checkBox.AutoSize = true;
-            this.autoPlay_checkBox.Location = new System.Drawing.Point(297, 565);
+            this.autoPlay_checkBox.Location = new System.Drawing.Point(297, 536);
             this.autoPlay_checkBox.Name = "autoPlay_checkBox";
             this.autoPlay_checkBox.Size = new System.Drawing.Size(71, 17);
             this.autoPlay_checkBox.TabIndex = 21;
@@ -268,7 +268,7 @@
             this.copyToClipboardToolStripMenuItem,
             this.removeChannelToolStripMenuItem});
             this.contextMenuStrip2.Name = "contextMenuStrip2";
-            this.contextMenuStrip2.Size = new System.Drawing.Size(161, 158);
+            this.contextMenuStrip2.Size = new System.Drawing.Size(161, 136);
             this.contextMenuStrip2.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuStrip2_Closed);
             // 
             // playStreamToolStripMenuItem
@@ -278,6 +278,20 @@
             this.playStreamToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.playStreamToolStripMenuItem.Text = "Play Original";
             this.playStreamToolStripMenuItem.Click += new System.EventHandler(this.playStreamToolStripMenuItem_Click);
+            // 
+            // playLowQualityToolStripMenuItem
+            // 
+            this.playLowQualityToolStripMenuItem.Name = "playLowQualityToolStripMenuItem";
+            this.playLowQualityToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.playLowQualityToolStripMenuItem.Text = "Play Low Quality";
+            this.playLowQualityToolStripMenuItem.Click += new System.EventHandler(this.playLowQualityToolStripMenuItem_Click);
+            // 
+            // openPageToolStripMenuItem
+            // 
+            this.openPageToolStripMenuItem.Name = "openPageToolStripMenuItem";
+            this.openPageToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.openPageToolStripMenuItem.Text = "Open Page";
+            this.openPageToolStripMenuItem.Click += new System.EventHandler(this.openPageToolStripMenuItem_Click);
             // 
             // openChatToolStripMenuItem
             // 
@@ -517,20 +531,6 @@
             this.screenshotsPath_textBox.ReadOnly = true;
             this.screenshotsPath_textBox.Size = new System.Drawing.Size(340, 20);
             this.screenshotsPath_textBox.TabIndex = 26;
-            // 
-            // playLowQualityToolStripMenuItem
-            // 
-            this.playLowQualityToolStripMenuItem.Name = "playLowQualityToolStripMenuItem";
-            this.playLowQualityToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.playLowQualityToolStripMenuItem.Text = "Play Low Quality";
-            this.playLowQualityToolStripMenuItem.Click += new System.EventHandler(this.playLowQualityToolStripMenuItem_Click);
-            // 
-            // openPageToolStripMenuItem
-            // 
-            this.openPageToolStripMenuItem.Name = "openPageToolStripMenuItem";
-            this.openPageToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.openPageToolStripMenuItem.Text = "Open Page";
-            this.openPageToolStripMenuItem.Click += new System.EventHandler(this.openPageToolStripMenuItem_Click);
             // 
             // Form1
             // 
