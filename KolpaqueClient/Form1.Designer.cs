@@ -115,7 +115,7 @@
             this.addChannel_button.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.addChannel_button.Location = new System.Drawing.Point(351, 487);
             this.addChannel_button.Name = "addChannel_button";
-            this.addChannel_button.Size = new System.Drawing.Size(29, 20);
+            this.addChannel_button.Size = new System.Drawing.Size(27, 20);
             this.addChannel_button.TabIndex = 11;
             this.addChannel_button.Text = "+";
             this.addChannel_button.UseVisualStyleBackColor = true;
