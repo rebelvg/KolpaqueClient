@@ -40,7 +40,6 @@
             this.poddyChannelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customChannelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.playFromClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.makeAPrintScreenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeClientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.channels_listView = new System.Windows.Forms.ListView();
@@ -71,11 +70,8 @@
             this.notifications_checkBox = new System.Windows.Forms.CheckBox();
             this.enableLog_checkBox = new System.Windows.Forms.CheckBox();
             this.launchStreamOnBalloonClick_checkBox = new System.Windows.Forms.CheckBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.changeScreenshotsPath_button = new System.Windows.Forms.Button();
-            this.screenshotsPath_textBox = new System.Windows.Forms.TextBox();
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -103,7 +99,7 @@
             // 
             this.LQ_checkBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.LQ_checkBox.AutoSize = true;
-            this.LQ_checkBox.Location = new System.Drawing.Point(297, 513);
+            this.LQ_checkBox.Location = new System.Drawing.Point(297, 590);
             this.LQ_checkBox.Name = "LQ_checkBox";
             this.LQ_checkBox.Size = new System.Drawing.Size(81, 17);
             this.LQ_checkBox.TabIndex = 10;
@@ -113,7 +109,7 @@
             // addChannel_button
             // 
             this.addChannel_button.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.addChannel_button.Location = new System.Drawing.Point(351, 487);
+            this.addChannel_button.Location = new System.Drawing.Point(351, 564);
             this.addChannel_button.Name = "addChannel_button";
             this.addChannel_button.Size = new System.Drawing.Size(27, 20);
             this.addChannel_button.TabIndex = 11;
@@ -124,7 +120,7 @@
             // addChannel_textBox
             // 
             this.addChannel_textBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.addChannel_textBox.Location = new System.Drawing.Point(6, 487);
+            this.addChannel_textBox.Location = new System.Drawing.Point(6, 564);
             this.addChannel_textBox.Name = "addChannel_textBox";
             this.addChannel_textBox.Size = new System.Drawing.Size(339, 20);
             this.addChannel_textBox.TabIndex = 13;
@@ -144,10 +140,9 @@
             this.poddyChannelsToolStripMenuItem,
             this.customChannelsToolStripMenuItem,
             this.playFromClipboardToolStripMenuItem,
-            this.makeAPrintScreenToolStripMenuItem,
             this.closeClientToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(168, 114);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(168, 92);
             // 
             // poddyChannelsToolStripMenuItem
             // 
@@ -168,13 +163,6 @@
             this.playFromClipboardToolStripMenuItem.Text = "Play from Clipboard";
             this.playFromClipboardToolStripMenuItem.Click += new System.EventHandler(this.playFromClipboardToolStripMenuItem_Click);
             // 
-            // makeAPrintScreenToolStripMenuItem
-            // 
-            this.makeAPrintScreenToolStripMenuItem.Name = "makeAPrintScreenToolStripMenuItem";
-            this.makeAPrintScreenToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.makeAPrintScreenToolStripMenuItem.Text = "PrintScreen";
-            this.makeAPrintScreenToolStripMenuItem.Click += new System.EventHandler(this.makeAPrintScreenToolStripMenuItem_Click);
-            // 
             // closeClientToolStripMenuItem
             // 
             this.closeClientToolStripMenuItem.Name = "closeClientToolStripMenuItem";
@@ -186,7 +174,7 @@
             // 
             this.linkLabel1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(3, 554);
+            this.linkLabel1.Location = new System.Drawing.Point(3, 587);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(83, 13);
             this.linkLabel1.TabIndex = 16;
@@ -206,7 +194,7 @@
             this.channels_listView.Location = new System.Drawing.Point(6, 6);
             this.channels_listView.MultiSelect = false;
             this.channels_listView.Name = "channels_listView";
-            this.channels_listView.Size = new System.Drawing.Size(372, 475);
+            this.channels_listView.Size = new System.Drawing.Size(372, 552);
             this.channels_listView.TabIndex = 19;
             this.channels_listView.UseCompatibleStateImageBehavior = false;
             this.channels_listView.View = System.Windows.Forms.View.Details;
@@ -228,7 +216,7 @@
             // 
             this.autoPlay_checkBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.autoPlay_checkBox.AutoSize = true;
-            this.autoPlay_checkBox.Location = new System.Drawing.Point(297, 536);
+            this.autoPlay_checkBox.Location = new System.Drawing.Point(297, 613);
             this.autoPlay_checkBox.Name = "autoPlay_checkBox";
             this.autoPlay_checkBox.Size = new System.Drawing.Size(71, 17);
             this.autoPlay_checkBox.TabIndex = 21;
@@ -239,7 +227,7 @@
             // 
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(2, 593);
+            this.label2.Location = new System.Drawing.Point(2, 626);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(72, 13);
             this.label2.TabIndex = 22;
@@ -249,7 +237,7 @@
             // 
             this.linkLabel3.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.linkLabel3.AutoSize = true;
-            this.linkLabel3.Location = new System.Drawing.Point(80, 593);
+            this.linkLabel3.Location = new System.Drawing.Point(80, 626);
             this.linkLabel3.Name = "linkLabel3";
             this.linkLabel3.Size = new System.Drawing.Size(113, 13);
             this.linkLabel3.TabIndex = 23;
@@ -334,7 +322,7 @@
             // 
             this.linkLabel2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.linkLabel2.AutoSize = true;
-            this.linkLabel2.Location = new System.Drawing.Point(3, 572);
+            this.linkLabel2.Location = new System.Drawing.Point(3, 605);
             this.linkLabel2.Name = "linkLabel2";
             this.linkLabel2.Size = new System.Drawing.Size(40, 13);
             this.linkLabel2.TabIndex = 26;
@@ -359,7 +347,7 @@
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(392, 640);
+            this.tabControl1.Size = new System.Drawing.Size(392, 673);
             this.tabControl1.TabIndex = 27;
             // 
             // tabPage1
@@ -376,7 +364,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(384, 611);
+            this.tabPage1.Size = new System.Drawing.Size(384, 644);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             // 
@@ -390,18 +378,15 @@
             this.tabPage2.Controls.Add(this.notifications_checkBox);
             this.tabPage2.Controls.Add(this.enableLog_checkBox);
             this.tabPage2.Controls.Add(this.launchStreamOnBalloonClick_checkBox);
-            this.tabPage2.Controls.Add(this.label4);
             this.tabPage2.Controls.Add(this.label3);
             this.tabPage2.Controls.Add(this.label1);
-            this.tabPage2.Controls.Add(this.changeScreenshotsPath_button);
-            this.tabPage2.Controls.Add(this.screenshotsPath_textBox);
             this.tabPage2.Controls.Add(this.xmlPath_textBox);
             this.tabPage2.Controls.Add(this.livestreamerPath_textBox);
             this.tabPage2.Controls.Add(this.changeLivestreamerPath_button);
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(384, 611);
+            this.tabPage2.Size = new System.Drawing.Size(384, 644);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Settings";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -409,7 +394,7 @@
             // save_button
             // 
             this.save_button.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.save_button.Location = new System.Drawing.Point(285, 582);
+            this.save_button.Location = new System.Drawing.Point(285, 615);
             this.save_button.Name = "save_button";
             this.save_button.Size = new System.Drawing.Size(93, 23);
             this.save_button.TabIndex = 40;
@@ -446,7 +431,7 @@
             // minimizeAtStart_checkBox
             // 
             this.minimizeAtStart_checkBox.AutoSize = true;
-            this.minimizeAtStart_checkBox.Location = new System.Drawing.Point(6, 146);
+            this.minimizeAtStart_checkBox.Location = new System.Drawing.Point(6, 107);
             this.minimizeAtStart_checkBox.Name = "minimizeAtStart_checkBox";
             this.minimizeAtStart_checkBox.Size = new System.Drawing.Size(103, 17);
             this.minimizeAtStart_checkBox.TabIndex = 36;
@@ -458,7 +443,7 @@
             this.notifications_checkBox.AutoSize = true;
             this.notifications_checkBox.Checked = true;
             this.notifications_checkBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.notifications_checkBox.Location = new System.Drawing.Point(6, 123);
+            this.notifications_checkBox.Location = new System.Drawing.Point(6, 84);
             this.notifications_checkBox.Name = "notifications_checkBox";
             this.notifications_checkBox.Size = new System.Drawing.Size(114, 17);
             this.notifications_checkBox.TabIndex = 35;
@@ -468,7 +453,7 @@
             // enableLog_checkBox
             // 
             this.enableLog_checkBox.AutoSize = true;
-            this.enableLog_checkBox.Location = new System.Drawing.Point(6, 192);
+            this.enableLog_checkBox.Location = new System.Drawing.Point(6, 153);
             this.enableLog_checkBox.Name = "enableLog_checkBox";
             this.enableLog_checkBox.Size = new System.Drawing.Size(77, 17);
             this.enableLog_checkBox.TabIndex = 34;
@@ -480,21 +465,12 @@
             this.launchStreamOnBalloonClick_checkBox.AutoSize = true;
             this.launchStreamOnBalloonClick_checkBox.Checked = true;
             this.launchStreamOnBalloonClick_checkBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.launchStreamOnBalloonClick_checkBox.Location = new System.Drawing.Point(6, 169);
+            this.launchStreamOnBalloonClick_checkBox.Location = new System.Drawing.Point(6, 130);
             this.launchStreamOnBalloonClick_checkBox.Name = "launchStreamOnBalloonClick_checkBox";
             this.launchStreamOnBalloonClick_checkBox.Size = new System.Drawing.Size(125, 17);
             this.launchStreamOnBalloonClick_checkBox.TabIndex = 31;
             this.launchStreamOnBalloonClick_checkBox.Text = "Play on Balloon Click";
             this.launchStreamOnBalloonClick_checkBox.UseVisualStyleBackColor = true;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(7, 81);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(98, 13);
-            this.label4.TabIndex = 30;
-            this.label4.Text = "Screenshots Folder";
             // 
             // label3
             // 
@@ -514,34 +490,16 @@
             this.label1.TabIndex = 28;
             this.label1.Text = "Xml Path";
             // 
-            // changeScreenshotsPath_button
-            // 
-            this.changeScreenshotsPath_button.Location = new System.Drawing.Point(352, 97);
-            this.changeScreenshotsPath_button.Name = "changeScreenshotsPath_button";
-            this.changeScreenshotsPath_button.Size = new System.Drawing.Size(26, 20);
-            this.changeScreenshotsPath_button.TabIndex = 27;
-            this.changeScreenshotsPath_button.Text = "...";
-            this.changeScreenshotsPath_button.UseVisualStyleBackColor = true;
-            this.changeScreenshotsPath_button.Click += new System.EventHandler(this.changeScreenshotsPath_button_Click);
-            // 
-            // screenshotsPath_textBox
-            // 
-            this.screenshotsPath_textBox.Location = new System.Drawing.Point(6, 97);
-            this.screenshotsPath_textBox.Name = "screenshotsPath_textBox";
-            this.screenshotsPath_textBox.ReadOnly = true;
-            this.screenshotsPath_textBox.Size = new System.Drawing.Size(340, 20);
-            this.screenshotsPath_textBox.TabIndex = 26;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(392, 640);
+            this.ClientSize = new System.Drawing.Size(392, 673);
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(400, 1200);
-            this.MinimumSize = new System.Drawing.Size(400, 667);
+            this.MinimumSize = new System.Drawing.Size(400, 700);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Kolpaque Client";
@@ -588,13 +546,9 @@
         private System.Windows.Forms.Timer sixtySecTimer;
         private System.Windows.Forms.LinkLabel linkLabel2;
         private System.Windows.Forms.Timer thirtySecTimer;
-        private System.Windows.Forms.ToolStripMenuItem makeAPrintScreenToolStripMenuItem;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.Button changeScreenshotsPath_button;
-        private System.Windows.Forms.TextBox screenshotsPath_textBox;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox launchStreamOnBalloonClick_checkBox;

@@ -12,7 +12,6 @@ using System.Net;
 using System.IO;
 using System.Diagnostics;
 using Newtonsoft.Json;
-using System.Drawing.Imaging;
 
 namespace KolpaqueClient
 {

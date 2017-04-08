@@ -12,7 +12,7 @@ using System.Net;
 using System.IO;
 using System.Diagnostics;
 using Newtonsoft.Json;
-using System.Drawing.Imaging;
+using Newtonsoft.Json.Linq;
 
 namespace KolpaqueClient
 {
@@ -39,7 +39,6 @@ namespace KolpaqueClient
                     if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
                     {
                         channels_listView.Items.Add(X);
-                        //customChannelsToolStripMenuItem.DropDownItems.Add(X, null, new EventHandler(contextMenu_Click));
                     }
                 }
 
@@ -47,7 +46,6 @@ namespace KolpaqueClient
                 columnHeader2.Width = ClientSettings.channels_listView_ColumnWidth;
                 launchStreamOnBalloonClick_checkBox.Checked = ClientSettings.launchStreamOnBalloonClick_checkBox;
                 enableLog_checkBox.Checked = ClientSettings.enableLog;
-                screenshotsPath_textBox.Text = ClientSettings.screenshotsPath_textBox;
             }
             catch
             {
@@ -83,7 +81,6 @@ namespace KolpaqueClient
                 ClientSettings.form1_size = new int[] { this.Width, this.Height };
                 ClientSettings.launchStreamOnBalloonClick_checkBox = launchStreamOnBalloonClick_checkBox.Checked;
                 ClientSettings.enableLog = enableLog_checkBox.Checked;
-                ClientSettings.screenshotsPath_textBox = screenshotsPath_textBox.Text;
 
                 System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(KolpaqueClientXmlSettings));
 
@@ -429,24 +426,22 @@ namespace KolpaqueClient
 
                 try
                 {
-                    string twitchFollowsString = client.DownloadString("https://api.twitch.tv/kraken/users/" + twitchImport_textBox.Text + "/follows/channels" + "?client_id=" + twitchApiAppKey + "&limit=100");
+                    string twitchFollowsString = client.DownloadString("https://api.twitch.tv/kraken/users/" + twitchImport_textBox.Text + "/follows/channels" + "?client_id=" + twitchApiAppKey + "&limit=200");
 
-                    dynamic twitchFollowsJSON = JsonConvert.DeserializeObject(twitchFollowsString);
+                    JObject twitchFollowsJSON = JObject.Parse(twitchFollowsString);
 
                     int newAdded = 0;
 
-                    if (twitchFollowsJSON.follows.Count > 0)
-                    {
-                        foreach (dynamic X in twitchFollowsJSON.follows)
-                        {
-                            string channel = X.channel.url.ToString();
+                    IList<JToken> channels = twitchFollowsJSON["follows"].Children().ToList();
 
-                            if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(channel))
-                            {
-                                channels_listView.Items.Add(channel);
-                                //customChannelsToolStripMenuItem.DropDownItems.Add(channel, null, new EventHandler(contextMenu_Click));
-                                newAdded++;
-                            }
+                    foreach (dynamic X in channels.Reverse())
+                    {
+                        string channel = X.channel.url.ToString();
+
+                        if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(channel))
+                        {
+                            channels_listView.Items.Add(channel);
+                            newAdded++;
                         }
                     }
 

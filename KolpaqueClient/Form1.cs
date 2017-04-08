@@ -12,7 +12,6 @@ using System.Net;
 using System.IO;
 using System.Diagnostics;
 using Newtonsoft.Json;
-using System.Drawing.Imaging;
 
 namespace KolpaqueClient
 {
@@ -44,7 +43,6 @@ namespace KolpaqueClient
                     if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
                     {
                         channels_listView.Items.Add(X);
-                        //poddyChannelsToolStripMenuItem.DropDownItems.Add(X, null, new EventHandler(contextMenu_Click));
                     }
                 }
 
@@ -108,7 +106,6 @@ namespace KolpaqueClient
             if (addChannel_textBox.Text.Replace(" ", "") != "" && !channels_listView.Items.Cast<ListViewItem>().Select(X => X.Text).Contains(addChannel_textBox.Text.Replace(" ", "")))
             {
                 channels_listView.Items.Add(addChannel_textBox.Text.Replace(" ", ""));
-                //customChannelsToolStripMenuItem.DropDownItems.Add(addChannel_textBox.Text.Replace(" ", ""), null, new EventHandler(contextMenu_Click));
             }
 
             addChannel_textBox.Text = "";
@@ -341,55 +338,6 @@ namespace KolpaqueClient
         private void thirtySecTimer_Tick(object sender, EventArgs e)
         {
             GetStats(true, 2);
-        }
-
-        private ImageCodecInfo GetEncoder(ImageFormat format)
-        {
-            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
-
-            foreach (ImageCodecInfo codec in codecs)
-            {
-                if (codec.FormatID == format.Guid)
-                {
-                    return codec;
-                }
-            }
-
-            return null;
-        }
-
-        private void makeAPrintScreenToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            contextMenuStrip1.Visible = false;
-
-            Bitmap printScreen = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
-            Graphics graphics = Graphics.FromImage(printScreen as Image);
-            graphics.CopyFromScreen(0, 0, 0, 0, printScreen.Size);
-
-            ImageCodecInfo jpgEncoder = GetEncoder(ImageFormat.Jpeg);
-            System.Drawing.Imaging.Encoder myEncoder = System.Drawing.Imaging.Encoder.Quality;
-            EncoderParameters myEncoderParameters = new EncoderParameters(1);
-            EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, 100L);
-            myEncoderParameters.Param[0] = myEncoderParameter;
-
-            if (!Directory.Exists(screenshotsPath_textBox.Text))
-            {
-                MessageBox.Show("Screenshots folder doesn't exist.");
-                return;
-            }
-
-            printScreen.Save(screenshotsPath_textBox.Text + "\\" + DateTime.Now.ToString().Replace("/", ".").Replace(":", ".").Replace(" ", "_") + ".jpg", jpgEncoder, myEncoderParameters);
-        }
-
-        private void changeScreenshotsPath_button_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog chosenFolder = new FolderBrowserDialog();
-            chosenFolder.Description = "Select folder for screenshots.";
-
-            if (chosenFolder.ShowDialog() == DialogResult.OK)
-            {
-                screenshotsPath_textBox.Text = chosenFolder.SelectedPath;
-            }
         }
 
         private void twitchImport_button_Click(object sender, EventArgs e)
