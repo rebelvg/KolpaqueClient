@@ -179,7 +179,7 @@ namespace KolpaqueClient
 
                 if (showBalloon)
                 {
-                    PrintBalloon("Stream is Live (" + DateTime.Now + ")", item.Text);
+                    PrintBalloon("Stream is Live (" + DateTime.Now.ToString("d/MMM, H:mm") + ")", item.Text);
                 }
 
                 if (autoPlay_checkBox.Checked)
