@@ -17,7 +17,7 @@ namespace KolpaqueClient
 {
     public partial class Form1 : Form
     {
-        string clientVersion = "0.292";
+        string clientVersion = "0.3.0";
 
         string twitchApiAppKey = "dk330061dv4t81s21utnhhdona0a91x";
 
