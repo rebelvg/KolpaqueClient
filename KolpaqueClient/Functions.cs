@@ -75,7 +75,7 @@ namespace KolpaqueClient
                 ClientSettings.LQ_checkBox = LQ_checkBox.Checked;
                 ClientSettings.notifications_checkBox = notifications_checkBox.Checked;
                 ClientSettings.autoPlay_checkBox = autoPlay_checkBox.Checked;
-                ClientSettings.channels_listView = channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Where(s => !poddyChannelsList.Contains(s)).ToList();
+                ClientSettings.channels_listView = channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).ToList();
                 ClientSettings.minimizeAtStart_checkBox = minimizeAtStart_checkBox.Checked;
                 ClientSettings.channels_listView_ColumnWidth = columnHeader2.Width;
                 ClientSettings.form1_size = new int[] { this.Width, this.Height };
@@ -106,11 +106,11 @@ namespace KolpaqueClient
 
                 if ((bool)amsStatsJSON.isLive)
                 {
-                    ChannelWentOnline(item, showBalloon);
+                    ChannelIsOnline(item, showBalloon);
                 }
                 if (!(bool)amsStatsJSON.isLive)
                 {
-                    ChannelWentOffline(item);
+                    ChannelIsOffline(item);
                 }
             }
             catch (Exception e)
@@ -131,11 +131,11 @@ namespace KolpaqueClient
 
                 if (twitchAPIStats.streams.Count > 0)
                 {
-                    ChannelWentOnline(item, showBalloon);
+                    ChannelIsOnline(item, showBalloon);
                 }
                 if (twitchAPIStats.streams.Count == 0)
                 {
-                    ChannelWentOffline(item);
+                    ChannelIsOffline(item);
                 }
             }
             catch (Exception e)
@@ -144,38 +144,20 @@ namespace KolpaqueClient
             }
         }
 
-        public void ChannelWentOnline(ListViewItem item, bool showBalloon)
+        public void ChannelIsOnline(ListViewItem item, bool showBalloon)
         {
             if (item.BackColor != Color.Green)
             {
                 WriteLog("ChannelWentOnline " + item.Text);
 
-                if (offlineChannelsDictionary.ContainsKey(item.Text))
+                if (offlineChannels.ContainsKey(item.Text))
                 {
-                    offlineChannelsDictionary.Remove(item.Text);
+                    offlineChannels.Remove(item.Text);
                 }
 
                 this.Invoke(new Action(() => item.BackColor = Color.Green));
 
-                if (poddyChannelsList.Contains(item.Text))
-                {
-                    poddyChannelsToolStripMenuItem.DropDownItems.Add(item.Text, null, new EventHandler(contextMenu_Click));
-                }
-                else
-                {
-                    customChannelsToolStripMenuItem.DropDownItems.Add(item.Text, null, new EventHandler(contextMenu_Click));
-                }
-
-                foreach (ToolStripMenuItem toolStripMenuitem1 in contextMenuStrip1.Items)
-                {
-                    foreach (ToolStripMenuItem toolStripMenuitem2 in toolStripMenuitem1.DropDownItems)
-                    {
-                        if (toolStripMenuitem2.Text == item.Text)
-                        {
-                            toolStripMenuitem2.BackColor = Color.Green;
-                        }
-                    }
-                }
+                customChannelsToolStripMenuItem.DropDownItems.Add(item.Text, null, new EventHandler(contextMenu_Click));
 
                 if (showBalloon)
                 {
@@ -189,58 +171,34 @@ namespace KolpaqueClient
             }
         }
 
-        public void ChannelWentOffline(ListViewItem item)
+        public void ChannelIsOffline(ListViewItem item)
         {
             if (item.BackColor == Color.Green)
             {
                 WriteLog("ChannelWentOffline " + item.Text);
 
-                if (offlineChannelsDictionary.ContainsKey(item.Text))
+                if (offlineChannels.ContainsKey(item.Text))
                 {
-                    offlineChannelsDictionary[item.Text] = offlineChannelsDictionary[item.Text] + 1;
+                    offlineChannels[item.Text] = offlineChannels[item.Text] + 1;
 
-                    if (offlineChannelsDictionary[item.Text] == 3)
+                    if (offlineChannels[item.Text] > 3)
                     {
                         this.Invoke(new Action(() => item.BackColor = default(Color)));
 
-                        if (poddyChannelsList.Contains(item.Text))
+                        for (int i = 0; i < customChannelsToolStripMenuItem.DropDownItems.Count; i++)
                         {
-                            for (int i = 0; i < poddyChannelsToolStripMenuItem.DropDownItems.Count; i++)
+                            if (customChannelsToolStripMenuItem.DropDownItems[i].Text.Contains(item.Text))
                             {
-                                if (poddyChannelsToolStripMenuItem.DropDownItems[i].Text.Contains(item.Text))
-                                {
-                                    poddyChannelsToolStripMenuItem.DropDownItems.RemoveAt(i);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            for (int i = 0; i < customChannelsToolStripMenuItem.DropDownItems.Count; i++)
-                            {
-                                if (customChannelsToolStripMenuItem.DropDownItems[i].Text.Contains(item.Text))
-                                {
-                                    customChannelsToolStripMenuItem.DropDownItems.RemoveAt(i);
-                                }
+                                customChannelsToolStripMenuItem.DropDownItems.RemoveAt(i);
                             }
                         }
 
-                        foreach (ToolStripMenuItem toolStripMenuitem1 in contextMenuStrip1.Items)
-                        {
-                            foreach (ToolStripMenuItem toolStripMenuitem2 in toolStripMenuitem1.DropDownItems)
-                            {
-                                if (toolStripMenuitem2.Text == item.Text)
-                                {
-                                    toolStripMenuitem2.BackColor = default(Color);
-                                }
-                            }
-                        }
-
-                        offlineChannelsDictionary.Remove(item.Text);
+                        offlineChannels.Remove(item.Text);
                     }
                 }
                 else
                 {
-                    offlineChannelsDictionary.Add(item.Text, 1);
+                    offlineChannels.Add(item.Text, 1);
                 }
             }
         }
@@ -356,7 +314,7 @@ namespace KolpaqueClient
             {
                 if (launchLowQuality)
                 {
-                    commandLine = "\"" + X.Text + "\"" + " high";
+                    commandLine = "\"" + X.Text + "\"" + " 720p,high,480p,medium,360p";
                 }
                 else
                 {
@@ -368,12 +326,31 @@ namespace KolpaqueClient
 
             if (File.Exists(livestreamerPath_textBox.Text))
             {
-                Process myProcess = new Process();
+                Task.Run(() =>
+                {
+                    Process myProcess = new Process();
 
-                myProcess.StartInfo.FileName = livestreamerPath_textBox.Text;
-                myProcess.StartInfo.Arguments = commandLine;
-                myProcess.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                myProcess.Start();
+                    myProcess.StartInfo.FileName = livestreamerPath_textBox.Text;
+                    myProcess.StartInfo.Arguments = commandLine;
+                    myProcess.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                    myProcess.StartInfo.UseShellExecute = false;
+                    myProcess.StartInfo.RedirectStandardOutput = true;
+                    myProcess.StartInfo.RedirectStandardError = true;
+                    myProcess.StartInfo.CreateNoWindow = true;
+                    myProcess.Start();
+
+                    while (!myProcess.StandardOutput.EndOfStream)
+                    {
+                        string line = myProcess.StandardOutput.ReadLine();
+
+                        if (line.Contains("error: "))
+                        {
+                            string[] error = line.Split(new string[] { "error: " }, StringSplitOptions.None);
+
+                            PrintBalloon("Error", error[1]);
+                        }
+                    }
+                });
             }
             else
             {
@@ -426,7 +403,7 @@ namespace KolpaqueClient
 
                 try
                 {
-                    string twitchFollowsString = client.DownloadString("https://api.twitch.tv/kraken/users/" + twitchImport_textBox.Text + "/follows/channels" + "?client_id=" + twitchApiAppKey + "&limit=200");
+                    string twitchFollowsString = client.DownloadString("https://api.twitch.tv/kraken/users/" + twitchImport_textBox.Text + "/follows/channels?direction=ASC&limit=100&sortby=created_at&user=" + twitchImport_textBox.Text + "&client_id=" + twitchApiAppKey);
 
                     JObject twitchFollowsJSON = JObject.Parse(twitchFollowsString);
 
@@ -434,7 +411,10 @@ namespace KolpaqueClient
 
                     IList<JToken> channels = twitchFollowsJSON["follows"].Children().ToList();
 
-                    foreach (dynamic X in channels.Reverse())
+                    if (channels.Count() == 0)
+                        return;
+
+                    foreach (dynamic X in channels)
                     {
                         string channel = X.channel.url.ToString();
 
@@ -442,6 +422,26 @@ namespace KolpaqueClient
                         {
                             channels_listView.Items.Add(channel);
                             newAdded++;
+                        }
+                    }
+
+                    while (channels.Count() != 0)
+                    {
+                        twitchFollowsString = client.DownloadString(twitchFollowsJSON["_links"]["next"] + "&client_id=" + twitchApiAppKey);
+
+                        twitchFollowsJSON = JObject.Parse(twitchFollowsString);
+
+                        channels = twitchFollowsJSON["follows"].Children().ToList();
+
+                        foreach (dynamic X in channels)
+                        {
+                            string channel = X.channel.url.ToString();
+
+                            if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(channel))
+                            {
+                                channels_listView.Items.Add(channel);
+                                newAdded++;
+                            }
                         }
                     }
 

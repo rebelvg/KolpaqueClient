@@ -38,14 +38,6 @@ namespace KolpaqueClient
 
                 xmlPath_textBox.Text = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.xml";
 
-                foreach (string X in poddyChannelsList)
-                {
-                    if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
-                    {
-                        channels_listView.Items.Add(X);
-                    }
-                }
-
                 if (File.Exists(xmlPath_textBox.Text))
                 {
                     ReadXmlFile();
@@ -63,6 +55,14 @@ namespace KolpaqueClient
                         writer.Close();
 
                         ReadXmlFile();
+
+                        foreach (string X in poddyChannelsList)
+                        {
+                            if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
+                            {
+                                channels_listView.Items.Add(X);
+                            }
+                        }
                     }
                     catch
                     {
@@ -88,7 +88,7 @@ namespace KolpaqueClient
 
         public class KolpaqueClientXmlSettings
         {
-            public string livestreamerPath_textBox = "C:\\Program Files (x86)\\Livestreamer\\livestreamer.exe";
+            public string livestreamerPath_textBox = "C:\\Program Files (x86)\\Streamlink\\bin\\streamlink.exe";
             public bool LQ_checkBox;
             public bool notifications_checkBox = true;
             public bool autoPlay_checkBox;
@@ -202,15 +202,6 @@ namespace KolpaqueClient
 
             if (e.Button == MouseButtons.Right)
             {
-                if (poddyChannelsList.Contains(channelsLastSelectedItem.Text))
-                {
-                    removeChannelToolStripMenuItem.Visible = false;
-                }
-                else
-                {
-                    removeChannelToolStripMenuItem.Visible = true;
-                }
-
                 var hitTestInfo = channels_listView.HitTest(e.X, e.Y);
 
                 if (hitTestInfo.Item != null)
@@ -274,10 +265,8 @@ namespace KolpaqueClient
 
         private void openChatToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (poddyChannelsList.Contains(channelsLastSelectedItem.Text))
+            if (channelsLastSelectedItem.Text.Contains("klpq.men"))
             {
-                string[] name = channelsLastSelectedItem.Text.Split(new string[] { "/" }, StringSplitOptions.None);
-
                 System.Diagnostics.Process.Start("http://stream.klpq.men/chat");
             }
 
@@ -357,7 +346,7 @@ namespace KolpaqueClient
 
         private void openPageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (poddyChannelsList.Contains(channelsLastSelectedItem.Text))
+            if (channelsLastSelectedItem.Text.Contains("klpq.men"))
             {
                 string[] name = channelsLastSelectedItem.Text.Split(new string[] { "/" }, StringSplitOptions.None);
 

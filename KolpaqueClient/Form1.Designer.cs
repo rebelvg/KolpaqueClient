@@ -37,7 +37,6 @@
             this.addChannel_textBox = new System.Windows.Forms.TextBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.poddyChannelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customChannelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.playFromClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeClientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -137,24 +136,17 @@
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.poddyChannelsToolStripMenuItem,
             this.customChannelsToolStripMenuItem,
             this.playFromClipboardToolStripMenuItem,
             this.closeClientToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(168, 92);
             // 
-            // poddyChannelsToolStripMenuItem
-            // 
-            this.poddyChannelsToolStripMenuItem.Name = "poddyChannelsToolStripMenuItem";
-            this.poddyChannelsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.poddyChannelsToolStripMenuItem.Text = "Poddy Channels";
-            // 
             // customChannelsToolStripMenuItem
             // 
             this.customChannelsToolStripMenuItem.Name = "customChannelsToolStripMenuItem";
             this.customChannelsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.customChannelsToolStripMenuItem.Text = "Custom Channels";
+            this.customChannelsToolStripMenuItem.Text = "Online Channels";
             // 
             // playFromClipboardToolStripMenuItem
             // 
@@ -534,7 +526,6 @@
         private System.Windows.Forms.LinkLabel linkLabel3;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem closeClientToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem poddyChannelsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem customChannelsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem playFromClipboardToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
