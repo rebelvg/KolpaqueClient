@@ -29,13 +29,6 @@ namespace KolpaqueClient
 
             try
             {
-                if (Process.GetProcessesByName(Path.GetFileNameWithoutExtension(AppDomain.CurrentDomain.FriendlyName)).Length > 1)
-                {
-                    MessageBox.Show("Client is already running.");
-                    notifyIcon1.Visible = false;
-                    System.Environment.Exit(1);
-                }
-
                 xmlPath_textBox.Text = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.xml";
 
                 if (File.Exists(xmlPath_textBox.Text))

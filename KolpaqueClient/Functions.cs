@@ -360,10 +360,10 @@ namespace KolpaqueClient
 
         public void WriteLog(string log)
         {
-            string logFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.log";
-
             if (!enableLog_checkBox.Checked)
                 return;
+
+            string logFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\KolpaqueClient.log";
 
             log = DateTime.Now.ToString() + " " + log;
 
