@@ -351,7 +351,6 @@
             // 
             // LQ_checkBox
             // 
-            this.LQ_checkBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.LQ_checkBox.AutoSize = true;
             this.LQ_checkBox.Location = new System.Drawing.Point(6, 84);
             this.LQ_checkBox.Name = "LQ_checkBox";
@@ -362,7 +361,6 @@
             // 
             // autoPlay_checkBox
             // 
-            this.autoPlay_checkBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.autoPlay_checkBox.AutoSize = true;
             this.autoPlay_checkBox.Location = new System.Drawing.Point(6, 130);
             this.autoPlay_checkBox.Name = "autoPlay_checkBox";
