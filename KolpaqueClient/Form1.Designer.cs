@@ -54,7 +54,13 @@
             this.thirtySecTimer = new System.Windows.Forms.Timer(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.linkLabel3 = new System.Windows.Forms.LinkLabel();
+            this.label2 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.linkLabel2 = new System.Windows.Forms.LinkLabel();
+            this.LQ_checkBox = new System.Windows.Forms.CheckBox();
+            this.autoPlay_checkBox = new System.Windows.Forms.CheckBox();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.save_button = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.twitchImport_button = new System.Windows.Forms.Button();
@@ -65,12 +71,6 @@
             this.launchStreamOnBalloonClick_checkBox = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.linkLabel2 = new System.Windows.Forms.LinkLabel();
-            this.LQ_checkBox = new System.Windows.Forms.CheckBox();
-            this.autoPlay_checkBox = new System.Windows.Forms.CheckBox();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.linkLabel3 = new System.Windows.Forms.LinkLabel();
-            this.label2 = new System.Windows.Forms.Label();
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -287,6 +287,28 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             // 
+            // linkLabel3
+            // 
+            this.linkLabel3.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.linkLabel3.AutoSize = true;
+            this.linkLabel3.Location = new System.Drawing.Point(80, 626);
+            this.linkLabel3.Name = "linkLabel3";
+            this.linkLabel3.Size = new System.Drawing.Size(113, 13);
+            this.linkLabel3.TabIndex = 47;
+            this.linkLabel3.TabStop = true;
+            this.linkLabel3.Text = "New Version Available";
+            this.linkLabel3.Visible = false;
+            // 
+            // label2
+            // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(2, 626);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(69, 13);
+            this.label2.TabIndex = 46;
+            this.label2.Text = "Version 0.0.0";
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.linkLabel2);
@@ -313,6 +335,50 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Settings";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // linkLabel2
+            // 
+            this.linkLabel2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.linkLabel2.AutoSize = true;
+            this.linkLabel2.Location = new System.Drawing.Point(2, 626);
+            this.linkLabel2.Name = "linkLabel2";
+            this.linkLabel2.Size = new System.Drawing.Size(40, 13);
+            this.linkLabel2.TabIndex = 46;
+            this.linkLabel2.TabStop = true;
+            this.linkLabel2.Text = "GitHub";
+            // 
+            // LQ_checkBox
+            // 
+            this.LQ_checkBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.LQ_checkBox.AutoSize = true;
+            this.LQ_checkBox.Location = new System.Drawing.Point(6, 84);
+            this.LQ_checkBox.Name = "LQ_checkBox";
+            this.LQ_checkBox.Size = new System.Drawing.Size(81, 17);
+            this.LQ_checkBox.TabIndex = 41;
+            this.LQ_checkBox.Text = "Low Quality";
+            this.LQ_checkBox.UseVisualStyleBackColor = true;
+            // 
+            // autoPlay_checkBox
+            // 
+            this.autoPlay_checkBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.autoPlay_checkBox.AutoSize = true;
+            this.autoPlay_checkBox.Location = new System.Drawing.Point(6, 130);
+            this.autoPlay_checkBox.Name = "autoPlay_checkBox";
+            this.autoPlay_checkBox.Size = new System.Drawing.Size(71, 17);
+            this.autoPlay_checkBox.TabIndex = 43;
+            this.autoPlay_checkBox.Text = "Auto-Play";
+            this.autoPlay_checkBox.UseVisualStyleBackColor = true;
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(2, 608);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(83, 13);
+            this.linkLabel1.TabIndex = 42;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "Kolpaque Home";
             // 
             // save_button
             // 
@@ -412,72 +478,6 @@
             this.label1.Size = new System.Drawing.Size(49, 13);
             this.label1.TabIndex = 28;
             this.label1.Text = "Xml Path";
-            // 
-            // linkLabel2
-            // 
-            this.linkLabel2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.linkLabel2.AutoSize = true;
-            this.linkLabel2.Location = new System.Drawing.Point(2, 626);
-            this.linkLabel2.Name = "linkLabel2";
-            this.linkLabel2.Size = new System.Drawing.Size(40, 13);
-            this.linkLabel2.TabIndex = 46;
-            this.linkLabel2.TabStop = true;
-            this.linkLabel2.Text = "GitHub";
-            // 
-            // LQ_checkBox
-            // 
-            this.LQ_checkBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.LQ_checkBox.AutoSize = true;
-            this.LQ_checkBox.Location = new System.Drawing.Point(6, 84);
-            this.LQ_checkBox.Name = "LQ_checkBox";
-            this.LQ_checkBox.Size = new System.Drawing.Size(81, 17);
-            this.LQ_checkBox.TabIndex = 41;
-            this.LQ_checkBox.Text = "Low Quality";
-            this.LQ_checkBox.UseVisualStyleBackColor = true;
-            // 
-            // autoPlay_checkBox
-            // 
-            this.autoPlay_checkBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.autoPlay_checkBox.AutoSize = true;
-            this.autoPlay_checkBox.Location = new System.Drawing.Point(6, 130);
-            this.autoPlay_checkBox.Name = "autoPlay_checkBox";
-            this.autoPlay_checkBox.Size = new System.Drawing.Size(71, 17);
-            this.autoPlay_checkBox.TabIndex = 43;
-            this.autoPlay_checkBox.Text = "Auto-Play";
-            this.autoPlay_checkBox.UseVisualStyleBackColor = true;
-            // 
-            // linkLabel1
-            // 
-            this.linkLabel1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(2, 608);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(83, 13);
-            this.linkLabel1.TabIndex = 42;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Kolpaque Home";
-            // 
-            // linkLabel3
-            // 
-            this.linkLabel3.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.linkLabel3.AutoSize = true;
-            this.linkLabel3.Location = new System.Drawing.Point(80, 626);
-            this.linkLabel3.Name = "linkLabel3";
-            this.linkLabel3.Size = new System.Drawing.Size(113, 13);
-            this.linkLabel3.TabIndex = 47;
-            this.linkLabel3.TabStop = true;
-            this.linkLabel3.Text = "New Version Available";
-            this.linkLabel3.Visible = false;
-            // 
-            // label2
-            // 
-            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(2, 626);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(72, 13);
-            this.label2.TabIndex = 46;
-            this.label2.Text = "Version 0.999";
             // 
             // Form1
             // 
