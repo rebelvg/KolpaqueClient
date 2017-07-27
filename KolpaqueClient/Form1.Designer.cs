@@ -291,13 +291,14 @@
             // 
             this.linkLabel3.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.linkLabel3.AutoSize = true;
-            this.linkLabel3.Location = new System.Drawing.Point(80, 626);
+            this.linkLabel3.Location = new System.Drawing.Point(77, 626);
             this.linkLabel3.Name = "linkLabel3";
             this.linkLabel3.Size = new System.Drawing.Size(113, 13);
             this.linkLabel3.TabIndex = 47;
             this.linkLabel3.TabStop = true;
             this.linkLabel3.Text = "New Version Available";
             this.linkLabel3.Visible = false;
+            this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel3_LinkClicked);
             // 
             // label2
             // 
@@ -346,6 +347,7 @@
             this.linkLabel2.TabIndex = 46;
             this.linkLabel2.TabStop = true;
             this.linkLabel2.Text = "GitHub";
+            this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
             // 
             // LQ_checkBox
             // 
@@ -379,6 +381,7 @@
             this.linkLabel1.TabIndex = 42;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Kolpaque Home";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // save_button
             // 
