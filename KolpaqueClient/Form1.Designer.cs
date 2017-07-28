@@ -50,7 +50,7 @@
             this.copyToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeChannelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeLivestreamerPath_button = new System.Windows.Forms.Button();
-            this.sixtySecTimer = new System.Windows.Forms.Timer(this.components);
+            this.tenMinTimer = new System.Windows.Forms.Timer(this.components);
             this.thirtySecTimer = new System.Windows.Forms.Timer(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -247,11 +247,11 @@
             this.changeLivestreamerPath_button.UseVisualStyleBackColor = true;
             this.changeLivestreamerPath_button.Click += new System.EventHandler(this.button1_Click);
             // 
-            // sixtySecTimer
+            // tenMinTimer
             // 
-            this.sixtySecTimer.Enabled = true;
-            this.sixtySecTimer.Interval = 60000;
-            this.sixtySecTimer.Tick += new System.EventHandler(this.timer2_Tick);
+            this.tenMinTimer.Enabled = true;
+            this.tenMinTimer.Interval = 600000;
+            this.tenMinTimer.Tick += new System.EventHandler(this.timer2_Tick);
             // 
             // thirtySecTimer
             // 
@@ -527,7 +527,7 @@
         private System.Windows.Forms.ToolStripMenuItem removeChannelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openChatToolStripMenuItem;
         private System.Windows.Forms.Button changeLivestreamerPath_button;
-        private System.Windows.Forms.Timer sixtySecTimer;
+        private System.Windows.Forms.Timer tenMinTimer;
         private System.Windows.Forms.Timer thirtySecTimer;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
