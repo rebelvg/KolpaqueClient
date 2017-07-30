@@ -467,9 +467,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(7, 42);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(92, 13);
+            this.label3.Size = new System.Drawing.Size(81, 13);
             this.label3.TabIndex = 29;
-            this.label3.Text = "Livestreamer Path";
+            this.label3.Text = "Streamlink Path";
             // 
             // label1
             // 
