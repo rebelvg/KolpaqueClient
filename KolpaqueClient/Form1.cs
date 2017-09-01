@@ -131,7 +131,7 @@ namespace KolpaqueClient
             {
                 if (launchStreamOnBalloonClick_checkBox.Checked)
                 {
-                    PlayStream(notifyIcon1.BalloonTipText, "notifyIcon1_BalloonTipClicked", LQ_checkBox.Checked);
+                    PlayStream(notifyIcon1.BalloonTipText, LQ_checkBox.Checked);
                 }
             }
 
@@ -146,7 +146,7 @@ namespace KolpaqueClient
 
         private void contextMenu_Click(object sender, EventArgs e)
         {
-            PlayStream(sender.ToString(), "contextMenu_Click", LQ_checkBox.Checked);
+            PlayStream(sender.ToString(), LQ_checkBox.Checked);
         }
 
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
@@ -179,12 +179,7 @@ namespace KolpaqueClient
 
         private void playFromClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Clipboard.GetText().Contains("http") || Clipboard.GetText().Contains("rtmp"))
-            {
-                PrintBalloon("Launching the Stream", Clipboard.GetText());
-
-                PlayStream(Clipboard.GetText(), "playFromClipboardToolStripMenuItem_Click", LQ_checkBox.Checked);
-            }
+            PlayStream(Clipboard.GetText(), LQ_checkBox.Checked);
         }
 
         private void listView2_MouseClick(object sender, MouseEventArgs e)
@@ -212,7 +207,7 @@ namespace KolpaqueClient
 
         private void playStreamToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PlayStream(channelsLastSelectedItem.Text, "playStreamToolStripMenuItem_Click", false);
+            PlayStream(channelsLastSelectedItem.Text, false);
         }
 
         private void Form1_ClientSizeChanged(object sender, EventArgs e)
@@ -265,9 +260,7 @@ namespace KolpaqueClient
         {
             if (e.Button == MouseButtons.Left)
             {
-                PlayStream(channelsLastSelectedItem.Text, "listView2_MouseDoubleClick", LQ_checkBox.Checked);
-
-                PrintBalloon("Launching the Stream", channelsLastSelectedItem.Text);
+                PlayStream(channelsLastSelectedItem.Text, LQ_checkBox.Checked);
 
                 channelsLastSelectedItem.Selected = false;
             }
@@ -336,7 +329,7 @@ namespace KolpaqueClient
 
         private void playLowQualityToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PlayStream(channelsLastSelectedItem.Text, "playLowQualityToolStripMenuItem_Click", true);
+            PlayStream(channelsLastSelectedItem.Text, true);
         }
 
         private void openPageToolStripMenuItem_Click(object sender, EventArgs e)

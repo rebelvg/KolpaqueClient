@@ -172,7 +172,7 @@ namespace KolpaqueClient
 
             if (autoPlay_checkBox.Checked)
             {
-                PlayStream(channelLink, "autoPlay", LQ_checkBox.Checked);
+                PlayStream(channelLink, LQ_checkBox.Checked);
             }
         }
 
@@ -295,9 +295,9 @@ namespace KolpaqueClient
             }
         }
 
-        public void PlayStream(string channelLink, string whoCalled, bool launchLowQuality)
+        public void PlayStream(string channelLink, bool launchLowQuality)
         {
-            WriteLog("PlayStream " + channelLink + " " + whoCalled);
+            WriteLog("PlayStream " + channelLink);
 
             string commandLine = "";
 
