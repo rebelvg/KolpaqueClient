@@ -21,7 +21,7 @@ namespace KolpaqueClient
 
         string twitchApiAppKey = "dk330061dv4t81s21utnhhdona0a91x";
 
-        List<string> poddyChannelsList = new List<string>(new string[] { "rtmp://stream.klpq.men/live/main" });
+        List<string> poddyChannelsList = new List<string>(new string[] { "rtmp://main.klpq.men/live/main" });
 
         ListViewItem channelsLastSelectedItem;
 

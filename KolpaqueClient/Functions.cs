@@ -314,7 +314,7 @@ namespace KolpaqueClient
             {
                 if (launchLowQuality)
                 {
-                    commandLine = "\"" + X.Text + "\"" + " 720p,high,480p,medium,360p";
+                    commandLine = "\"" + X.Text + "\"" + " best --stream-sorting-excludes=>=720p,>=high";
                 }
                 else
                 {
@@ -322,7 +322,7 @@ namespace KolpaqueClient
                 }
             }
 
-            commandLine = commandLine.Replace("https://", "http://");
+            commandLine += " --twitch-disable-hosting";
 
             if (File.Exists(livestreamerPath_textBox.Text))
             {
@@ -341,11 +341,11 @@ namespace KolpaqueClient
 
                     while (!myProcess.StandardOutput.EndOfStream)
                     {
-                        string line = myProcess.StandardOutput.ReadLine();
+                        string stdOut = myProcess.StandardOutput.ReadLine();
 
-                        if (line.Contains("error: "))
+                        if (stdOut.Contains("error: "))
                         {
-                            string[] error = line.Split(new string[] { "error: " }, StringSplitOptions.None);
+                            string[] error = stdOut.Split(new string[] { "error: " }, StringSplitOptions.None);
 
                             PrintBalloon("Error", error[1]);
                         }

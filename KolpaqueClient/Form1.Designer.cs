@@ -129,25 +129,25 @@
             this.playFromClipboardToolStripMenuItem,
             this.closeClientToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(168, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 92);
             // 
             // customChannelsToolStripMenuItem
             // 
             this.customChannelsToolStripMenuItem.Name = "customChannelsToolStripMenuItem";
-            this.customChannelsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.customChannelsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.customChannelsToolStripMenuItem.Text = "Online Channels";
             // 
             // playFromClipboardToolStripMenuItem
             // 
             this.playFromClipboardToolStripMenuItem.Name = "playFromClipboardToolStripMenuItem";
-            this.playFromClipboardToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.playFromClipboardToolStripMenuItem.Text = "Play from Clipboard";
+            this.playFromClipboardToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.playFromClipboardToolStripMenuItem.Text = "Play / Clipboard";
             this.playFromClipboardToolStripMenuItem.Click += new System.EventHandler(this.playFromClipboardToolStripMenuItem_Click);
             // 
             // closeClientToolStripMenuItem
             // 
             this.closeClientToolStripMenuItem.Name = "closeClientToolStripMenuItem";
-            this.closeClientToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.closeClientToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.closeClientToolStripMenuItem.Text = "Close Client";
             this.closeClientToolStripMenuItem.Click += new System.EventHandler(this.closeClientToolStripMenuItem_Click);
             // 
