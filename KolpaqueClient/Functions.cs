@@ -470,7 +470,7 @@ namespace KolpaqueClient
         {
             for (int i = 0; i < customChannelsToolStripMenuItem.DropDownItems.Count; i++)
             {
-                if (customChannelsToolStripMenuItem.DropDownItems[i].Text.Contains(channelsLastSelectedItem.Text))
+                if (customChannelsToolStripMenuItem.DropDownItems[i].Text.Contains(channelLink))
                 {
                     customChannelsToolStripMenuItem.DropDownItems.RemoveAt(i);
                 }
