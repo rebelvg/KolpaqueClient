@@ -40,7 +40,6 @@
             this.playFromClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeClientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.channels_listView = new System.Windows.Forms.ListView();
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.fiveSecTimer = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.playStreamToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,6 +70,7 @@
             this.launchStreamOnBalloonClick_checkBox = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -169,11 +169,6 @@
             this.channels_listView.View = System.Windows.Forms.View.Details;
             this.channels_listView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView2_MouseClick);
             this.channels_listView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listView2_MouseDoubleClick);
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Channels";
-            this.columnHeader2.Width = 348;
             // 
             // fiveSecTimer
             // 
@@ -480,6 +475,11 @@
             this.label1.TabIndex = 28;
             this.label1.Text = "Xml Path";
             // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Channels";
+            this.columnHeader2.Width = 348;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -514,7 +514,6 @@
         private System.Windows.Forms.Button addChannel_button;
         private System.Windows.Forms.TextBox addChannel_textBox;
         private System.Windows.Forms.ListView channels_listView;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.Timer fiveSecTimer;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
@@ -550,5 +549,6 @@
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.LinkLabel linkLabel3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
     }
 }

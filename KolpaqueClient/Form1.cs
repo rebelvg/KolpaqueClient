@@ -51,10 +51,7 @@ namespace KolpaqueClient
 
                         foreach (string X in poddyChannelsList)
                         {
-                            if (!channels_listView.Items.Cast<ListViewItem>().Select(x => x.Text).Contains(X))
-                            {
-                                channels_listView.Items.Add(X);
-                            }
+                            AddChannel(X);
                         }
                     }
                     catch
@@ -91,14 +88,15 @@ namespace KolpaqueClient
             public int[] form1_size = { 400, 667 };
             public bool launchStreamOnBalloonClick_checkBox = true;
             public bool enableLog;
-            public string screenshotsPath_textBox = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (addChannel_textBox.Text.Replace(" ", "") != "" && !channels_listView.Items.Cast<ListViewItem>().Select(X => X.Text).Contains(addChannel_textBox.Text.Replace(" ", "")))
+            string channelLink = addChannel_textBox.Text.Replace(" ", "");
+
+            if (!string.IsNullOrWhiteSpace(channelLink))
             {
-                channels_listView.Items.Add(addChannel_textBox.Text.Replace(" ", ""));
+                AddChannel(channelLink);
             }
 
             addChannel_textBox.Text = "";
@@ -133,7 +131,7 @@ namespace KolpaqueClient
             {
                 if (launchStreamOnBalloonClick_checkBox.Checked)
                 {
-                    PlayStream(new ListViewItem(notifyIcon1.BalloonTipText), "notifyIcon1_BalloonTipClicked", LQ_checkBox.Checked);
+                    PlayStream(notifyIcon1.BalloonTipText, "notifyIcon1_BalloonTipClicked", LQ_checkBox.Checked);
                 }
             }
 
@@ -148,7 +146,7 @@ namespace KolpaqueClient
 
         private void contextMenu_Click(object sender, EventArgs e)
         {
-            PlayStream(new ListViewItem(sender.ToString()), "contextMenu_Click", LQ_checkBox.Checked);
+            PlayStream(sender.ToString(), "contextMenu_Click", LQ_checkBox.Checked);
         }
 
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
@@ -185,7 +183,7 @@ namespace KolpaqueClient
             {
                 PrintBalloon("Launching the Stream", Clipboard.GetText());
 
-                PlayStream(new ListViewItem(Clipboard.GetText()), "playFromClipboardToolStripMenuItem_Click", LQ_checkBox.Checked);
+                PlayStream(Clipboard.GetText(), "playFromClipboardToolStripMenuItem_Click", LQ_checkBox.Checked);
             }
         }
 
@@ -214,7 +212,7 @@ namespace KolpaqueClient
 
         private void playStreamToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PlayStream(channelsLastSelectedItem, "playStreamToolStripMenuItem_Click", false);
+            PlayStream(channelsLastSelectedItem.Text, "playStreamToolStripMenuItem_Click", false);
         }
 
         private void Form1_ClientSizeChanged(object sender, EventArgs e)
@@ -245,15 +243,9 @@ namespace KolpaqueClient
 
         private void removeChannelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < customChannelsToolStripMenuItem.DropDownItems.Count; i++)
-            {
-                if (customChannelsToolStripMenuItem.DropDownItems[i].Text.Contains(channelsLastSelectedItem.Text))
-                {
-                    customChannelsToolStripMenuItem.DropDownItems.RemoveAt(i);
-                }
-            }
+            RemoveTrayChannel(channelsLastSelectedItem.Text);
 
-            channelsLastSelectedItem.Remove();
+            RemoveChannel(channelsLastSelectedItem.Text);
         }
 
         private void openChatToolStripMenuItem_Click(object sender, EventArgs e)
@@ -273,9 +265,11 @@ namespace KolpaqueClient
         {
             if (e.Button == MouseButtons.Left)
             {
-                PlayStream(channelsLastSelectedItem, "listView2_MouseDoubleClick", LQ_checkBox.Checked);
+                PlayStream(channelsLastSelectedItem.Text, "listView2_MouseDoubleClick", LQ_checkBox.Checked);
 
                 PrintBalloon("Launching the Stream", channelsLastSelectedItem.Text);
+
+                channelsLastSelectedItem.Selected = false;
             }
         }
 
@@ -324,7 +318,15 @@ namespace KolpaqueClient
 
         private void twitchImport_button_Click(object sender, EventArgs e)
         {
-            ImportChannel();
+            string twitchChannel = twitchImport_textBox.Text.Replace(" ", "");
+
+            if (!string.IsNullOrWhiteSpace(twitchChannel))
+            {
+                Thread NewThread = new Thread(() => ImportChannel(twitchChannel));
+                NewThread.Start();
+            }
+
+            twitchImport_textBox.Text = "";
         }
 
         private void save_button_Click(object sender, EventArgs e)
@@ -334,7 +336,7 @@ namespace KolpaqueClient
 
         private void playLowQualityToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PlayStream(channelsLastSelectedItem, "playLowQualityToolStripMenuItem_Click", true);
+            PlayStream(channelsLastSelectedItem.Text, "playLowQualityToolStripMenuItem_Click", true);
         }
 
         private void openPageToolStripMenuItem_Click(object sender, EventArgs e)

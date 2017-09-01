@@ -27,7 +27,9 @@ namespace KolpaqueClient
 
         int lastBalloonPrint = 0;
 
-        Dictionary<string, int> offlineChannels = new Dictionary<string, int>();
+        List<string> allChannels = new List<string>();
+
+        Dictionary<string, int> onlineChannels = new Dictionary<string, int>();
 
         KolpaqueClientXmlSettings ClientSettings;
 
