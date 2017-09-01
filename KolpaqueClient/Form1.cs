@@ -107,7 +107,7 @@ namespace KolpaqueClient
             System.Diagnostics.Process.Start("http://klpq.men/");
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void fiveSecTimer_Tick(object sender, EventArgs e)
         {
             lastBalloonPrint = lastBalloonPrint + 5;
 
@@ -117,7 +117,12 @@ namespace KolpaqueClient
                 notifyIcon1.BalloonTipText = "";
             }
 
-            GetStats(true, 1);
+            GetStats(true, 5);
+        }
+
+        private void thirtySecTimer_Tick(object sender, EventArgs e)
+        {
+            GetStats(true, 30);
         }
 
         private void notifyIcon1_BalloonTipClicked(object sender, EventArgs e)
@@ -302,11 +307,6 @@ namespace KolpaqueClient
             this.WindowState = FormWindowState.Normal;
 
             SaveXmlFile();
-        }
-
-        private void thirtySecTimer_Tick(object sender, EventArgs e)
-        {
-            GetStats(true, 2);
         }
 
         private void twitchImport_button_Click(object sender, EventArgs e)

@@ -44,11 +44,11 @@ namespace KolpaqueClient
                 launchStreamOnBalloonClick_checkBox.Checked = ClientSettings.launchStreamOnBalloonClick_checkBox;
                 enableLog_checkBox.Checked = ClientSettings.enableLog;
             }
-            catch
+            catch (Exception e)
             {
                 reader.Close();
 
-                DialogResult dialogResult = MessageBox.Show("Create a new one?", "Xml file is corrupted.", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show(e + "\n\nCreate a new one?", "Xml file is corrupted.", MessageBoxButtons.YesNo);
 
                 if (dialogResult == DialogResult.Yes)
                 {
@@ -72,7 +72,7 @@ namespace KolpaqueClient
                 ClientSettings.LQ_checkBox = LQ_checkBox.Checked;
                 ClientSettings.notifications_checkBox = notifications_checkBox.Checked;
                 ClientSettings.autoPlay_checkBox = autoPlay_checkBox.Checked;
-                ClientSettings.channels_listView = allChannels;
+                ClientSettings.channels_listView = allChannels.Keys.ToList();
                 ClientSettings.minimizeAtStart_checkBox = minimizeAtStart_checkBox.Checked;
                 ClientSettings.channels_listView_ColumnWidth = columnHeader2.Width;
                 ClientSettings.form1_size = new int[] { this.Width, this.Height };
@@ -91,120 +91,110 @@ namespace KolpaqueClient
             }
         }
 
-        public void GetPoddyMenStatsNewThread(string channelLink, string channelName, bool showBalloon)
+        public void GetPoddyMenStatsNewThread(Channel channelObj, bool showBalloon)
         {
             WebClient client = new WebClient();
 
             try
             {
-                string amsStatsString = client.DownloadString("http://stats.klpq.men/channel/" + channelName);
+                string amsStatsString = client.DownloadString("http://stats.klpq.men/channel/" + channelObj.name);
 
                 dynamic amsStatsJSON = JsonConvert.DeserializeObject(amsStatsString);
 
                 if ((bool)amsStatsJSON.isLive)
                 {
-                    ChannelIsOnline(channelLink, showBalloon);
+                    ChannelIsOnline(channelObj, showBalloon);
                 }
                 if (!(bool)amsStatsJSON.isLive)
                 {
-                    ChannelIsOffline(channelLink);
+                    ChannelIsOffline(channelObj);
                 }
             }
             catch (Exception e)
             {
-                WriteLog("GetPoddyStatsNewThread Crashed " + channelName + " " + e.Message);
+                WriteLog("GetPoddyStatsNewThread Crashed " + channelObj.name + " " + e.Message);
             }
         }
 
-        public void GetTwitchStatsNewThread(string channelLink, string channelName, bool showBalloon)
+        public void GetTwitchStatsNewThread(Channel channelObj, bool showBalloon)
         {
             WebClient client = new WebClient();
 
             try
             {
-                string twitchStatsString = client.DownloadString("https://api.twitch.tv/kraken/streams?channel=" + channelName + "&client_id=" + twitchApiAppKey);
+                string twitchStatsString = client.DownloadString("https://api.twitch.tv/kraken/streams?channel=" + channelObj.name + "&client_id=" + twitchApiAppKey);
 
                 dynamic twitchAPIStats = JsonConvert.DeserializeObject(twitchStatsString);
 
                 if (twitchAPIStats.streams.Count > 0)
                 {
-                    ChannelIsOnline(channelLink, showBalloon);
+                    ChannelIsOnline(channelObj, showBalloon);
                 }
                 if (twitchAPIStats.streams.Count == 0)
                 {
-                    ChannelIsOffline(channelLink);
+                    ChannelIsOffline(channelObj);
                 }
             }
             catch (Exception e)
             {
-                WriteLog("GetTwitchStatsNewThread Crashed " + channelName + " " + e.Message);
+                WriteLog("GetTwitchStatsNewThread Crashed " + channelObj.name + " " + e.Message);
             }
         }
 
-        public void ChannelIsOnline(string channelLink, bool showBalloon)
+        public void ChannelIsOnline(Channel channelObj, bool showBalloon)
         {
-            if (onlineChannels.ContainsKey(channelLink))
+            if (onlineChannels.ContainsKey(channelObj.link))
             {
-                onlineChannels[channelLink] = 0;
+                onlineChannels[channelObj.link] = 0;
                 return;
             }
 
-            WriteLog("ChannelWentOnline " + channelLink);
+            WriteLog("ChannelWentOnline " + channelObj.link);
 
-            onlineChannels[channelLink] = 0;
+            onlineChannels[channelObj.link] = 0;
 
             this.Invoke(new Action(() =>
             {
-                var item = channels_listView.FindItemWithText(channelLink);
+                channelObj.item.BackColor = Color.Green;
 
-                if (item != null)
-                {
-                    item.BackColor = Color.Green;
-                }
-
-                AddTrayChannel(channelLink);
+                AddTrayChannel(channelObj.link);
             }));
 
             if (showBalloon)
             {
-                PrintBalloon("Stream is Live (" + DateTime.Now.ToString("d/MMM, H:mm") + ")", channelLink);
+                PrintBalloon("Stream is Live (" + DateTime.Now.ToString("d/MMM, H:mm") + ")", channelObj.link);
             }
 
             if (autoPlay_checkBox.Checked)
             {
-                PlayStream(channelLink, LQ_checkBox.Checked);
+                PlayStream(channelObj.link, LQ_checkBox.Checked);
             }
         }
 
-        public void ChannelIsOffline(string channelLink)
+        public void ChannelIsOffline(Channel channelObj)
         {
-            if (!onlineChannels.ContainsKey(channelLink))
+            if (!onlineChannels.ContainsKey(channelObj.link))
             {
                 return;
             }
 
-            onlineChannels[channelLink]++;
+            onlineChannels[channelObj.link]++;
 
-            if (onlineChannels[channelLink] < 3)
+            if (onlineChannels[channelObj.link] < 3)
             {
                 return;
             }
 
-            WriteLog("ChannelWentOffline " + channelLink);
+            WriteLog("ChannelWentOffline " + channelObj.link);
 
-            onlineChannels.Remove(channelLink);
+            onlineChannels.Remove(channelObj.link);
 
             this.Invoke(new Action(() =>
             {
-                var item = channels_listView.FindItemWithText(channelLink);
+                channelObj.item.BackColor = default(Color);
 
-                if (item != null)
-                {
-                    item.BackColor = default(Color);
-                }
+                RemoveTrayChannel(channelObj.link);
             }));
-
-            RemoveTrayChannel(channelLink);
         }
 
         public void PrintBalloon(string balloonTitle, string balloonText)
@@ -260,27 +250,23 @@ namespace KolpaqueClient
             }
         }
 
-        public void GetStatsPerItem(string channelLink, bool showBalloon, int schedule)
+        public void GetStatsPerItem(Channel channelObj, bool showBalloon, int schedule)
         {
-            if (schedule == 0 || schedule == 1)
+            if (schedule == 0 || schedule == 5)
             {
-                if (channelLink.Contains("klpq.men/live/"))
+                if (channelObj.service == "klpq-main")
                 {
-                    string[] name = channelLink.Split(new string[] { "/" }, StringSplitOptions.None);
-
-                    Thread NewThread = new Thread(() => GetPoddyMenStatsNewThread(channelLink, name.Last(), showBalloon));
+                    Thread NewThread = new Thread(() => GetPoddyMenStatsNewThread(channelObj, showBalloon));
                     NewThread.IsBackground = true;
                     NewThread.Start();
                 }
             }
 
-            if (schedule == 0 || schedule == 2)
+            if (schedule == 0 || schedule == 30)
             {
-                if (channelLink.Contains("twitch.tv/"))
+                if (channelObj.service == "twitch")
                 {
-                    string[] name = channelLink.Split(new string[] { "/" }, StringSplitOptions.None);
-
-                    Thread NewThread = new Thread(() => GetTwitchStatsNewThread(channelLink, name.Last(), showBalloon));
+                    Thread NewThread = new Thread(() => GetTwitchStatsNewThread(channelObj, showBalloon));
                     NewThread.IsBackground = true;
                     NewThread.Start();
                 }
@@ -289,9 +275,9 @@ namespace KolpaqueClient
 
         public void GetStats(bool showBalloon, int schedule)
         {
-            foreach (string channelLink in allChannels)
+            foreach (KeyValuePair<string, Channel> channel in allChannels)
             {
-                GetStatsPerItem(channelLink, showBalloon, schedule);
+                GetStatsPerItem(channel.Value, showBalloon, schedule);
             }
         }
 
@@ -435,23 +421,23 @@ namespace KolpaqueClient
 
         public bool AddChannel(string channelLink)
         {
-            Channel channelClass = Channel.CreateChannel(channelLink);
+            Channel channelClass = Channel.Create(channelLink);
 
             if (channelClass == null)
             {
                 return false;
             }
 
-            channelLink = channelClass.link;
-
-            if (allChannels.Contains(channelLink))
+            if (allChannels.ContainsKey(channelClass.link))
             {
                 return false;
             }
 
-            allChannels.Add(channelLink);
+            ListViewItem item = channels_listView.Items.Add(channelClass.link);
 
-            channels_listView.Items.Add(channelLink);
+            channelClass.item = item;
+
+            allChannels[channelClass.link] = channelClass;
 
             return true;
         }

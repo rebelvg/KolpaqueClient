@@ -7,31 +7,36 @@ using System.Windows.Forms;
 
 namespace KolpaqueClient
 {
-    class Channel
+    public class Channel
     {
         private string[] allowedProtocols = new string[] { "rtmp", "http", "https" };
         private Dictionary<string, dynamic> registeredServices = new Dictionary<string, dynamic>();
 
         public string service = "custom";
-        public string name = null;
-        public string link = null;
-        public string protocol = null;
+        public string name;
+        public string link;
+        public string protocol;
+        public ListViewItem item;
 
         private void RegisterServices()
         {
             Dictionary<string, dynamic> service = new Dictionary<string, dynamic>();
 
-            service["protocols"] = new string[] { "rtmp" };
-            service["hosts"] = new string[] { "main.klpq.men", "stream.klpq.men" };
-            service["paths"] = new string[] { "/live/" };
-            service["name"] = 2;
-            registeredServices["klpq-main"] = service;
+            registeredServices["klpq-main"] = new Dictionary<string, dynamic>()
+            {
+                { "protocols" , new string[] { "rtmp" } },
+                { "hosts" , new string[] { "main.klpq.men", "stream.klpq.men" } },
+                { "paths", new string[] { "/live/" } },
+                { "name", 2 }
+            };
 
-            service["protocols"] = new string[] { "https", "http" };
-            service["hosts"] = new string[] { "www.twitch.tv", "twitch.tv" };
-            service["paths"] = new string[] { "/" };
-            service["name"] = 1;
-            registeredServices["twitch"] = service;
+            registeredServices["twitch"] = new Dictionary<string, dynamic>()
+            {
+                { "protocols" , new string[] { "https", "http" } },
+                { "hosts" , new string[] { "www.twitch.tv", "twitch.tv" } },
+                { "paths", new string[] { "/" } },
+                { "name", 1 }
+            };
         }
 
         public Channel(string channelLink)
@@ -92,7 +97,7 @@ namespace KolpaqueClient
             }
         }
 
-        public static Channel CreateChannel(string channelLink)
+        public static Channel Create(string channelLink)
         {
             try
             {

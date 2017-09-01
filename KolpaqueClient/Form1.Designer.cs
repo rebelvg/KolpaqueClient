@@ -174,7 +174,7 @@
             // 
             this.fiveSecTimer.Enabled = true;
             this.fiveSecTimer.Interval = 5000;
-            this.fiveSecTimer.Tick += new System.EventHandler(this.timer1_Tick);
+            this.fiveSecTimer.Tick += new System.EventHandler(this.fiveSecTimer_Tick);
             // 
             // contextMenuStrip2
             // 
