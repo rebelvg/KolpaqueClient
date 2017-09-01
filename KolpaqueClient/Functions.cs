@@ -435,6 +435,15 @@ namespace KolpaqueClient
 
         public bool AddChannel(string channelLink)
         {
+            Channel channelClass = Channel.CreateChannel(channelLink);
+
+            if (channelClass == null)
+            {
+                return false;
+            }
+
+            channelLink = channelClass.link;
+
             if (allChannels.Contains(channelLink))
             {
                 return false;
