@@ -155,7 +155,7 @@ namespace KolpaqueClient
 
             this.Invoke(new Action(() =>
             {
-                channelObj.item.BackColor = Color.Green;
+                channelObj.SetOnline();
 
                 AddTrayChannel(channelObj.link);
             }));
@@ -191,7 +191,7 @@ namespace KolpaqueClient
 
             this.Invoke(new Action(() =>
             {
-                channelObj.item.BackColor = default(Color);
+                channelObj.SetOffline();
 
                 RemoveTrayChannel(channelObj.link);
             }));
