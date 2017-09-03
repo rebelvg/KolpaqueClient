@@ -236,7 +236,7 @@ namespace KolpaqueClient
 
         private void openChatToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (channelsLastSelectedItem.Text.Contains("klpq.men"))
+            if (channelsLastSelectedItem.Text.StartsWith("rtmp") && channelsLastSelectedItem.Text.Contains("klpq.men"))
             {
                 System.Diagnostics.Process.Start("http://stream.klpq.men/chat");
             }
@@ -320,7 +320,7 @@ namespace KolpaqueClient
 
         private void openPageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (channelsLastSelectedItem.Text.Contains("klpq.men"))
+            if (channelsLastSelectedItem.Text.StartsWith("rtmp") && channelsLastSelectedItem.Text.Contains("klpq.men"))
             {
                 string[] name = channelsLastSelectedItem.Text.Split(new string[] { "/" }, StringSplitOptions.None);
 
