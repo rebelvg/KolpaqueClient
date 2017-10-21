@@ -370,7 +370,7 @@ namespace KolpaqueClient
 
             try
             {
-                string twitchFollowsString = client.DownloadString("https://api.twitch.tv/kraken/users/" + twitchName + "/follows/channels?direction=ASC&limit=100&sortby=created_at&user=" + twitchName + "&client_id=" + twitchApiAppKey);
+                string twitchFollowsString = client.DownloadString("https://api.twitch.tv/kraken/users/" + twitchName + "/follows/channels?sortby=created_at&direction=ASC&limit=100&client_id=" + twitchApiAppKey);
 
                 JObject twitchFollowsJSON = JObject.Parse(twitchFollowsString);
 
@@ -380,6 +380,8 @@ namespace KolpaqueClient
 
                 if (channels.Count() == 0)
                     return;
+
+                this.Invoke(new Func<Boolean>(() => AddChannel("https://twitch.tv/" + twitchName)));
 
                 foreach (dynamic X in channels)
                 {
