@@ -1,5 +1,6 @@
-## KolpaqueClient
-KLPQ Stream Client
+# Legacy KolpaqueClient
 
-This is legacy Kolpaque Client.
-New multiplatform client here - https://github.com/rebelvg/KolpaqueClientElectron
+## Overview
+THIS CLIENT IS DEPRECATED.
+
+NEW MULTIPLATFORM CLIENT - https://github.com/rebelvg/KolpaqueClientElectron
